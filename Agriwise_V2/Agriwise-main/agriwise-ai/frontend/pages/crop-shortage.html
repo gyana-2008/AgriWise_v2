@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🗺 Interactive National Crop Shortage & Deficit Map — AGRIWISE AI</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <!-- Title Section -->
+      <div class="page-title-bar">
+        <div class="page-title-left">
+          <h1>🗺 National Crop Shortage & Deficit Map</h1>
+          <p>Real-time spatial visualization of agricultural demand deficits, state surpluses, and wholesale price premiums across India.</p>
+        </div>
+        <div class="page-title-actions">
+          <a href="/profit-estimator" class="btn btn-primary btn-sm">Next: Profit Estimator ➔</a>
+        </div>
+      </div>
+
+      <!-- Commodity Selector & Filter Bar -->
+      <div class="card" style="margin-bottom: 2rem; background: #f8fafc;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <label style="font-weight: 700; color: var(--text-main);">Select Target Crop:</label>
+            <select id="shortageCropSelect" class="form-control" style="width: 240px; font-weight: 700;" onchange="loadShortageData()">
+              <option value="Maize" selected>🌽 Maize (Corn)</option>
+              <option value="Wheat">🌾 Wheat (Gehu)</option>
+              <option value="Soybean">🌱 Soybean (Pili Soy)</option>
+              <option value="Basmati Rice">🍚 Basmati Rice</option>
+              <option value="Mustard">🌼 Mustard (Sarson)</option>
+            </select>
+          </div>
+
+          <div style="font-size: 0.84rem; color: var(--text-muted);">
+            💡 <em>Click on any state region on the map to inspect granular Mandi deficits & buyer inquiries.</em>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2-Column Layout: Interactive Map on Left, Detailed State Intelligence on Right -->
+      <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2rem; align-items: start;">
+        <!-- Left: Interactive SVG Map Container -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">🗺</span>
+              <span>All-India Regional Supply Balance</span>
+            </div>
+            <span class="badge badge-emerald" id="activeCropBadge">Maize Deficit Map</span>
+          </div>
+
+          <div id="indiaShortageMapContainer" style="min-height: 480px; display: flex; align-items: center; justify-content: center;">
+            <!-- Rendered by AgriMaps.renderIndiaShortageMap -->
+          </div>
+        </div>
+
+        <!-- Right: Clicked State Detailed Dossier -->
+        <div>
+          <div class="card" id="stateDetailCard">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="icon">📍</span>
+                <span id="stateDetailName">Punjab (PB) — High Shortage Region</span>
+              </div>
+              <span class="badge badge-rose" id="stateStatusBadge">41.8% Deficit</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+              <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+                <div style="font-size: 0.76rem; color: var(--text-muted); font-weight: 700;">MONTHLY DEMAND</div>
+                <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-main);" id="stateDemand">55,000 T</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Industrial feed & mills</div>
+              </div>
+
+              <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+                <div style="font-size: 0.76rem; color: var(--text-muted); font-weight: 700;">ESTIMATED ARRIVALS</div>
+                <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-main);" id="stateSupply">32,000 T</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Local APMC yards</div>
+              </div>
+
+              <div style="background: #fff1f2; padding: 1rem; border-radius: var(--radius-md); border: 1px solid #fecdd3;">
+                <div style="font-size: 0.76rem; color: #9f1239; font-weight: 700;">SUPPLY SHORTAGE</div>
+                <div style="font-size: 1.5rem; font-weight: 800; color: #e11d48;" id="stateDeficit">23,000 T</div>
+                <div style="font-size: 0.75rem; color: #9f1239;">Severe regional deficit</div>
+              </div>
+
+              <div style="background: #ecfdf5; padding: 1rem; border-radius: var(--radius-md); border: 1px solid #a7f3d0;">
+                <div style="font-size: 0.76rem; color: #065f46; font-weight: 700;">AVERAGE MANDI SPOT</div>
+                <div style="font-size: 1.5rem; font-weight: 800; color: #047857;" id="statePrice">₹2,360 / q</div>
+                <div style="font-size: 0.75rem; color: #065f46;" id="statePriceTrend">Bullish (+4.2%)</div>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 1.25rem;">
+              <div style="font-weight: 700; color: var(--text-main); font-size: 0.92rem; margin-bottom: 0.3rem;">Key Mandi Hubs in State:</div>
+              <div style="font-size: 0.88rem; color: var(--text-muted);" id="stateMarkets">Khanna, Ludhiana, Jalandhar</div>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-light); margin-bottom: 1.5rem;">
+              <div style="font-weight: 700; color: var(--text-main); font-size: 0.88rem; margin-bottom: 4px;">Buyer Sourcing Behavior:</div>
+              <p style="font-size: 0.84rem; color: #334155; margin-bottom: 0;" id="stateBuyerSummary">
+                Distilleries and starch manufacturers running at 75% capacity due to grain deficit. Offering spot cash premiums of ₹70-100 over MSP for low-moisture kernels.
+              </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+              <a href="/buyer-marketplace" class="btn btn-primary btn-sm">
+                <span>🏢 View Buyers in This State</span>
+              </a>
+              <a href="/transport-marketplace" class="btn btn-secondary btn-sm">
+                <span>🚛 Check Interstate Transport</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/maps.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script>
+    let shortageDataCache = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedCrop = localStorage.getItem('agriwise_selected_crop');
+      if (savedCrop && document.querySelector(`#shortageCropSelect option[value="${savedCrop}"]`)) {
+        document.getElementById('shortageCropSelect').value = savedCrop;
+      }
+      loadShortageData();
+    });
+
+    async function loadShortageData() {
+      const crop = document.getElementById('shortageCropSelect').value;
+      if (window.AgriState) {
+        AgriState.setSelectedCrop(crop);
+      }
+      document.getElementById('activeCropBadge').innerText = `${crop} Regional Supply Map`;
+
+      try {
+        const data = await AgriAPI.getShortageData(crop);
+        shortageDataCache = data || [];
+
+        AgriMaps.renderIndiaShortageMap('indiaShortageMapContainer', shortageDataCache, (stateCode, stateData) => {
+          if (stateData) {
+            updateStateDetailCard(stateData);
+          }
+        });
+
+        // Prefer home state Punjab, else pick state with top volume/deficit
+        const defaultState = shortageDataCache.find(d => d.state_code === 'PB') || shortageDataCache[0];
+        if (defaultState) {
+          updateStateDetailCard(defaultState);
+        }
+      } catch (e) {
+        console.warn("Failed to load shortage data from API", e);
+      }
+    }
+
+    function updateStateDetailCard(d) {
+      document.getElementById('stateDetailName').innerText = `${d.state_name} (${d.state_code}) — ${d.status}`;
+      
+      const isSurplus = d.deficit_tonnes < 0 || d.status.includes('Surplus');
+      const isHigh = d.status.includes('High');
+
+      const badgeText = isSurplus 
+        ? `${Math.abs(d.deficit_pct).toFixed(1)}% Regional Surplus`
+        : `${Math.abs(d.deficit_pct).toFixed(1)}% Supply Deficit`;
+
+      document.getElementById('stateStatusBadge').innerText = badgeText;
+      document.getElementById('stateStatusBadge').className = isHigh ? 'badge badge-rose' : (isSurplus ? 'badge badge-emerald' : 'badge badge-amber');
+      document.getElementById('stateDemand').innerText = `${d.demand_tonnes.toLocaleString()} T`;
+      document.getElementById('stateSupply').innerText = `${d.supply_tonnes.toLocaleString()} T`;
+      document.getElementById('stateDeficit').innerText = `${d.deficit_tonnes > 0 ? '+' : ''}${d.deficit_tonnes.toLocaleString()} T`;
+      document.getElementById('statePrice').innerText = `₹${d.current_avg_price_q.toLocaleString()} / q`;
+      document.getElementById('statePriceTrend').innerText = d.price_trend;
+      document.getElementById('stateMarkets').innerText = d.major_markets;
+      document.getElementById('stateBuyerSummary').innerText = d.buyer_demand_summary;
+    }
+  </script>
+</body>
+</html>

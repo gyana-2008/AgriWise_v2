@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>💧 Irrigation Water Quality Analysis — AGRIWISE AI</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <!-- Title Section -->
+      <div class="page-title-bar">
+        <div class="page-title-left">
+          <h1>💧 Irrigation Water Quality Analysis</h1>
+          <p>Scientific diagnostic of groundwater salinity, sodium hazard, and drip system emitter compatibility.</p>
+        </div>
+        <div class="page-title-actions">
+          <a href="/farm-analysis" class="btn btn-secondary btn-sm">🔬 Back to Soil Analysis</a>
+          <a href="/market-intelligence" class="btn btn-primary btn-sm">Next: Market Intelligence ➔</a>
+        </div>
+      </div>
+
+      <!-- Water Health Overview Hero -->
+      <div class="card" style="margin-bottom: 2rem; background: radial-gradient(circle at 10% 20%, #f0f9ff 0%, #ffffff 70%);">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;">
+          <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <div class="score-dial" style="width: 86px; height: 86px; border-color: var(--accent-sky);">
+              <div class="score-number" style="font-size: 2rem; color: #0284c7;">88</div>
+              <div class="score-label">OUT OF 100</div>
+            </div>
+            <div>
+              <h3 style="font-size: 1.4rem; color: #0369a1; margin-bottom: 4px;">Water Suitability: Class 1 (Safe)</h3>
+              <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 0;">
+                Source: <strong>Deep Groundwater Tube-well (180 ft aquifer, Sahnewal)</strong> • Zero salinity restriction for cereal and oilseed rotations.
+              </p>
+            </div>
+          </div>
+          <div>
+            <button class="btn btn-outline-emerald btn-sm" onclick="document.getElementById('waterFormSection').scrollIntoView({behavior: 'smooth'})">
+              <span>📝 Update Lab Water Test</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Chemistry Diagnostics -->
+      <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 2rem; margin-bottom: 2rem;">
+        <!-- Left: Diagnostic Attributes Table -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">🔬</span>
+              <span>Water Quality Parameters (ICAR Standards)</span>
+            </div>
+            <span class="badge badge-emerald">Safe Irrigation Range</span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Chemical Parameter</th>
+                  <th>Observed Value</th>
+                  <th>Safe Threshold</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Water pH</strong></td>
+                  <td><strong>7.2</strong></td>
+                  <td>6.5 - 8.2</td>
+                  <td><span class="badge badge-emerald">Optimal</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Electrical Conductivity (EC)</strong></td>
+                  <td><strong>0.65 dS/m</strong></td>
+                  <td>&lt; 1.5 dS/m</td>
+                  <td><span class="badge badge-emerald">Non-Saline</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Total Dissolved Solids (TDS)</strong></td>
+                  <td><strong>420 ppm</strong></td>
+                  <td>&lt; 1,000 ppm</td>
+                  <td><span class="badge badge-emerald">Freshwater</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Sodium Adsorption Ratio (SAR)</strong></td>
+                  <td><strong>2.4</strong></td>
+                  <td>&lt; 6.0</td>
+                  <td><span class="badge badge-emerald">Low Sodium Risk</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Total Hardness (CaCO3)</strong></td>
+                  <td><strong>180 mg/L</strong></td>
+                  <td>&lt; 300 mg/L</td>
+                  <td><span class="badge badge-emerald">Moderate</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right: Agronomic Interpretation & Drip System Guidance -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">💡</span>
+              <span>Agronomic Interpretation</span>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div style="background: #f0fdf4; padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--primary-600);">
+              <div style="font-weight: 700; color: var(--primary-900); font-size: 0.9rem;">Drip Irrigation Feasibility:</div>
+              <div style="font-size: 0.84rem; color: #166534; margin-top: 2px;">
+                TDS (&lt;500 ppm) and low bicarbonates mean emitter orifice clogging will not occur. Ideal for subsurface drip systems.
+              </div>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--accent-sky);">
+              <div style="font-weight: 700; color: var(--text-main); font-size: 0.9rem;">Highly Suitable Crops:</div>
+              <div style="font-size: 0.84rem; color: var(--text-muted); margin-top: 2px;">
+                Maize, Basmati Rice, Wheat, Soybean, Tomato, and Mustard thrive without any salt-induced osmotic yield loss.
+              </div>
+            </div>
+
+            <div style="background: #fffbeb; padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--accent-amber);">
+              <div style="font-weight: 700; color: #92400e; font-size: 0.9rem;">Precautionary Recommendations:</div>
+              <div style="font-size: 0.84rem; color: #78350f; margin-top: 2px;">
+                During peak dry heat in June, flush drip lines once a month to prevent biological biofilm buildup.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Update Laboratory Results Form -->
+      <div class="card" id="waterFormSection">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="icon">📝</span>
+            <span>Update Water Quality Test Data</span>
+          </div>
+        </div>
+
+        <form onsubmit="updateWaterTest(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Water Source Type</label>
+              <select id="waterSourceInput" class="form-control">
+                <option value="Deep Groundwater Tube-well" selected>Deep Groundwater Tube-well</option>
+                <option value="Canal Water Distributary">Canal Water Distributary</option>
+                <option value="Farm Pond / Surface Water">Farm Pond / Surface Water</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Water pH</label>
+              <input type="number" id="waterPhInput" class="form-control" value="7.2" step="0.1" min="5.0" max="10.0" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Electrical Conductivity (EC in dS/m)</label>
+              <input type="number" id="waterEcInput" class="form-control" value="0.65" step="0.05" min="0.1" max="5.0" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Total Dissolved Solids (TDS ppm)</label>
+              <input type="number" id="waterTdsInput" class="form-control" value="420" min="50" max="5000" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Total Hardness (mg/L)</label>
+              <input type="number" id="waterHardnessInput" class="form-control" value="180" min="20" max="1000" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Laboratory Soil/Water Card Upload (Optional)</label>
+              <input type="file" class="form-control" accept=".pdf,.png,.jpg,.jpeg">
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1rem;">
+            <button type="submit" class="btn btn-primary">
+              <span>Recalculate Water Suitability Score</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script>
+    function updateWaterTest(e) {
+      e.preventDefault();
+      alert("✅ Water quality diagnostic recalibrated! Suitability score: 88/100 (Safe).");
+    }
+  </script>
+</body>
+</html>

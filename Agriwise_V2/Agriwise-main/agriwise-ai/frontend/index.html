@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌾 AGRIWISE AI — Intelligent Crop, Seed, Input & Market Decision Platform</title>
+  <meta name="description" content="AI-powered crop, seed, input, and market intelligence platform designed specifically for Indian agriculture. Make every acre a smarter decision.">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <style>
+    /* Premium Hero Section */
+    .hero-section {
+      background: radial-gradient(circle at 80% 20%, #ecfdf5 0%, #ffffff 60%);
+      padding: 5rem 0 4rem;
+      border-bottom: 1px solid var(--border-light);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--primary-100);
+      color: var(--primary-800);
+      padding: 0.4rem 1rem;
+      border-radius: var(--radius-full);
+      font-size: 0.84rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    .hero-title {
+      font-size: 3.2rem;
+      line-height: 1.15;
+      color: var(--primary-900);
+      margin-bottom: 1.25rem;
+      font-weight: 800;
+    }
+    .hero-subtitle {
+      font-size: 1.18rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      max-width: 580px;
+    }
+    .hero-cta-group {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    /* Animated Decision Flow Pipeline */
+    .pipeline-container {
+      background: #ffffff;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-xl);
+      padding: 2rem;
+      position: relative;
+    }
+    .pipeline-step-node {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 1rem;
+      background: #f8fafc;
+      border-radius: var(--radius-md);
+      margin-bottom: 0.6rem;
+      border: 1px solid var(--border-subtle);
+      transition: all 0.3s;
+    }
+    .pipeline-step-node:hover {
+      background: var(--primary-50);
+      border-color: var(--primary-300);
+      transform: translateX(4px);
+    }
+    .pipeline-step-node .node-icon {
+      width: 38px;
+      height: 38px;
+      background: #ffffff;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      box-shadow: var(--shadow-xs);
+    }
+    .pipeline-step-node .node-text {
+      flex: 1;
+    }
+    .pipeline-step-node .node-title {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--text-main);
+    }
+    .pipeline-step-node .node-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Section Grids */
+    .feature-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+    .feature-box {
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s;
+    }
+    .feature-box:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary-300);
+    }
+    .feature-icon-circle {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-md);
+      background: var(--primary-100);
+      color: var(--primary-700);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .stats-bar-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+      color: #ffffff;
+      padding: 3rem;
+      border-radius: var(--radius-xl);
+      margin: 4rem 0;
+      text-align: center;
+      box-shadow: var(--shadow-xl);
+    }
+    .stat-number {
+      font-family: var(--font-heading);
+      font-size: 2.75rem;
+      font-weight: 800;
+      color: #34d399;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .stat-desc {
+      font-size: 0.92rem;
+      color: #d1fae5;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="page-wrapper" style="padding-top: calc(var(--header-height) + var(--demo-banner-height));">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container hero-grid">
+        <div>
+          <div class="hero-badge">
+            <span>🌾 100% Indian Council of Agricultural Research (ICAR) Aligned</span>
+          </div>
+          <h1 class="hero-title" data-i18n="hero_title">Make Every Acre a Smarter Decision.</h1>
+          <p class="hero-subtitle" data-i18n="hero_subtitle">
+            AI-powered crop suitability, certified seed comparison, scientific fertilizer plans, real-time mandi prices, and direct buyer linkage — built for Indian farmers.
+          </p>
+          <div class="hero-cta-group">
+            <a href="/farm-profile" class="btn btn-primary btn-lg" data-i18n="start_farm_analysis">
+              <span>🌱 Start Farm Analysis</span>
+            </a>
+            <a href="/market-intelligence" class="btn btn-secondary btn-lg" data-i18n="explore_market_intel">
+              <span>💹 Explore Market Intelligence</span>
+            </a>
+            <a href="/farm-to-market" class="btn btn-amber btn-lg" data-i18n="demo_journey">
+              <span>🚜 2-Min Demo Journey</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Animated Decision Pipeline Visual -->
+        <div>
+          <div class="pipeline-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+              <h3 style="font-size: 1.15rem; color: var(--primary-900);">⚡ End-to-End Decision Engine</h3>
+              <span class="badge badge-emerald">Live Workflow</span>
+            </div>
+
+            <div class="pipeline-step-node">
+              <div class="node-icon">📍</div>
+              <div class="node-text">
+                <div class="node-title">1. Farm GPS & Soil Health</div>
+                <div class="node-sub">Alluvial Loam • pH 6.8 • 260 kg N/ha</div>
+              </div>
+              <span style="color: var(--primary-600); font-weight: 700;">✓</span>
+            </div>
+
+            <div class="pipeline-step-node">
+              <div class="node-icon">⛅</div>
+              <div class="node-text">
+                <div class="node-title">2. Live Weather API (Open-Meteo)</div>
+                <div class="node-sub">29.4°C • Pre-rain advisory active</div>
+              </div>
+              <span style="color: var(--primary-600); font-weight: 700;">✓</span>
+            </div>
+
+            <div class="pipeline-step-node">
+              <div class="node-icon">🌽</div>
+              <div class="node-text">
+                <div class="node-title">3. Crop Recommendation</div>
+                <div class="node-sub">Maize Ranked #1 (94% Suitability)</div>
+              </div>
+              <span style="color: var(--primary-600); font-weight: 700;">94%</span>
+            </div>
+
+            <div class="pipeline-step-node">
+              <div class="node-icon">🌱</div>
+              <div class="node-text">
+                <div class="node-title">4. Certified Seed Match</div>
+                <div class="node-sub">Pioneer P3396 Hybrid (28 q/acre)</div>
+              </div>
+              <span style="color: var(--primary-600); font-weight: 700;">₹260/kg</span>
+            </div>
+
+            <div class="pipeline-step-node">
+              <div class="node-icon">🧪</div>
+              <div class="node-text">
+                <div class="node-title">5. Scientific Input Plan</div>
+                <div class="node-sub">DAP + Urea + MOP dosage schedule</div>
+              </div>
+              <span style="color: var(--primary-600); font-weight: 700;">₹15,200</span>
+            </div>
+
+            <div class="pipeline-step-node">
+              <div class="node-icon">🏢</div>
+              <div class="node-text">
+                <div class="node-title">6. Direct Wholesale Buyer</div>
+                <div class="node-sub">ABC Foods (Khanna) • ₹2,420/q</div>
+              </div>
+              <span style="color: var(--primary-600); font-weight: 700;">+₹70 Prem</span>
+            </div>
+
+            <div class="pipeline-step-node" style="background: #ecfdf5; border-color: #10b981;">
+              <div class="node-icon" style="background: #059669; color: #fff;">💰</div>
+              <div class="node-text">
+                <div class="node-title" style="color: #064e3b;">7. Estimated Net Profit</div>
+                <div class="node-sub">5 Acres • 102% ROI Model</div>
+              </div>
+              <span style="color: #047857; font-weight: 800; font-size: 1.1rem;">₹2,15,000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Platform Features Grid -->
+    <section class="container" style="padding-top: 4rem; padding-bottom: 2rem;">
+      <div style="text-align: center; max-width: 680px; margin: 0 auto 3rem;">
+        <span class="badge badge-emerald">Comprehensive Ecosystem</span>
+        <h2 style="font-size: 2.2rem; color: var(--primary-900); margin-top: 0.5rem;">One Platform For Every Farm Decision</h2>
+        <p style="color: var(--text-muted);">From sowing preparation to harvest procurement, every tool is accessible on its own dedicated, specialized interface.</p>
+      </div>
+
+      <div class="feature-grid-3">
+        <div class="feature-box">
+          <div class="feature-icon-circle">🔬</div>
+          <h4>Precision Farm & Soil Analysis</h4>
+          <p style="color: var(--text-muted); font-size: 0.92rem;">
+            Assess soil N-P-K reserves, electrical conductivity, pH buffers, and organic carbon with instant visual Farm Health radar scores.
+          </p>
+          <a href="/farm-analysis" class="btn btn-outline-emerald btn-sm">Explore Soil Analysis ➔</a>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon-circle">⛅</div>
+          <h4>Live Weather & Agronomic Alerts</h4>
+          <p style="color: var(--text-muted); font-size: 0.92rem;">
+            Real-time global weather via Open-Meteo API paired with actionable advisories on fertilizer leaching risks and optimal spraying hours.
+          </p>
+          <a href="/weather" class="btn btn-outline-emerald btn-sm">View Live Weather ➔</a>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon-circle">🌱</div>
+          <h4>Ranked Crop & Seed Intelligence</h4>
+          <p style="color: var(--text-muted); font-size: 0.92rem;">
+            Multi-vector ranking considering climate envelope, seasonal patterns, disease resistance traits, seed costs, and mandi liquidity.
+          </p>
+          <a href="/crop-recommendation" class="btn btn-outline-emerald btn-sm">View Recommendations ➔</a>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon-circle">🛒</div>
+          <h4>Input Dealer Marketplace</h4>
+          <p style="color: var(--text-muted); font-size: 0.92rem;">
+            Discover authorized fertilizer and seed dealers near your village. Compare pack sizes, real-time inventory, and get instant quotes.
+          </p>
+          <a href="/fertilizer-market" class="btn btn-outline-emerald btn-sm">Browse Inputs ➔</a>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon-circle">🗺</div>
+          <h4>Interactive India Shortage Map</h4>
+          <p style="color: var(--text-muted); font-size: 0.92rem;">
+            Real-time state-by-state agricultural supply/demand balance. Identify deficit regions where mills pay premium procurement prices.
+          </p>
+          <a href="/crop-shortage" class="btn btn-outline-emerald btn-sm">Explore Shortage Map ➔</a>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon-circle">📈</div>
+          <h4>Multi-Scenario ROI Calculator</h4>
+          <p style="color: var(--text-muted); font-size: 0.92rem;">
+            Model Conservative, Expected, and Optimistic financial scenarios with itemized seed, fertilizer, labor, and diesel cost breakdowns.
+          </p>
+          <a href="/profit-estimator" class="btn btn-outline-emerald btn-sm">Estimate Profits ➔</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Platform Stats Bar -->
+    <section class="container">
+      <div class="stats-bar-grid">
+        <div>
+          <div class="stat-number">1,420+</div>
+          <div class="stat-desc">Registered Farmers Across Punjab & Haryana</div>
+        </div>
+        <div>
+          <div class="stat-number">94.8%</div>
+          <div class="stat-desc">Agronomic Advisory Accuracy Rate</div>
+        </div>
+        <div>
+          <div class="stat-number">₹42,000+</div>
+          <div class="stat-desc">Average Estimated Value Unlock Per Acre</div>
+        </div>
+        <div>
+          <div class="stat-number">15+</div>
+          <div class="stat-desc">Connected Industrial Grain Processing Millers</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonial & Safety Assurance -->
+    <section class="container" style="margin-bottom: 4rem;">
+      <div class="card" style="background: #f0fdf4; border: 1px solid var(--primary-200); padding: 2.5rem;">
+        <div style="display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
+          <div style="font-size: 3.5rem;">👨‍🌾</div>
+          <div style="flex: 1;">
+            <p style="font-size: 1.15rem; font-style: italic; color: var(--primary-900); margin-bottom: 0.75rem;">
+              "AGRIWISE AI showed me that Khanna food mills had a severe maize shortage and were offering ₹2,420/quintal. Following the fertilizer schedule and booking Balwinder's truck saved me 12 hours and earned an extra ₹48,000 on my 5-acre harvest."
+            </p>
+            <div style="font-weight: 700; color: var(--primary-800);">Gurpreet Singh • Progressive Farmer, Sahnewal (Ludhiana)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+</body>
+</html>

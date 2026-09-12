@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌾 Farmer Dashboard — AGRIWISE AI</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <!-- Title Section -->
+      <div class="page-title-bar">
+        <div class="page-title-left">
+          <h1>🌾 Farmer Command Center</h1>
+          <p>Real-time agricultural overview for <strong>Gurpreet Singh</strong> • Sahnewal Golden Acre Farm</p>
+        </div>
+        <div class="page-title-actions">
+          <a href="/farm-profile" class="btn btn-secondary btn-sm">📍 Switch Farm</a>
+          <a href="/farm-to-market" class="btn btn-primary btn-sm">🚜 Farm-to-Market Pipeline</a>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+        <div class="card" style="border-left: 4px solid var(--primary-600);">
+          <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Farm Size & Status</div>
+          <div style="font-size: 1.75rem; font-weight: 800; color: var(--primary-900); margin: 4px 0;">5.0 Acres</div>
+          <div style="font-size: 0.82rem; color: var(--primary-700);">Sahnewal, Ludhiana (Punjab)</div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid var(--accent-amber);">
+          <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Current Crop & Cycle</div>
+          <div style="font-size: 1.75rem; font-weight: 800; color: var(--text-main); margin: 4px 0;">Maize (Corn)</div>
+          <div style="font-size: 0.82rem; color: var(--accent-amber);">Kharif Season • Vegetative (V4)</div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid var(--accent-sky);">
+          <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Soil & Water Health</div>
+          <div style="font-size: 1.75rem; font-weight: 800; color: var(--accent-sky); margin: 4px 0;">87 / 100</div>
+          <div style="font-size: 0.82rem; color: #0284c7;">Optimal Loam • Safe Salinity</div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid #10b981;">
+          <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Regional Price Index</div>
+          <div style="font-size: 1.75rem; font-weight: 800; color: #059669; margin: 4px 0;">₹2,360 / q</div>
+          <div style="font-size: 0.82rem; color: var(--primary-700);">+3.2% in Khanna Mandi Today</div>
+        </div>
+      </div>
+
+      <!-- Main Dashboard 2-Column Layout -->
+      <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 2rem; margin-bottom: 2rem;">
+        <!-- Left: Weather Widget & AI Recommendation -->
+        <div>
+          <!-- Live Weather Card -->
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="icon">⛅</span>
+                <span>Live Farm Weather & Advisory</span>
+              </div>
+              <span class="badge badge-emerald" id="weatherSourceBadge">Open-Meteo Live</span>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem;">
+              <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="font-size: 3rem;" id="weatherIcon">⛅</div>
+                <div>
+                  <div style="font-size: 2.2rem; font-weight: 800; color: var(--text-main); line-height: 1;" id="weatherTemp">29.4°C</div>
+                  <div style="font-size: 0.88rem; color: var(--text-muted);" id="weatherCondition">Partly Cloudy / Light Breeze</div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 1.5rem; font-size: 0.88rem;">
+                <div>
+                  <div style="color: var(--text-muted);">Rain Prob</div>
+                  <div style="font-weight: 700;" id="weatherRainProb">25%</div>
+                </div>
+                <div>
+                  <div style="color: var(--text-muted);">Humidity</div>
+                  <div style="font-weight: 700;" id="weatherHumidity">68%</div>
+                </div>
+                <div>
+                  <div style="color: var(--text-muted);">Wind</div>
+                  <div style="font-weight: 700;" id="weatherWind">14 km/h</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Agronomic Dynamic Advisory Alert -->
+            <div class="safety-notice-box" style="margin: 0; background: #ecfdf5; border-color: var(--primary-600);">
+              <div class="notice-title" style="color: var(--primary-800);">
+                <span>🌱 Dynamic Agronomic Advisory:</span>
+              </div>
+              <p style="color: var(--primary-900);" id="advisoryText">
+                Upcoming conditions are favorable for vegetative crop monitoring. Maintain weed control in row middles.
+              </p>
+            </div>
+          </div>
+
+          <!-- Top AI Crop Suitability Recommendation -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="icon">🤖</span>
+                <span>AI Crop Suitability Recommendations</span>
+              </div>
+              <a href="/crop-recommendation" class="btn btn-outline-emerald btn-sm">Full Analysis ➔</a>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1rem;">
+              <p style="font-size: 0.92rem; color: var(--text-main); margin-bottom: 0;">
+                💡 <strong>AI Agronomist Verdict:</strong> <em>"Based on your farm location in Ludhiana, prevailing Kharif temperature envelope, high nitrogen alluvial soil, and the 41.8% regional shortage in industrial starch processing, <strong>Maize</strong> and <strong>Soybean</strong> currently demonstrate exceptional suitability."</em>
+              </p>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.85rem;" id="cropList">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; background: #f0fdf4; border-radius: var(--radius-md); border: 1px solid var(--primary-200);">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                  <span style="font-size: 1.5rem;">🌽</span>
+                  <div>
+                    <div style="font-weight: 700; color: var(--primary-900);">1. Maize (Corn)</div>
+                    <div style="font-size: 0.78rem; color: var(--text-muted);">Expected Yield: 28.5 q/acre • High Processing Demand</div>
+                  </div>
+                </div>
+                <div style="text-align: right;">
+                  <span class="badge badge-emerald" style="font-size: 0.84rem;">94% Suitability</span>
+                  <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Confidence: 0.94</div>
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; background: #fff; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                  <span style="font-size: 1.5rem;">🌱</span>
+                  <div>
+                    <div style="font-weight: 700; color: var(--text-main);">2. Soybean</div>
+                    <div style="font-size: 0.78rem; color: var(--text-muted);">Expected Yield: 12.0 q/acre • Oilseed Crushing Sourcing</div>
+                  </div>
+                </div>
+                <div style="text-align: right;">
+                  <span class="badge badge-amber" style="font-size: 0.84rem;">88% Suitability</span>
+                  <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Confidence: 0.91</div>
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; background: #fff; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                  <span style="font-size: 1.5rem;">🌾</span>
+                  <div>
+                    <div style="font-weight: 700; color: var(--text-main);">3. Basmati Rice</div>
+                    <div style="font-size: 0.78rem; color: var(--text-muted);">Expected Yield: 20.0 q/acre • Export Demand</div>
+                  </div>
+                </div>
+                <div style="text-align: right;">
+                  <span class="badge badge-blue" style="font-size: 0.84rem;">86% Suitability</span>
+                  <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Confidence: 0.88</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Market Snapshot & Quick Decision Actions -->
+        <div>
+          <!-- Market Intelligence Snapshot -->
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="icon">💹</span>
+                <span>Regional Mandi Snapshot</span>
+              </div>
+              <a href="/market-intelligence" class="btn btn-outline-emerald btn-sm">Full Mandis ➔</a>
+            </div>
+
+            <div style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+              Khanna, Ludhiana & Karnal Mandi Trends Today:
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border-subtle);">
+                <div>
+                  <div style="font-weight: 700;">Maize (Khanna Mandi)</div>
+                  <div style="font-size: 0.75rem; color: #059669;">Arrivals: 480 Tonnes/day</div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-weight: 800; font-size: 1.05rem;">₹2,360 / q</div>
+                  <span class="badge badge-emerald" style="padding: 1px 6px;">+3.2%</span>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border-subtle);">
+                <div>
+                  <div style="font-weight: 700;">Soybean (Indore Mandi)</div>
+                  <div style="font-size: 0.75rem; color: #059669;">Crusher Demand High</div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-weight: 800; font-size: 1.05rem;">₹4,720 / q</div>
+                  <span class="badge badge-emerald" style="padding: 1px 6px;">+1.8%</span>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <div style="font-weight: 700;">Basmati Rice (Amritsar)</div>
+                  <div style="font-size: 0.75rem; color: #059669;">Slender Aromatic</div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-weight: 800; font-size: 1.05rem;">₹3,890 / q</div>
+                  <span class="badge badge-emerald" style="padding: 1px 6px;">+2.1%</span>
+                </div>
+              </div>
+            </div>
+
+            <a href="/buyer-marketplace" class="btn btn-secondary btn-sm btn-full">
+              🏢 View 4 Active Wholesale Buyers Near Farm
+            </a>
+          </div>
+
+          <!-- Quick Action Launchpad -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="icon">⚡</span>
+                <span>Decision Launchpad</span>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+              <a href="/farm-analysis" class="btn btn-secondary btn-sm" style="justify-content: flex-start;">
+                <span>🔬 Analyze Farm</span>
+              </a>
+              <a href="/crop-recommendation" class="btn btn-secondary btn-sm" style="justify-content: flex-start;">
+                <span>🌱 Find Best Crop</span>
+              </a>
+              <a href="/seed-recommendation" class="btn btn-secondary btn-sm" style="justify-content: flex-start;">
+                <span>🌾 Best Seeds</span>
+              </a>
+              <a href="/cultivation-plan" class="btn btn-secondary btn-sm" style="justify-content: flex-start;">
+                <span>📅 Cultivation Plan</span>
+              </a>
+              <a href="/fertilizer-market" class="btn btn-secondary btn-sm" style="justify-content: flex-start;">
+                <span>🧪 Find Fertilizer</span>
+              </a>
+              <a href="/crop-shortage" class="btn btn-secondary btn-sm" style="justify-content: flex-start;">
+                <span>🗺 Shortage Map</span>
+              </a>
+              <a href="/buyer-marketplace" class="btn btn-secondary btn-sm" style="justify-content: flex-start;">
+                <span>🏢 Find Buyer</span>
+              </a>
+              <a href="/transport-marketplace" class="btn btn-secondary btn-sm" style="justify-content: flex-start;">
+                <span>🚛 Find Transport</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Load live weather for the dashboard
+      try {
+        const weather = await AgriAPI.getLiveWeather(30.9010, 75.8573, "Sahnewal, Ludhiana");
+        if (weather && weather.current) {
+          document.getElementById('weatherTemp').innerText = `${weather.current.temperature_c}°C`;
+          document.getElementById('weatherCondition').innerText = weather.current.condition;
+          document.getElementById('weatherHumidity').innerText = `${weather.current.humidity_pct}%`;
+          document.getElementById('weatherWind').innerText = `${weather.current.wind_speed_kmh} km/h`;
+          document.getElementById('weatherSourceBadge').innerText = weather.is_live ? "Open-Meteo Live API" : "Simulated Model";
+
+          if (weather.agronomic_advisory && weather.agronomic_advisory.length > 0) {
+            document.getElementById('advisoryText').innerText = weather.agronomic_advisory[0].text;
+          }
+        }
+      } catch (e) {
+        console.warn("Using offline weather fallback", e);
+      }
+    });
+  </script>
+</body>
+</html>

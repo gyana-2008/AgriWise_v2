@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🚜 Farm Equipment & Tractor Rental Hub — AGRIWISE AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <style>
+    /* Farm Equipment Specific Aesthetics */
+    .eq-hero-banner {
+      background: linear-gradient(135deg, #064e3b 0%, #047857 60%, #059669 100%);
+      color: #ffffff;
+      border-radius: var(--radius-xl);
+      padding: 2.25rem 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(4, 120, 87, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .eq-hero-banner::after {
+      content: '🚜';
+      position: absolute;
+      right: -20px;
+      bottom: -35px;
+      font-size: 11rem;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+    .eq-hero-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+    .eq-hero-subtitle {
+      font-size: 1.02rem;
+      color: #d1fae5;
+      max-width: 680px;
+      line-height: 1.55;
+    }
+    .eq-hero-badges {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+    .eq-hero-badge {
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(8px);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    /* Main View Navigation Tabs */
+    .eq-view-tabs {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 2px solid var(--border-light);
+      margin-bottom: 1.75rem;
+      overflow-x: auto;
+      white-space: nowrap;
+      padding-bottom: 2px;
+    }
+    .eq-view-tab {
+      padding: 0.75rem 1.4rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+    .eq-view-tab:hover {
+      color: var(--primary-700);
+    }
+    .eq-view-tab.active {
+      color: var(--primary-700);
+      border-bottom-color: var(--primary-600);
+      background: var(--primary-50);
+      border-top-left-radius: var(--radius-sm);
+      border-top-right-radius: var(--radius-sm);
+    }
+    .eq-tab-badge {
+      background: var(--primary-600);
+      color: #fff;
+      font-size: 0.72rem;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      font-weight: 800;
+    }
+
+    /* Equipment Filter Controls */
+    .filter-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.75rem;
+      box-shadow: var(--shadow-xs);
+    }
+    .filter-pills {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-top: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .filter-pill {
+      background: #f1f5f9;
+      color: var(--text-main);
+      border: 1px solid var(--border-light);
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .filter-pill:hover, .filter-pill.active {
+      background: var(--primary-700);
+      color: #ffffff;
+      border-color: var(--primary-700);
+      box-shadow: 0 2px 6px rgba(4, 120, 87, 0.2);
+    }
+    .rental-type-toggle {
+      display: inline-flex;
+      background: #e2e8f0;
+      padding: 3px;
+      border-radius: var(--radius-md);
+      gap: 3px;
+    }
+    .rental-type-btn {
+      border: none;
+      background: transparent;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .rental-type-btn.active {
+      background: #ffffff;
+      color: var(--primary-900);
+      box-shadow: var(--shadow-xs);
+    }
+
+    /* Equipment Cards Grid */
+    .equipment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .equipment-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .equipment-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary-300);
+    }
+    .equipment-img-wrapper {
+      position: relative;
+      height: 200px;
+      background: #e2e8f0;
+      overflow: hidden;
+    }
+    .equipment-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .equipment-card:hover .equipment-img {
+      transform: scale(1.04);
+    }
+    .equipment-cat-tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(6px);
+      color: #fff;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 6px;
+    }
+    .equipment-status-tag {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+    .status-available { background: #10b981; color: #fff; }
+    .status-booked { background: #f59e0b; color: #fff; }
+    .status-maintenance { background: #ef4444; color: #fff; }
+
+    .equipment-body {
+      padding: 1.25rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .equipment-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.25rem;
+      line-height: 1.3;
+    }
+    .equipment-provider {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .equipment-specs-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.85rem;
+    }
+    .spec-chip {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+    .equipment-price-box {
+      margin-top: auto;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .price-main {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary-800);
+      line-height: 1;
+    }
+    .price-unit {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .equipment-actions {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 0.5rem;
+      margin-top: 0.85rem;
+    }
+
+    /* Modal Backdrop and Box */
+    .agri-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 2100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .agri-modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .agri-modal {
+      background: #ffffff;
+      border-radius: var(--radius-xl);
+      max-width: 620px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-xl);
+      display: flex;
+      flex-direction: column;
+      transform: translateY(15px);
+      transition: transform 0.25s ease;
+    }
+    .agri-modal-backdrop.active .agri-modal {
+      transform: translateY(0);
+    }
+    .agri-modal-header {
+      padding: 1.25rem 1.5rem;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .agri-modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .agri-modal-footer {
+      padding: 1.25rem 1.5rem;
+      background: #f8fafc;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      position: sticky;
+      bottom: 0;
+      z-index: 10;
+    }
+
+    /* Conflict Banner */
+    .conflict-banner {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 0.85rem 1rem;
+      border-radius: 6px;
+      color: #92400e;
+      font-size: 0.86rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .conflict-banner.active {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+    .available-banner {
+      background: #ecfdf5;
+      border-left: 4px solid #10b981;
+      padding: 0.85rem 1rem;
+      border-radius: 6px;
+      color: #065f46;
+      font-size: 0.86rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .available-banner.active {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+
+    /* Price Breakdown Box */
+    .price-breakdown-card {
+      background: #f8fafc;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      margin-top: 1rem;
+      font-size: 0.88rem;
+    }
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.35rem;
+      color: #475569;
+    }
+    .price-row.total {
+      border-top: 1px solid #cbd5e1;
+      margin-top: 0.6rem;
+      padding-top: 0.6rem;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary-900);
+    }
+
+    /* Printable Slip Styles */
+    .booking-slip {
+      background: #fff;
+      border: 2px dashed #94a3b8;
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      position: relative;
+    }
+    .booking-slip-watermark {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      opacity: 0.04;
+      font-weight: 900;
+      pointer-events: none;
+      transform: rotate(-25deg);
+    }
+    @media print {
+      body * { visibility: hidden; }
+      #printableSlipArea, #printableSlipArea * { visibility: visible; }
+      #printableSlipArea { position: absolute; left: 0; top: 0; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container">
+      
+      <!-- Top Hero Banner -->
+      <div class="eq-hero-banner">
+        <div>
+          <div class="eq-hero-badges">
+            <span class="eq-hero-badge">🚜 Verified Custom Hiring Centres (CHC)</span>
+            <span class="eq-hero-badge">⏱️ Hourly & Daily Time Slots</span>
+            <span class="eq-hero-badge">💳 UPI & KCC RuPay Accepted</span>
+          </div>
+          <h1 class="eq-hero-title" data-i18n="equipment_rental">🚜 Farm Equipment & Machinery Rental</h1>
+          <p class="eq-hero-subtitle">
+            Rent verified tractors, combine harvesters, water pumps, rotavators, seed drills, and sprayers with transparent hourly and daily rates, licensed operators, farm delivery, and full double-booking protection.
+          </p>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <button class="btn btn-secondary" onclick="AgriEquipment.switchTab('rentals')" style="font-weight: 700;">
+            <span>📋 My Equipment Rentals</span>
+            <span class="eq-tab-badge" id="heroMyRentalsBadge">0</span>
+          </button>
+          <button class="btn btn-primary" onclick="AgriEquipment.switchTab('list')" style="background: #ffffff; color: var(--primary-900); font-weight: 800;">
+            <span>➕ List Your Equipment</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Navigation Tabs -->
+      <div class="eq-view-tabs">
+        <button class="eq-view-tab active" id="tabBtnCatalog" onclick="AgriEquipment.switchTab('catalog')">
+          <span>🚜 Browse Machinery</span>
+        </button>
+        <button class="eq-view-tab" id="tabBtnRentals" onclick="AgriEquipment.switchTab('rentals')">
+          <span>📋 My Equipment Rentals</span>
+          <span class="eq-tab-badge" id="myRentalsCountBadge">0</span>
+        </button>
+        <button class="eq-view-tab" id="tabBtnList" onclick="AgriEquipment.switchTab('list')">
+          <span>➕ List Your Equipment (Owner Portal)</span>
+        </button>
+      </div>
+
+      <!-- VIEW 1: BROWSE MACHINERY CATALOG -->
+      <section id="viewCatalog">
+        <!-- Search & Filter Controls -->
+        <div class="filter-card">
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+            <!-- Search Bar -->
+            <div style="flex: 1; min-width: 260px; position: relative;">
+              <input type="text" id="eqSearchInput" class="form-control" placeholder="🔍 Search by machine name, brand (John Deere, Mahindra, Kubota...)" oninput="AgriEquipment.handleFilterChange()">
+            </div>
+
+            <!-- Rental Type Toggle -->
+            <div class="rental-type-toggle">
+              <button type="button" class="rental-type-btn active" id="toggleHourly" onclick="AgriEquipment.setRentalType('HOURLY')">
+                ⏱️ Hourly (₹/hr)
+              </button>
+              <button type="button" class="rental-type-btn" id="toggleDaily" onclick="AgriEquipment.setRentalType('DAILY')">
+                📅 Daily (₹/day)
+              </button>
+            </div>
+
+            <!-- Distance Near Me Filter -->
+            <div style="min-width: 170px;">
+              <select id="eqDistanceFilter" class="form-control" onchange="AgriEquipment.handleFilterChange()">
+                <option value="999">📍 All Locations</option>
+                <option value="5">📍 Within 5 km</option>
+                <option value="10">📍 Within 10 km</option>
+                <option value="20">📍 Within 20 km</option>
+                <option value="35">📍 Within 35 km</option>
+              </select>
+            </div>
+
+            <!-- Sort Filter -->
+            <div style="min-width: 180px;">
+              <select id="eqSortFilter" class="form-control" onchange="AgriEquipment.handleFilterChange()">
+                <option value="distance_asc">Nearest Location</option>
+                <option value="price_asc">Price: Low to High</option>
+                <option value="price_desc">Price: High to Low</option>
+                <option value="rating_desc">Highest Rating</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Category Pills -->
+          <div class="filter-pills" id="categoryPills">
+            <span class="filter-pill active" onclick="AgriEquipment.setCategory('ALL', this)">All Machinery</span>
+            <span class="filter-pill" onclick="AgriEquipment.setCategory('Tractors', this)">🚜 Tractors</span>
+            <span class="filter-pill" onclick="AgriEquipment.setCategory('Harvesters', this)">🌾 Combine Harvesters</span>
+            <span class="filter-pill" onclick="AgriEquipment.setCategory('Water Pumps', this)">💧 Water Pumps</span>
+            <span class="filter-pill" onclick="AgriEquipment.setCategory('Rotavators', this)">🔄 Rotavators & Tillers</span>
+            <span class="filter-pill" onclick="AgriEquipment.setCategory('Seed Drills', this)">🌱 Seed-cum-Drills</span>
+            <span class="filter-pill" onclick="AgriEquipment.setCategory('Sprayers', this)">🚿 Boom Sprayers</span>
+            <span class="filter-pill" onclick="AgriEquipment.setCategory('Threshers', this)">⚙️ Multi-Crop Threshers</span>
+          </div>
+
+          <!-- Price Range Slider & Counters -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted);">Max Budget:</label>
+              <input type="range" id="priceSlider" min="200" max="16000" step="100" value="16000" oninput="AgriEquipment.handlePriceSlider(this.value)" style="cursor: pointer; width: 150px;">
+              <span id="priceSliderVal" style="font-weight: 800; color: var(--primary-700); font-size: 0.88rem;">Up to ₹16,000</span>
+            </div>
+
+            <div style="font-size: 0.84rem; color: var(--text-muted);" id="equipmentCountNotice">
+              Showing 10 available machines near your farm
+            </div>
+          </div>
+        </div>
+
+        <!-- Equipment Cards Grid -->
+        <div class="equipment-grid" id="equipmentGrid">
+          <!-- Dynamically populated from /api/equipment -->
+        </div>
+      </section>
+
+      <!-- VIEW 2: MY EQUIPMENT RENTALS (FARMER DASHBOARD) -->
+      <section id="viewRentals" style="display: none;">
+        <div class="card" style="margin-bottom: 2rem;">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">📋</span>
+              <span>My Equipment Booking History & Active Hires</span>
+            </div>
+            <button class="btn btn-sm btn-primary" onclick="AgriEquipment.loadRentals()">
+              🔄 Refresh Status
+            </button>
+          </div>
+
+          <!-- Rentals Sub-Filter Tabs -->
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem; flex-wrap: wrap;">
+            <button class="btn btn-sm btn-outline active-subtab" id="subtabAll" onclick="AgriEquipment.filterRentalsSubtab('all', this)">All Rentals (<span id="countAll">0</span>)</button>
+            <button class="btn btn-sm btn-outline" id="subtabUpcoming" onclick="AgriEquipment.filterRentalsSubtab('upcoming', this)">⏱️ Upcoming (<span id="countUpcoming">0</span>)</button>
+            <button class="btn btn-sm btn-outline" id="subtabActive" onclick="AgriEquipment.filterRentalsSubtab('active', this)">🟢 Active Ongoing (<span id="countActive">0</span>)</button>
+            <button class="btn btn-sm btn-outline" id="subtabCompleted" onclick="AgriEquipment.filterRentalsSubtab('completed', this)">✅ Completed (<span id="countCompleted">0</span>)</button>
+            <button class="btn btn-sm btn-outline" id="subtabCancelled" onclick="AgriEquipment.filterRentalsSubtab('cancelled', this)">🛑 Cancelled (<span id="countCancelled">0</span>)</button>
+          </div>
+
+          <!-- Rentals List Container -->
+          <div id="rentalsListContainer">
+            <!-- Dynamically populated from /api/equipment/my-rentals -->
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 3: LIST YOUR EQUIPMENT (OWNER / CHC PORTAL) -->
+      <section id="viewList" style="display: none;">
+        <div class="card" style="margin-bottom: 2rem;">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">🚜</span>
+              <span>List Your Farm Machinery on AgriWise CHC Network</span>
+            </div>
+            <span class="badge badge-emerald">Direct Farmer Booking • Guaranteed Payout</span>
+          </div>
+
+          <form id="listEquipmentForm" onsubmit="AgriEquipment.submitNewEquipment(event)">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 1.25rem;">
+              <div>
+                <label class="form-label" style="font-weight: 700; font-size: 0.85rem;">Machine Name *</label>
+                <input type="text" name="name" class="form-control" required placeholder="e.g. Swaraj 855 FE 52HP Tractor">
+              </div>
+
+              <div>
+                <label class="form-label" style="font-weight: 700; font-size: 0.85rem;">Equipment Category *</label>
+                <select name="category" class="form-control" required>
+                  <option value="Tractors">🚜 Tractors</option>
+                  <option value="Harvesters">🌾 Combine Harvesters</option>
+                  <option value="Water Pumps">💧 Water Pumps</option>
+                  <option value="Rotavators">🔄 Rotavators / Tillers</option>
+                  <option value="Seed Drills">🌱 Seed-cum-Drills</option>
+                  <option value="Sprayers">🚿 Boom Sprayers</option>
+                  <option value="Threshers">⚙️ Multi-Crop Threshers</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="form-label" style="font-weight: 700; font-size: 0.85rem;">Brand & Model</label>
+                <input type="text" name="brand" class="form-control" placeholder="e.g. Swaraj 855 FE">
+              </div>
+
+              <div>
+                <label class="form-label" style="font-weight: 700; font-size: 0.85rem;">Engine Power / Capacity</label>
+                <input type="text" name="power_hp" class="form-control" placeholder="e.g. 52 HP Diesel">
+              </div>
+
+              <div>
+                <label class="form-label" style="font-weight: 700; font-size: 0.85rem;">Hourly Rate (₹/hr) *</label>
+                <input type="number" name="hourly_rate" class="form-control" required placeholder="500">
+              </div>
+
+              <div>
+                <label class="form-label" style="font-weight: 700; font-size: 0.85rem;">Daily Rate (₹/day) *</label>
+                <input type="number" name="daily_rate" class="form-control" required placeholder="3500">
+              </div>
+
+              <div>
+                <label class="form-label" style="font-weight: 700; font-size: 0.85rem;">Operator Available?</label>
+                <select name="operator_available" class="form-control">
+                  <option value="true">Yes, Operator Included/Available</option>
+                  <option value="false">No, Self-Drive / Farmer Operated</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="form-label" style="font-weight: 700; font-size: 0.85rem;">Operator Charge (₹/hr)</label>
+                <input type="number" name="operator_charge_per_hr" class="form-control" value="150">
+              </div>
+
+              <div>
+                <label class="form-label" style="font-weight: 700; font-size: 0.85rem;">Security Caution Deposit (₹)</label>
+                <input type="number" name="security_deposit" class="form-control" value="2000">
+              </div>
+
+              <div>
+                <label class="form-label" style="font-weight: 700; font-size: 0.85rem;">Location & Village</label>
+                <input type="text" name="location" class="form-control" value="Sahnewal / Ludhiana, Punjab">
+              </div>
+            </div>
+
+            <div style="margin-bottom: 1.25rem;">
+              <label class="form-label" style="font-weight: 700; font-size: 0.85rem;">Compatible Implements & Special Terms</label>
+              <textarea name="implements_compatibility" class="form-control" rows="2" placeholder="e.g. Standard 3-point linkage. Fits rotavators, cultivator and 5-tonne trolley. Valid ID required."></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+              <button type="reset" class="btn btn-secondary">Reset</button>
+              <button type="submit" class="btn btn-primary" style="font-weight: 800;">
+                🚀 Publish Machinery Listing
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- MODAL 1: INTERACTIVE BOOKING MODAL -->
+  <div id="bookingModalBackdrop" class="agri-modal-backdrop" onclick="if(event.target === this) AgriEquipment.closeBookingModal()">
+    <div class="agri-modal">
+      <div class="agri-modal-header">
+        <div>
+          <h3 style="font-size: 1.25rem; color: var(--text-main); margin-bottom: 2px;" id="bookModalTitle">
+            Book Farm Equipment
+          </h3>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0;" id="bookModalSubtitle">
+            Select your rental time slot and farm delivery options
+          </p>
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="AgriEquipment.closeBookingModal()">&times;</button>
+      </div>
+
+      <div class="agri-modal-body">
+        <!-- Live Conflict Warning Banner -->
+        <div id="conflictBanner" class="conflict-banner">
+          ⚠️ <strong>Time Slot Unavailable:</strong> <span id="conflictMsg">This machine is already reserved for the selected slot. Please pick another slot or machine.</span>
+        </div>
+
+        <!-- Live Available Banner -->
+        <div id="availableBanner" class="available-banner">
+          ✅ <strong>Slot Available:</strong> Machine is free and ready for booking during this time.
+        </div>
+
+        <form id="bookingForm" onsubmit="AgriEquipment.confirmBookingSubmit(event)">
+          <input type="hidden" id="bookEquipmentId" name="equipment_id">
+
+          <!-- Timing Controls -->
+          <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-light); margin-bottom: 1.25rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <label style="font-weight: 800; font-size: 0.88rem; color: var(--text-main);">Rental Type</label>
+              <div class="rental-type-toggle">
+                <button type="button" class="rental-type-btn active" id="modalToggleHourly" onclick="AgriEquipment.setModalRentalType('HOURLY')">⏱️ Hourly</button>
+                <button type="button" class="rental-type-btn" id="modalToggleDaily" onclick="AgriEquipment.setModalRentalType('DAILY')">📅 Daily</button>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+              <div>
+                <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 3px;">Rental Start Date *</label>
+                <input type="date" id="bookStartDate" class="form-control" required onchange="AgriEquipment.recalculateBooking()">
+              </div>
+
+              <div id="hourlyTimeBox">
+                <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 3px;">Start Time *</label>
+                <select id="bookStartTime" class="form-control" onchange="AgriEquipment.recalculateBooking()">
+                  <option value="06:00">06:00 AM (Morning Shift)</option>
+                  <option value="07:00">07:00 AM</option>
+                  <option value="08:00" selected>08:00 AM</option>
+                  <option value="09:00">09:00 AM</option>
+                  <option value="10:00">10:00 AM</option>
+                  <option value="12:00">12:00 PM (Noon)</option>
+                  <option value="14:00">02:00 PM</option>
+                  <option value="16:00">04:00 PM</option>
+                </select>
+              </div>
+
+              <div id="durationBox" style="grid-column: span 2;">
+                <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 3px;" id="durationLabel">
+                  Rental Duration (Hours) *
+                </label>
+                <select id="bookDurationUnits" class="form-control" onchange="AgriEquipment.recalculateBooking()">
+                  <option value="2">2 Hours</option>
+                  <option value="3">3 Hours</option>
+                  <option value="4" selected>4 Hours (Half Day)</option>
+                  <option value="6">6 Hours</option>
+                  <option value="8">8 Hours (Full Day Shift)</option>
+                  <option value="10">10 Hours</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add-ons Section -->
+          <div style="margin-bottom: 1.25rem;">
+            <label style="font-weight: 800; font-size: 0.88rem; color: var(--text-main); display: block; margin-bottom: 0.5rem;">Add-on Options</label>
+            
+            <label style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #fff; border: 1px solid var(--border-light); border-radius: 8px; margin-bottom: 6px; cursor: pointer;">
+              <span style="font-size: 0.86rem; font-weight: 600;">👨‍✈️ Skilled Driver / Operator</span>
+              <input type="checkbox" id="addOperator" checked onchange="AgriEquipment.recalculateBooking()">
+            </label>
+
+            <label style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #fff; border: 1px solid var(--border-light); border-radius: 8px; margin-bottom: 6px; cursor: pointer;">
+              <span style="font-size: 0.86rem; font-weight: 600;">⛽ Fuel Included (Standard Diesel)</span>
+              <input type="checkbox" id="addFuel" onchange="AgriEquipment.recalculateBooking()">
+            </label>
+
+            <label style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #fff; border: 1px solid var(--border-light); border-radius: 8px; margin-bottom: 6px; cursor: pointer;">
+              <span style="font-size: 0.86rem; font-weight: 600;">🚜 Deliver to Farm Gate (Transit Truck)</span>
+              <input type="checkbox" id="addDelivery" checked onchange="AgriEquipment.recalculateBooking()">
+            </label>
+
+            <div id="deliveryAddressBox" style="margin-top: 6px;">
+              <input type="text" id="deliveryAddress" class="form-control" placeholder="📍 Farm Gate Location / Village / Khasra No." value="Sahnewal Farm 1, Ludhiana">
+            </div>
+          </div>
+
+          <!-- Payment Options -->
+          <div style="margin-bottom: 1rem;">
+            <label style="font-weight: 800; font-size: 0.88rem; color: var(--text-main); display: block; margin-bottom: 0.5rem;">Payment Method</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+              <label style="border: 1px solid var(--border-light); padding: 8px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                <input type="radio" name="payment_method" value="UPI_QR" checked> ⚡ UPI Bharat QR
+              </label>
+              <label style="border: 1px solid var(--border-light); padding: 8px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                <input type="radio" name="payment_method" value="KCC_RUPAY"> 🌾 KCC RuPay Card
+              </label>
+              <label style="border: 1px solid var(--border-light); padding: 8px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                <input type="radio" name="payment_method" value="NET_BANKING"> 🏛️ Net Banking
+              </label>
+              <label style="border: 1px solid var(--border-light); padding: 8px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                <input type="radio" name="payment_method" value="PAY_ON_DELIVERY"> 💵 Pay on Delivery
+              </label>
+            </div>
+          </div>
+
+          <!-- Live Price Breakdown -->
+          <div class="price-breakdown-card">
+            <div class="price-row">
+              <span>Base Machinery Rental (<span id="calcDurationText">4 Hours</span>):</span>
+              <span id="calcBasePrice">₹2,200</span>
+            </div>
+            <div class="price-row" id="rowOperator">
+              <span>Operator Charges:</span>
+              <span id="calcOperatorPrice">₹600</span>
+            </div>
+            <div class="price-row" id="rowFuel" style="display: none;">
+              <span>Fuel Charges:</span>
+              <span id="calcFuelPrice">₹0</span>
+            </div>
+            <div class="price-row" id="rowDelivery">
+              <span>Farm Gate Delivery (<span id="calcKmText">3.8 km</span>):</span>
+              <span id="calcDeliveryPrice">₹133</span>
+            </div>
+            <div class="price-row">
+              <span>Refundable Security Deposit:</span>
+              <span id="calcDepositPrice" style="color: #059669; font-weight: 700;">₹2,000 (Refundable)</span>
+            </div>
+            <div class="price-row">
+              <span>Taxes & GST (5% SMAM Scheme):</span>
+              <span id="calcGstPrice">₹146.65</span>
+            </div>
+            <div class="price-row total">
+              <span>Total Payable Net:</span>
+              <span id="calcTotalPrice">₹5,079.65</span>
+            </div>
+          </div>
+
+          <div style="margin-top: 1rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+            <button type="button" class="btn btn-secondary" onclick="AgriEquipment.closeBookingModal()">Cancel</button>
+            <button type="submit" id="btnConfirmBooking" class="btn btn-primary" style="font-weight: 800;">
+              💳 Confirm & Pay <span id="btnPayAmount">₹5,079</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: CONFIRMATION RECEIPT SLIP -->
+  <div id="receiptModalBackdrop" class="agri-modal-backdrop" onclick="if(event.target === this) this.classList.remove('active')">
+    <div class="agri-modal" style="max-width: 650px;">
+      <div class="agri-modal-header" style="background: #064e3b; color: #fff;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span style="font-size: 1.3rem;">🌾</span>
+          <h3 style="font-size: 1.15rem; color: #fff; margin: 0;">Official Rental Booking Slip</h3>
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('receiptModalBackdrop').classList.remove('active')" style="color: #fff; background: rgba(255,255,255,0.2);">&times;</button>
+      </div>
+
+      <div class="agri-modal-body" id="printableSlipArea">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div class="agri-modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="document.getElementById('receiptModalBackdrop').classList.remove('active')">Close</button>
+        <button type="button" class="btn btn-primary" onclick="window.print()">🖨️ Print Receipt Slip</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: MACHINE DETAILS MODAL -->
+  <div id="detailsModalBackdrop" class="agri-modal-backdrop" onclick="if(event.target === this) this.classList.remove('active')">
+    <div class="agri-modal" style="max-width: 680px;">
+      <div class="agri-modal-header">
+        <h3 style="font-size: 1.2rem; margin: 0;" id="detailsModalTitle">Machinery Specifications</h3>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('detailsModalBackdrop').classList.remove('active')">&times;</button>
+      </div>
+      <div class="agri-modal-body" id="detailsModalBody">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script>
+    /**
+     * 🌾 AGRIWISE AI - Farm Equipment Rental Controller
+     */
+    const AgriEquipment = {
+      equipmentList: [],
+      currentCategory: 'ALL',
+      currentRentalType: 'HOURLY',
+      modalRentalType: 'HOURLY',
+      selectedEquipment: null,
+      myRentals: { upcoming: [], active: [], completed: [], cancelled: [] },
+
+      async init() {
+        // Set default start date in booking modal to tomorrow
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const yyyy = tomorrow.getFullYear();
+        const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+        const dd = String(tomorrow.getDate()).padStart(2, '0');
+        const defaultDateStr = `${yyyy}-${mm}-${dd}`;
+        const dateInput = document.getElementById('bookStartDate');
+        if (dateInput) {
+          dateInput.min = defaultDateStr;
+          dateInput.value = defaultDateStr;
+        }
+
+        // Check URL params for deep linking
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('tab') === 'rentals') {
+          this.switchTab('rentals');
+        }
+
+        await this.loadCatalog();
+        await this.loadRentals();
+      },
+
+      switchTab(tabName) {
+        document.getElementById('viewCatalog').style.display = tabName === 'catalog' ? 'block' : 'none';
+        document.getElementById('viewRentals').style.display = tabName === 'rentals' ? 'block' : 'none';
+        document.getElementById('viewList').style.display = tabName === 'list' ? 'block' : 'none';
+
+        document.getElementById('tabBtnCatalog').classList.toggle('active', tabName === 'catalog');
+        document.getElementById('tabBtnRentals').classList.toggle('active', tabName === 'rentals');
+        document.getElementById('tabBtnList').classList.toggle('active', tabName === 'list');
+      },
+
+      setRentalType(type) {
+        this.currentRentalType = type;
+        document.getElementById('toggleHourly').classList.toggle('active', type === 'HOURLY');
+        document.getElementById('toggleDaily').classList.toggle('active', type === 'DAILY');
+        this.handleFilterChange();
+      },
+
+      setCategory(cat, el) {
+        this.currentCategory = cat;
+        document.querySelectorAll('#categoryPills .filter-pill').forEach(p => p.classList.remove('active'));
+        if (el) el.classList.add('active');
+        this.handleFilterChange();
+      },
+
+      handlePriceSlider(val) {
+        document.getElementById('priceSliderVal').innerText = `Up to ₹${Number(val).toLocaleString('en-IN')}`;
+        this.handleFilterChange();
+      },
+
+      async handleFilterChange() {
+        const search = document.getElementById('eqSearchInput').value.trim();
+        const maxDist = document.getElementById('eqDistanceFilter').value;
+        const sortBy = document.getElementById('eqSortFilter').value;
+        const maxPrice = document.getElementById('priceSlider').value;
+
+        const params = {
+          rental_type: this.currentRentalType,
+          sort_by: sortBy
+        };
+        if (search) params.search = search;
+        if (this.currentCategory !== 'ALL') params.category = this.currentCategory;
+        if (maxDist && Number(maxDist) < 999) params.max_distance = maxDist;
+        if (maxPrice) params.max_price = maxPrice;
+
+        await this.loadCatalog(params);
+      },
+
+      async loadCatalog(params = {}) {
+        const grid = document.getElementById('equipmentGrid');
+        try {
+          params.rental_type = params.rental_type || this.currentRentalType;
+          const items = await AgriAPI.getEquipment(params);
+          this.equipmentList = items;
+
+          document.getElementById('equipmentCountNotice').innerText = `Showing ${items.length} available machines`;
+
+          if (items.length === 0) {
+            grid.innerHTML = `
+              <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: #fff; border-radius: 12px; border: 1px solid var(--border-light);">
+                <span style="font-size: 3rem;">🚜</span>
+                <h3 style="margin-top: 0.5rem; color: var(--text-main);">No Machinery Matches Found</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Try adjusting your distance or price filters to see more nearby farm equipment.</p>
+                <button class="btn btn-secondary btn-sm" onclick="AgriEquipment.setCategory('ALL'); document.getElementById('eqSearchInput').value=''; AgriEquipment.handleFilterChange();">Reset Filters</button>
+              </div>
+            `;
+            return;
+          }
+
+          grid.innerHTML = items.map(eq => {
+            const isHourly = this.currentRentalType === 'HOURLY';
+            const displayRate = isHourly ? `₹${Number(eq.hourly_rate).toLocaleString('en-IN')}` : `₹${Number(eq.daily_rate).toLocaleString('en-IN')}`;
+            const displayUnit = isHourly ? '/ hour' : '/ day';
+            const altRate = isHourly ? `(or ₹${Number(eq.daily_rate).toLocaleString('en-IN')} / day)` : `(or ₹${Number(eq.hourly_rate).toLocaleString('en-IN')} / hr)`;
+
+            const statusClass = eq.live_status.status === 'AVAILABLE' ? 'status-available' :
+                               eq.live_status.status === 'BOOKED' ? 'status-booked' : 'status-maintenance';
+
+            return `
+              <div class="equipment-card">
+                <div class="equipment-img-wrapper">
+                  <img src="${eq.image_url}" class="equipment-img" alt="${eq.name}" onerror="this.src='/images/equipment/john_deere_5310.jpg'">
+                  <span class="equipment-cat-tag">${eq.category}</span>
+                  <span class="equipment-status-tag ${statusClass}">${eq.live_status.badge_text}</span>
+                </div>
+
+                <div class="equipment-body">
+                  <h4 class="equipment-name">${eq.name}</h4>
+                  <div class="equipment-provider">
+                    <span>🏢 ${eq.owner_name}</span>
+                    <span class="badge badge-emerald" style="font-size: 0.65rem; padding: 1px 5px;">${eq.owner_badge}</span>
+                  </div>
+
+                  <div class="equipment-specs-row">
+                    <span class="spec-chip">⚡ ${eq.power_hp}</span>
+                    <span class="spec-chip">⛽ ${eq.fuel_type}</span>
+                    <span class="spec-chip">⭐ ${eq.rating} (${eq.reviews_count})</span>
+                  </div>
+
+                  <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                    📍 ${eq.location} • <strong>${eq.distance_km} km away</strong>
+                  </div>
+
+                  <div class="equipment-price-box">
+                    <div>
+                      <div class="price-main">${displayRate} <span class="price-unit">${displayUnit}</span></div>
+                      <div style="font-size: 0.74rem; color: var(--text-muted);">${altRate}</div>
+                    </div>
+                    <div style="font-size: 0.76rem; font-weight: 700; color: #059669;">
+                      ${eq.operator_available ? '👨‍✈️ With Operator' : '👤 Self-Operated'}
+                    </div>
+                  </div>
+
+                  <div class="equipment-actions">
+                    <button class="btn btn-secondary btn-sm" onclick="AgriEquipment.openDetailsModal(${eq.id})">
+                      🔍 Specs
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="AgriEquipment.openBookingModal(${eq.id})">
+                      ⚡ Rent Now
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+
+        } catch (err) {
+          console.error("Failed to load equipment catalog", err);
+          grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 2rem; text-align: center; color: red;">Failed to load equipment catalog. Please verify server connection.</div>`;
+        }
+      },
+
+      async openDetailsModal(id) {
+        try {
+          const eq = await AgriAPI.getEquipmentDetails(id);
+          document.getElementById('detailsModalTitle').innerText = eq.name;
+
+          let slotsHtml = '<em>No conflicting reservations recorded. Machine available for immediate booking.</em>';
+          if (eq.upcoming_booked_slots && eq.upcoming_booked_slots.length > 0) {
+            slotsHtml = `<ul style="margin: 0; padding-left: 1.2rem; font-size: 0.84rem; color: #b45309;">` +
+              eq.upcoming_booked_slots.map(s => `<li><strong>${s.formatted_start}</strong> to <strong>${s.formatted_end}</strong> (${s.rental_type})</li>`).join('') +
+              `</ul>`;
+          }
+
+          document.getElementById('detailsModalBody').innerHTML = `
+            <div style="display: flex; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap;">
+              <img src="${eq.image_url}" style="width: 100%; max-height: 240px; object-fit: cover; border-radius: var(--radius-md);" onerror="this.src='/images/equipment/john_deere_5310.jpg'">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem; background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+              <div><strong>Brand & Model:</strong> ${eq.brand} (${eq.model})</div>
+              <div><strong>Manufacturing Year:</strong> ${eq.year}</div>
+              <div><strong>Engine Power:</strong> ${eq.power_hp}</div>
+              <div><strong>Fuel Type:</strong> ${eq.fuel_type}</div>
+              <div><strong>Hourly Tariff:</strong> ₹${eq.hourly_rate} / hr</div>
+              <div><strong>Daily Tariff:</strong> ₹${eq.daily_rate} / day</div>
+              <div><strong>Operator Charge:</strong> ₹${eq.operator_charge_per_hr}/hr (₹${eq.operator_charge_per_day}/day)</div>
+              <div><strong>Security Deposit:</strong> ₹${eq.security_deposit} (Refundable)</div>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+              <h5 style="font-size: 0.95rem; margin-bottom: 4px;">🚜 Implement Compatibility:</h5>
+              <p style="font-size: 0.88rem; color: #475569;">${eq.implements_compatibility}</p>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+              <h5 style="font-size: 0.95rem; margin-bottom: 4px;">📜 Rental Terms & Handover Guidelines:</h5>
+              <p style="font-size: 0.85rem; color: #64748b;">${eq.terms}</p>
+            </div>
+
+            <div style="margin-bottom: 1.25rem; background: #fef3c7; padding: 0.85rem; border-radius: 8px; border: 1px solid #fde68a;">
+              <h5 style="font-size: 0.88rem; color: #92400e; margin-bottom: 4px;">📅 Reserved Schedule Slots:</h5>
+              ${slotsHtml}
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-light); padding-top: 1rem;">
+              <div>
+                <div style="font-size: 0.84rem; color: var(--text-muted);">Provider Phone:</div>
+                <div style="font-weight: 800; font-size: 1.05rem; color: var(--primary-800);">📞 ${eq.owner_phone}</div>
+              </div>
+              <button class="btn btn-primary" onclick="document.getElementById('detailsModalBackdrop').classList.remove('active'); AgriEquipment.openBookingModal(${eq.id})">
+                ⚡ Book This Machine Now
+              </button>
+            </div>
+          `;
+
+          document.getElementById('detailsModalBackdrop').classList.add('active');
+        } catch (err) {
+          alert('Failed to load equipment specifications.');
+        }
+      },
+
+      openBookingModal(id) {
+        const eq = this.equipmentList.find(item => item.id === id);
+        if (!eq) return;
+        this.selectedEquipment = eq;
+
+        document.getElementById('bookEquipmentId').value = eq.id;
+        document.getElementById('bookModalTitle').innerText = `Rent: ${eq.name}`;
+        document.getElementById('bookModalSubtitle').innerText = `Provider: ${eq.owner_name} • ${eq.location} (${eq.distance_km} km away)`;
+
+        // Reset banners
+        document.getElementById('conflictBanner').classList.remove('active');
+        document.getElementById('availableBanner').classList.remove('active');
+        document.getElementById('btnConfirmBooking').disabled = false;
+
+        this.setModalRentalType(this.currentRentalType);
+        document.getElementById('bookingModalBackdrop').classList.add('active');
+      },
+
+      closeBookingModal() {
+        document.getElementById('bookingModalBackdrop').classList.remove('active');
+      },
+
+      setModalRentalType(type) {
+        this.modalRentalType = type;
+        document.getElementById('modalToggleHourly').classList.toggle('active', type === 'HOURLY');
+        document.getElementById('modalToggleDaily').classList.toggle('active', type === 'DAILY');
+
+        const isHourly = type === 'HOURLY';
+        document.getElementById('hourlyTimeBox').style.display = isHourly ? 'block' : 'none';
+        document.getElementById('durationLabel').innerText = isHourly ? 'Rental Duration (Hours) *' : 'Rental Duration (Days) *';
+
+        const durSelect = document.getElementById('bookDurationUnits');
+        if (isHourly) {
+          durSelect.innerHTML = `
+            <option value="2">2 Hours</option>
+            <option value="3">3 Hours</option>
+            <option value="4" selected>4 Hours (Half Day)</option>
+            <option value="6">6 Hours</option>
+            <option value="8">8 Hours (Full Shift)</option>
+            <option value="10">10 Hours</option>
+          `;
+        } else {
+          durSelect.innerHTML = `
+            <option value="1" selected>1 Day</option>
+            <option value="2">2 Days</option>
+            <option value="3">3 Days</option>
+            <option value="5">5 Days</option>
+            <option value="7">1 Week (7 Days)</option>
+          `;
+        }
+
+        this.recalculateBooking();
+      },
+
+      async recalculateBooking() {
+        if (!this.selectedEquipment) return;
+        const eq = this.selectedEquipment;
+
+        const isHourly = this.modalRentalType === 'HOURLY';
+        const startDate = document.getElementById('bookStartDate').value;
+        const startTime = isHourly ? document.getElementById('bookStartTime').value : '08:00';
+        const durationUnits = parseFloat(document.getElementById('bookDurationUnits').value) || 1.0;
+
+        const withOperator = document.getElementById('addOperator').checked;
+        const withFuel = document.getElementById('addFuel').checked;
+        const withDelivery = document.getElementById('addDelivery').checked;
+
+        document.getElementById('deliveryAddressBox').style.display = withDelivery ? 'block' : 'none';
+
+        // Calculate Start and End ISO strings
+        const startDt = new Date(`${startDate}T${startTime}:00`);
+        let endDt = new Date(startDt.getTime());
+        if (isHourly) {
+          endDt.setHours(endDt.getHours() + durationUnits);
+        } else {
+          endDt.setDate(endDt.getDate() + durationUnits);
+        }
+
+        // Live Overlap Check
+        try {
+          const avail = await AgriAPI.checkEquipmentAvailability({
+            equipment_id: eq.id,
+            start_time: startDt.toISOString(),
+            end_time: endDt.toISOString()
+          });
+
+          const conflictBanner = document.getElementById('conflictBanner');
+          const availBanner = document.getElementById('availableBanner');
+          const btnSubmit = document.getElementById('btnConfirmBooking');
+
+          if (!avail.available) {
+            conflictBanner.classList.add('active');
+            availBanner.classList.remove('active');
+            document.getElementById('conflictMsg').innerText = avail.message;
+            btnSubmit.disabled = true;
+            btnSubmit.style.opacity = '0.5';
+          } else {
+            conflictBanner.classList.remove('active');
+            availBanner.classList.add('active');
+            btnSubmit.disabled = false;
+            btnSubmit.style.opacity = '1';
+          }
+        } catch (e) {
+          console.warn("Availability check error", e);
+        }
+
+        // Price calculations
+        const unitRate = isHourly ? eq.hourly_rate : eq.daily_rate;
+        const baseAmount = unitRate * durationUnits;
+
+        const opUnitRate = isHourly ? eq.operator_charge_per_hr : eq.operator_charge_per_day;
+        const operatorAmount = withOperator ? (opUnitRate * durationUnits) : 0;
+
+        const fuelUnitRate = isHourly ? eq.fuel_charge_per_hr : eq.fuel_charge_per_day;
+        const fuelAmount = withFuel ? (fuelUnitRate * durationUnits) : 0;
+
+        const deliveryDist = eq.distance_km || 4.0;
+        const deliveryAmount = withDelivery ? (deliveryDist * eq.delivery_rate_per_km) : 0;
+
+        const subtotal = baseAmount + operatorAmount + fuelAmount + deliveryAmount;
+        const gstAmount = subtotal * 0.05;
+        const deposit = eq.security_deposit || 2000;
+        const totalAmount = subtotal + gstAmount + deposit;
+
+        // Update UI breakdown
+        document.getElementById('calcDurationText').innerText = isHourly ? `${durationUnits} Hours` : `${durationUnits} Days`;
+        document.getElementById('calcBasePrice').innerText = `₹${baseAmount.toLocaleString('en-IN')}`;
+
+        document.getElementById('rowOperator').style.display = withOperator ? 'flex' : 'none';
+        document.getElementById('calcOperatorPrice').innerText = `₹${operatorAmount.toLocaleString('en-IN')}`;
+
+        document.getElementById('rowFuel').style.display = withFuel ? 'flex' : 'none';
+        document.getElementById('calcFuelPrice').innerText = `₹${fuelAmount.toLocaleString('en-IN')}`;
+
+        document.getElementById('rowDelivery').style.display = withDelivery ? 'flex' : 'none';
+        document.getElementById('calcKmText').innerText = `${deliveryDist} km`;
+        document.getElementById('calcDeliveryPrice').innerText = `₹${deliveryAmount.toLocaleString('en-IN')}`;
+
+        document.getElementById('calcDepositPrice').innerText = `₹${deposit.toLocaleString('en-IN')} (Refundable)`;
+        document.getElementById('calcGstPrice').innerText = `₹${gstAmount.toFixed(2)}`;
+        document.getElementById('calcTotalPrice').innerText = `₹${totalAmount.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+        document.getElementById('btnPayAmount').innerText = `₹${Math.round(totalAmount).toLocaleString('en-IN')}`;
+      },
+
+      async confirmBookingSubmit(e) {
+        e.preventDefault();
+        const eq = this.selectedEquipment;
+        if (!eq) return;
+
+        const isHourly = this.modalRentalType === 'HOURLY';
+        const startDate = document.getElementById('bookStartDate').value;
+        const startTime = isHourly ? document.getElementById('bookStartTime').value : '08:00';
+        const durationUnits = parseFloat(document.getElementById('bookDurationUnits').value);
+
+        const startDt = new Date(`${startDate}T${startTime}:00`);
+        let endDt = new Date(startDt.getTime());
+        if (isHourly) {
+          endDt.setHours(endDt.getHours() + durationUnits);
+        } else {
+          endDt.setDate(endDt.getDate() + durationUnits);
+        }
+
+        const selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+        const withOperator = document.getElementById('addOperator').checked;
+        const withFuel = document.getElementById('addFuel').checked;
+        const withDelivery = document.getElementById('addDelivery').checked;
+        const deliveryAddress = document.getElementById('deliveryAddress').value.trim();
+
+        const payload = {
+          equipment_id: eq.id,
+          rental_type: this.modalRentalType,
+          start_time: startDt.toISOString(),
+          end_time: endDt.toISOString(),
+          duration_units: durationUnits,
+          with_operator: withOperator,
+          with_fuel: withFuel,
+          delivery_to_farm: withDelivery,
+          delivery_address: deliveryAddress,
+          payment_method: selectedPaymentMethod,
+          farmer_name: window.AgriState && window.AgriState.currentUser ? window.AgriState.currentUser.name : 'Sardar Gurpreet Singh'
+        };
+
+        const btn = document.getElementById('btnConfirmBooking');
+        btn.disabled = true;
+        btn.innerText = '⏳ Processing Booking...';
+
+        try {
+          const result = await AgriAPI.bookEquipment(payload);
+          this.closeBookingModal();
+
+          // Show confirmation slip modal
+          await this.showReceiptSlip(result.booking_id);
+
+          // Refresh catalog & rentals
+          await this.loadCatalog();
+          await this.loadRentals();
+        } catch (err) {
+          alert('Booking failed: ' + (err.message || 'Could not complete reservation.'));
+        } finally {
+          btn.disabled = false;
+          btn.innerText = '💳 Confirm & Pay';
+        }
+      },
+
+      async showReceiptSlip(bookingId) {
+        try {
+          const rec = await AgriAPI.getEquipmentReceipt(bookingId);
+          const modalArea = document.getElementById('printableSlipArea');
+
+          modalArea.innerHTML = `
+            <div class="booking-slip">
+              <div class="booking-slip-watermark">CONFIRMED</div>
+              
+              <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #047857; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+                <div>
+                  <div style="font-size: 1.3rem; font-weight: 800; color: #064e3b;">🌾 AGRIWISE AI</div>
+                  <div style="font-size: 0.76rem; color: #64748b;">Ministry of Agriculture CHC DBT Settlement Receipt</div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 0.85rem; font-weight: 800; color: #047857;">${rec.receipt_number}</div>
+                  <div style="font-size: 0.75rem; color: #64748b;">Booking: <strong>${rec.booking_id}</strong></div>
+                  <div style="font-size: 0.75rem; color: #64748b;">${rec.created_at}</div>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; font-size: 0.86rem;">
+                <div>
+                  <div style="font-weight: 700; color: #334155; margin-bottom: 3px;">🚜 Equipment Reserved:</div>
+                  <div style="font-weight: 800; font-size: 1rem; color: var(--primary-900);">${rec.equipment.name}</div>
+                  <div style="font-size: 0.78rem; color: #64748b;">${rec.equipment.power} • ${rec.equipment.category}</div>
+                </div>
+                <div>
+                  <div style="font-weight: 700; color: #334155; margin-bottom: 3px;">⏱️ Rental Slot & Duration:</div>
+                  <div><strong>${rec.rental_period}</strong></div>
+                  <div style="font-size: 0.78rem; color: #059669; font-weight: 700;">Duration: ${rec.duration}</div>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; font-size: 0.86rem; background: #f8fafc; padding: 0.85rem; border-radius: 8px;">
+                <div>
+                  <div style="font-weight: 700; color: #475569;">👨‍🌾 Farmer / Hirer:</div>
+                  <div>${rec.farmer.name} (${rec.farmer.phone})</div>
+                  <div style="font-size: 0.78rem; color: #64748b;">📍 ${rec.farmer.delivery_address}</div>
+                </div>
+                <div>
+                  <div style="font-weight: 700; color: #475569;">🏢 CHC Partner / Provider:</div>
+                  <div>${rec.owner.name}</div>
+                  <div style="font-size: 0.78rem; color: #047857; font-weight: 700;">📞 ${rec.owner.phone} • ${rec.owner.badge}</div>
+                </div>
+              </div>
+
+              <div style="border-top: 1px solid #cbd5e1; padding-top: 0.75rem; margin-bottom: 0.75rem;">
+                <div style="font-weight: 800; font-size: 0.9rem; margin-bottom: 6px;">Payment Summary:</div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 3px;">
+                  <span>Base Machinery Hire:</span>
+                  <span>₹${rec.financials.base_rental.toLocaleString('en-IN')}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 3px;">
+                  <span>Operator Charges:</span>
+                  <span>₹${rec.financials.operator_charges.toLocaleString('en-IN')}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 3px;">
+                  <span>Farm Gate Transit:</span>
+                  <span>₹${rec.financials.delivery_charges.toLocaleString('en-IN')}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 3px;">
+                  <span>Refundable Caution Deposit:</span>
+                  <span style="color: #059669; font-weight: 700;">₹${rec.financials.security_deposit_refundable.toLocaleString('en-IN')} (Refundable)</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 3px;">
+                  <span>5% GST:</span>
+                  <span>₹${rec.financials.gst_5_pct.toFixed(2)}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 1.05rem; font-weight: 800; color: #064e3b; border-top: 1px solid #cbd5e1; margin-top: 6px; padding-top: 6px;">
+                  <span>Total Paid (${rec.financials.payment_method}):</span>
+                  <span>₹${rec.financials.total_paid.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</span>
+                </div>
+              </div>
+
+              <div style="font-size: 0.72rem; color: #64748b; line-height: 1.4; border-top: 1px dashed #cbd5e1; padding-top: 6px;">
+                ✓ 100% full refund policy if cancelled > 6 hours before slot start. Security deposit released within 2 hours of post-use physical inspection.
+              </div>
+            </div>
+          `;
+
+          document.getElementById('receiptModalBackdrop').classList.add('active');
+        } catch (e) {
+          alert('Could not generate receipt slip.');
+        }
+      },
+
+      async loadRentals() {
+        try {
+          const res = await AgriAPI.getMyEquipmentRentals();
+          this.myRentals = res;
+
+          const total = res.total_count || 0;
+          document.getElementById('myRentalsCountBadge').innerText = total;
+          document.getElementById('heroMyRentalsBadge').innerText = total;
+
+          document.getElementById('countAll').innerText = total;
+          document.getElementById('countUpcoming').innerText = (res.upcoming || []).length;
+          document.getElementById('countActive').innerText = (res.active || []).length;
+          document.getElementById('countCompleted').innerText = (res.completed || []).length;
+          document.getElementById('countCancelled').innerText = (res.cancelled || []).length;
+
+          this.filterRentalsSubtab('all');
+        } catch (err) {
+          console.error("Failed to load rentals", err);
+        }
+      },
+
+      filterRentalsSubtab(type, el) {
+        if (el) {
+          document.querySelectorAll('#viewRentals .btn-outline').forEach(b => b.classList.remove('active-subtab'));
+          el.classList.add('active-subtab');
+        }
+
+        let list = [];
+        if (type === 'upcoming') list = this.myRentals.upcoming || [];
+        else if (type === 'active') list = this.myRentals.active || [];
+        else if (type === 'completed') list = this.myRentals.completed || [];
+        else if (type === 'cancelled') list = this.myRentals.cancelled || [];
+        else {
+          list = [
+            ...(this.myRentals.upcoming || []),
+            ...(this.myRentals.active || []),
+            ...(this.myRentals.completed || []),
+            ...(this.myRentals.cancelled || [])
+          ];
+        }
+
+        const container = document.getElementById('rentalsListContainer');
+        if (list.length === 0) {
+          container.innerHTML = `
+            <div style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+              <span style="font-size: 2.5rem;">🚜</span>
+              <p style="margin-top: 0.5rem; font-size: 0.95rem;">No rentals found in this status category.</p>
+              <button class="btn btn-sm btn-primary" onclick="AgriEquipment.switchTab('catalog')">Browse Farm Machinery</button>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = list.map(r => {
+          const statusBadge = r.booking_status === 'CONFIRMED' ? 'badge-blue' :
+                              r.booking_status === 'ACTIVE' ? 'badge-emerald' :
+                              r.booking_status === 'COMPLETED' ? 'badge-emerald' : 'badge-red';
+
+          return `
+            <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1rem; box-shadow: var(--shadow-xs); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+              <div style="display: flex; gap: 1rem; align-items: center;">
+                <img src="${r.equipment_image}" style="width: 76px; height: 76px; object-fit: cover; border-radius: 8px;" onerror="this.src='/images/equipment/john_deere_5310.jpg'">
+                <div>
+                  <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2px;">
+                    <span style="font-weight: 800; color: var(--text-main); font-size: 1.05rem;">${r.equipment_name}</span>
+                    <span class="badge ${statusBadge}">${r.booking_status}</span>
+                  </div>
+                  <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 3px;">
+                    Booking ID: <strong>#${r.booking_id}</strong> • Provider: ${r.owner_name}
+                  </div>
+                  <div style="font-size: 0.82rem; color: #334155;">
+                    ⏱️ <strong>${r.start_time}</strong> to <strong>${r.end_time}</strong> (${r.duration_units} ${r.rental_type === 'HOURLY' ? 'Hours' : 'Days'})
+                  </div>
+                </div>
+              </div>
+
+              <div style="text-align: right;">
+                <div style="font-size: 1.25rem; font-weight: 800; color: var(--primary-900); margin-bottom: 2px;">
+                  ₹${Number(r.total_amount).toLocaleString('en-IN')}
+                </div>
+                <div style="font-size: 0.74rem; color: #059669; font-weight: 600; margin-bottom: 0.5rem;">
+                  Deposit: ₹${Number(r.security_deposit).toLocaleString('en-IN')} • Paid via ${r.payment_method}
+                </div>
+
+                <div style="display: flex; gap: 0.4rem; justify-content: flex-end; flex-wrap: wrap;">
+                  <button class="btn btn-sm btn-secondary" style="padding: 3px 8px; font-size: 0.75rem;" onclick="AgriEquipment.contactOwner('${r.owner_name}', '${r.owner_phone}')">
+                    📞 Call Provider
+                  </button>
+                  <button class="btn btn-sm btn-outline-primary" style="padding: 3px 8px; font-size: 0.75rem;" onclick="AgriEquipment.showReceiptSlip('${r.booking_id}')">
+                    📄 Receipt Slip
+                  </button>
+                  ${r.can_cancel ? `
+                    <button class="btn btn-sm btn-secondary" style="padding: 3px 8px; font-size: 0.75rem; color: #dc2626;" onclick="AgriEquipment.cancelBooking('${r.booking_id}')">
+                      🛑 Cancel Booking
+                    </button>
+                  ` : ''}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      },
+
+      contactOwner(owner, phone) {
+        alert(`Provider: ${owner}\nDirect Phone / WhatsApp: ${phone}\n\nCall provider for immediate gate coordination or implement changes.`);
+      },
+
+      async cancelBooking(bookingId) {
+        if (!confirm('Are you sure you want to cancel this equipment booking?\n\nCancellation Policy:\n• 100% full refund if cancelled > 6 hours before slot.\n• Deposit + 50% base rental if cancelled < 6 hours before slot.')) return;
+
+        try {
+          const res = await AgriAPI.cancelEquipmentBooking(bookingId, 'Farmer requested cancellation');
+          alert(`Booking Cancelled:\n${res.message}\n${res.policy_note}`);
+          await this.loadRentals();
+          await this.loadCatalog();
+        } catch (err) {
+          alert('Cancellation failed: ' + (err.message || 'Error cancelling booking.'));
+        }
+      },
+
+      async submitNewEquipment(e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        data.hourly_rate = parseFloat(data.hourly_rate);
+        data.daily_rate = parseFloat(data.daily_rate);
+        data.operator_available = data.operator_available === 'true';
+        data.operator_charge_per_hr = parseFloat(data.operator_charge_per_hr) || 150;
+        data.security_deposit = parseFloat(data.security_deposit) || 2000;
+
+        try {
+          const res = await AgriAPI.listEquipment(data);
+          alert(res.message);
+          form.reset();
+          this.switchTab('catalog');
+          await this.loadCatalog();
+        } catch (err) {
+          alert('Failed to list equipment: ' + (err.message || 'Error occurred.'));
+        }
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      AgriEquipment.init();
+    });
+  </script>
+</body>
+</html>

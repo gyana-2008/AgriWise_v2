@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌾 Seed Variety Recommendations & Comparison — AGRIWISE AI</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/marketplace.css">
+  <style>
+    .seed-card-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+      margin: -1.5rem -1.5rem 1rem -1.5rem;
+      width: calc(100% + 3rem);
+    }
+  </style>
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <!-- Title Section -->
+      <div class="page-title-bar">
+        <div class="page-title-left">
+          <h1>🌾 Certified Seed Varieties & Ranking</h1>
+          <p id="pageSubtitle">Evaluating certified high-yield hybrid varieties based on soil affinity and regional disease tolerance.</p>
+        </div>
+        <div class="page-title-actions">
+          <button class="btn btn-secondary btn-sm" onclick="toggleCompareModal()">
+            <span>⚖️ Compare Varieties</span>
+          </button>
+          <a href="/cultivation-plan" class="btn btn-primary btn-sm">
+            <span>Next: Cultivation Timeline ➔</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Commodity Filter Bar -->
+      <div class="card" style="margin-bottom: 2rem; background: #064e3b; color: #fff;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <div style="font-weight: 700; font-size: 1.05rem; color: #34d399;">Filter by Commodity / Crop:</div>
+            <select id="commodityFilterSelect" class="form-control" style="width: 240px; background: #042f24; color: #fff; border-color: #059669; font-weight: 700;" onchange="onFilterCommodityChange(this.value)">
+              <option value="Maize">🌽 Maize (Corn)</option>
+              <option value="Wheat">🌾 Wheat (Gehu)</option>
+              <option value="Mustard">🌼 Mustard (Sarson)</option>
+              <option value="Soybean">🌱 Soybean (Pili Soy)</option>
+              <option value="Basmati Rice">🍚 Basmati Rice</option>
+              <option value="Chickpea">🧆 Chickpea (Chana)</option>
+              <option value="Potato">🥔 Potato (Aloo)</option>
+            </select>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span class="badge badge-emerald" id="activeSeasonBadge">Kharif High-Yield</span>
+            <span class="badge badge-amber">ICAR / NSC Verified</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seed Variety Cards Grid (Dynamic) -->
+      <div id="seedCardsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+        <!-- Rendered by JavaScript -->
+      </div>
+
+      <!-- Seed Comparison Matrix Section -->
+      <div class="card" id="compareSection">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="icon">⚖️</span>
+            <span id="matrixHeaderTitle">Side-by-Side Hybrid Variety Comparison Matrix</span>
+          </div>
+          <span class="badge badge-emerald">3 Varieties Evaluated</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table" id="comparisonTable">
+            <!-- Rendered by JavaScript -->
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/cart.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script>
+    // Comprehensive Agronomic Seed Database for AgriWise
+    const SEED_DATABASE = {
+      "Maize": {
+        season: "Kharif Hybrid",
+        subtitle: "Evaluating certified high-yield hybrid varieties for Maize (Kharif) based on Punjab alluvial soils and corn borer resistance.",
+        varieties: [
+          {
+            id: "seed-maize-1",
+            name: "Pioneer P3396 Hybrid",
+            tag: "Top AI Recommendation",
+            tagClass: "badge-amber",
+            company: "Corteva Agriscience • Certified ICAR/NSC",
+            score: 95,
+            duration: "108 Days",
+            rate: "8 kg / acre",
+            yield: "27 - 32 q/acre",
+            pricePerKg: "₹260 / kg",
+            pricePack: "₹1,040 / 4kg pack",
+            unitPrice: 1040,
+            packSize: "4 kg Sealed Bag",
+            waterReq: "Medium",
+            droughtVigor: "High",
+            image: "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "High resistance to Turcicum Leaf Blight & Downy Mildew",
+              "Superior cob girth with heavy shelling percentage (>82%)",
+              "Stay-green trait keeps stalk standing even in late winds"
+            ]
+          },
+          {
+            id: "seed-maize-2",
+            name: "Kaveri 50 Super Hybrid",
+            tag: "Early Maturity Option",
+            tagClass: "badge-emerald",
+            company: "Kaveri Seed Company Ltd",
+            score: 89,
+            duration: "102 Days",
+            rate: "7.5 kg / acre",
+            yield: "24.5 - 28.5 q/acre",
+            pricePerKg: "₹220 / kg",
+            pricePack: "₹880 / 4kg pack",
+            unitPrice: 880,
+            packSize: "4 kg Sealed Bag",
+            waterReq: "Low-Medium",
+            droughtVigor: "Medium",
+            image: "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "6 days shorter duration: clears field early for November Wheat",
+              "Uniform orange-yellow flint grains with good test weight",
+              "Lower seed investment per acre (Most economical)"
+            ]
+          },
+          {
+            id: "seed-maize-3",
+            name: "CP 333 Bold Kernel",
+            tag: "Industrial Starch Grade",
+            tagClass: "badge-blue",
+            company: "Charoen Pokphand Seeds",
+            score: 91,
+            duration: "112 Days",
+            rate: "8.0 kg / acre",
+            yield: "26.0 - 30.5 q/acre",
+            pricePerKg: "₹245 / kg",
+            pricePack: "₹980 / 4kg pack",
+            unitPrice: 980,
+            packSize: "4 kg Sealed Bag",
+            waterReq: "Medium",
+            droughtVigor: "High",
+            image: "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "High starch recovery percentage preferred by Khanna food millers",
+              "Strong root anchoring system resisting stem lodging",
+              "Stalk Rot and Charcoal Rot high field tolerance"
+            ]
+          }
+        ]
+      },
+      "Wheat": {
+        season: "Rabi Main Season",
+        subtitle: "Certified high-protein bread and chapati wheat varieties calibrated for northern plains with yellow rust immunity.",
+        varieties: [
+          {
+            id: "seed-wheat-1",
+            name: "HD-2967 (Pusa Wheat)",
+            tag: "Top AI Recommendation",
+            tagClass: "badge-amber",
+            company: "ICAR - IARI New Delhi / National Seeds Corp",
+            score: 96,
+            duration: "140 Days",
+            rate: "40 kg / acre",
+            yield: "22 - 26 q/acre",
+            pricePerKg: "₹42 / kg",
+            pricePack: "₹1,680 / 40kg bag",
+            unitPrice: 1680,
+            packSize: "40 kg Certified Bag",
+            waterReq: "Medium (4-5 Irrigations)",
+            droughtVigor: "Medium-High",
+            image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "Genetic immunity to stripe/yellow rust and leaf blight",
+              "Premium amber lustrous grains with high chapati softness",
+              "Broad adaptability across Punjab, Haryana, and Western UP"
+            ]
+          },
+          {
+            id: "seed-wheat-2",
+            name: "PBW-550 (High Lodging Resistance)",
+            tag: "Timely Sown Benchmark",
+            tagClass: "badge-emerald",
+            company: "Punjab Agricultural University (PAU Ludhiana)",
+            score: 92,
+            duration: "135 Days",
+            rate: "45 kg / acre",
+            yield: "21 - 25 q/acre",
+            pricePerKg: "₹40 / kg",
+            pricePack: "₹1,600 / 40kg bag",
+            unitPrice: 1600,
+            packSize: "40 kg Certified Bag",
+            waterReq: "Medium",
+            droughtVigor: "Medium",
+            image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "Thick, sturdy culms prevent lodging during late spring hailstorms",
+              "Responds exceptionally to balanced NPK + zinc fertility",
+              "High hectolitre test weight (80 kg/hl) preferred by flour millers"
+            ]
+          },
+          {
+            id: "seed-wheat-3",
+            name: "DBW-187 (Karan Vandana)",
+            tag: "Bio-Fortified & Heat Tolerant",
+            tagClass: "badge-blue",
+            company: "ICAR - IIWBR Karnal",
+            score: 94,
+            duration: "120 Days",
+            rate: "40 kg / acre",
+            yield: "24 - 28 q/acre",
+            pricePerKg: "₹48 / kg",
+            pricePack: "₹1,920 / 40kg bag",
+            unitPrice: 1920,
+            packSize: "40 kg Certified Bag",
+            waterReq: "Low-Medium",
+            droughtVigor: "High (Heat Resilient)",
+            image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "Terminal heat tolerance resisting early March temperature spikes",
+              "Bio-fortified with Zinc (43.1 ppm) and Iron (43 ppm)",
+              "Yield potential exceeds 27 q/acre with early November sowing"
+            ]
+          }
+        ]
+      },
+      "Mustard": {
+        season: "Rabi Oilseed",
+        subtitle: "High oil content (>40%) Indian mustard varieties with high branching architecture and frost resistance.",
+        varieties: [
+          {
+            id: "seed-mustard-1",
+            name: "Pusa Bold (High Oil)",
+            tag: "Top AI Recommendation",
+            tagClass: "badge-amber",
+            company: "IARI New Delhi • Certified NSC",
+            score: 95,
+            duration: "115 Days",
+            rate: "2.0 kg / acre",
+            yield: "8.5 - 10.5 q/acre",
+            pricePerKg: "₹280 / kg",
+            pricePack: "₹560 / 2kg pack",
+            unitPrice: 560,
+            packSize: "2 kg Poly Pack",
+            waterReq: "Low (2 Irrigations)",
+            droughtVigor: "High",
+            image: "https://images.unsplash.com/photo-1508747703725-719777637510?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "Bold dark reddish-brown seeds with 40.5% oil recovery",
+              "Excellent field tolerance to white rust and Alternaria blight",
+              "Siliquae resist shattering even if harvesting is slightly delayed"
+            ]
+          },
+          {
+            id: "seed-mustard-2",
+            name: "Giriraj (RH-749)",
+            tag: "Multi-Branching Master",
+            tagClass: "badge-emerald",
+            company: "CCS Haryana Agricultural University (Hisar)",
+            score: 92,
+            duration: "125 Days",
+            rate: "2.5 kg / acre",
+            yield: "9.0 - 11.5 q/acre",
+            pricePerKg: "₹310 / kg",
+            pricePack: "₹775 / 2.5kg pack",
+            unitPrice: 775,
+            packSize: "2.5 kg Poly Pack",
+            waterReq: "Low-Medium",
+            droughtVigor: "Medium-High",
+            image: "https://images.unsplash.com/photo-1508747703725-719777637510?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "Aggressive secondary and tertiary branching (up to 40 pods/branch)",
+              "Tolerant to frost and winter cold waves",
+              "Highly profitable for mustard oil expelling millers"
+            ]
+          },
+          {
+            id: "seed-mustard-3",
+            name: "Pioneer 45S46 Hybrid Mustard",
+            tag: "Premium High-Tech Hybrid",
+            tagClass: "badge-blue",
+            company: "Corteva Agriscience",
+            score: 90,
+            duration: "110 Days",
+            rate: "1.5 kg / acre",
+            yield: "8.5 - 11.0 q/acre",
+            pricePerKg: "₹650 / kg",
+            pricePack: "₹975 / 1.5kg pack",
+            unitPrice: 975,
+            packSize: "1.5 kg Sealed Tin",
+            waterReq: "Low",
+            droughtVigor: "High",
+            image: "https://images.unsplash.com/photo-1508747703725-719777637510?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "Compact plant architecture allows high plant population density",
+              "Extremely uniform pod ripening for single-pass combine cutting",
+              "High pungency and golden clear oil yield"
+            ]
+          }
+        ]
+      },
+      "Soybean": {
+        season: "Kharif Oilseed",
+        subtitle: "High-protein yellow soybean cultivars engineered for heavy nodulation, shattering resistance, and crushing meal.",
+        varieties: [
+          {
+            id: "seed-soybean-1",
+            name: "JS 335 (National Benchmark)",
+            tag: "Top AI Recommendation",
+            tagClass: "badge-amber",
+            company: "JNKVV Jabalpur • Certified NSC",
+            score: 94,
+            duration: "98 Days",
+            rate: "30 kg / acre",
+            yield: "10 - 12 q/acre",
+            pricePerKg: "₹85 / kg",
+            pricePack: "₹2,550 / 30kg bag",
+            unitPrice: 2550,
+            packSize: "30 kg Certified Bag",
+            waterReq: "Medium (Monsoon Dependent)",
+            droughtVigor: "Medium-High",
+            image: "https://images.unsplash.com/photo-1599420186946-7b6fb4e297f0?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "Exceptional field emergence and heavy bacterial root nodulation",
+              "Pods resist pre-harvest shattering during dry autumn winds",
+              "Uniform yellow seeds with light brown hilum preferred by solvent plants"
+            ]
+          },
+          {
+            id: "seed-soybean-2",
+            name: "JS 95-60 (Super Early)",
+            tag: "Short Duration Champion",
+            tagClass: "badge-emerald",
+            company: "JNKVV Jabalpur",
+            score: 91,
+            duration: "88 Days",
+            rate: "32 kg / acre",
+            yield: "9 - 11 q/acre",
+            pricePerKg: "₹90 / kg",
+            pricePack: "₹2,880 / 32kg bag",
+            unitPrice: 2880,
+            packSize: "32 kg Certified Bag",
+            waterReq: "Low-Medium",
+            droughtVigor: "Medium",
+            image: "https://images.unsplash.com/photo-1599420186946-7b6fb4e297f0?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "Ultra-early 88-day cycle: vacate fields ahead of early potato/mustard",
+              "Allows profitable 3-crop multi-cropping annual rotations",
+              "Moderate resistance to Stem Fly and Collar Rot"
+            ]
+          },
+          {
+            id: "seed-soybean-3",
+            name: "NRC 37 (Ahilya 4)",
+            tag: "High Protein & High Oil",
+            tagClass: "badge-blue",
+            company: "ICAR - Indian Institute of Soybean Research (IISR)",
+            score: 88,
+            duration: "105 Days",
+            rate: "30 kg / acre",
+            yield: "11 - 13 q/acre",
+            pricePerKg: "₹88 / kg",
+            pricePack: "₹2,640 / 30kg bag",
+            unitPrice: 2640,
+            packSize: "30 kg Certified Bag",
+            waterReq: "Medium",
+            droughtVigor: "High",
+            image: "https://images.unsplash.com/photo-1599420186946-7b6fb4e297f0?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "High protein (41%) and oil (20.5%) content",
+              "Strong field tolerance to Charcoal Rot and Rhizoctonia aerial blight",
+              "Erect robust canopy preventing weed competition"
+            ]
+          }
+        ]
+      },
+      "Basmati Rice": {
+        season: "Kharif Premium Paddy",
+        subtitle: "Aromatic extra-long slender Basmati paddy seeds with exceptional elongation, delicate fragrance, and export demand.",
+        varieties: [
+          {
+            id: "seed-basmati-1",
+            name: "Pusa Basmati 1121",
+            tag: "Top AI Recommendation",
+            tagClass: "badge-amber",
+            company: "ICAR - IARI New Delhi • Certified NSC",
+            score: 96,
+            duration: "145 Days",
+            rate: "8 kg / acre (Nursery)",
+            yield: "18 - 22 q/acre",
+            pricePerKg: "₹115 / kg",
+            pricePack: "₹920 / 8kg pack",
+            unitPrice: 920,
+            packSize: "8 kg Poly Pack",
+            waterReq: "High",
+            droughtVigor: "Medium",
+            image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "World record grain elongation (up to 21.5 mm after cooking)",
+              "Unmatched aroma and premium export realization (₹3,800+/q)",
+              "High head rice recovery (HRR) in modern automatic shellers"
+            ]
+          },
+          {
+            id: "seed-basmati-2",
+            name: "Pusa Basmati 1509",
+            tag: "Water & Time Saver",
+            tagClass: "badge-emerald",
+            company: "ICAR - IARI New Delhi",
+            score: 93,
+            duration: "120 Days",
+            rate: "8 kg / acre (Nursery)",
+            yield: "20 - 25 q/acre",
+            pricePerKg: "₹110 / kg",
+            pricePack: "₹880 / 8kg pack",
+            unitPrice: 880,
+            packSize: "8 kg Poly Pack",
+            waterReq: "Medium (Saves 3-4 Irrigations)",
+            droughtVigor: "Medium-High",
+            image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "25-30 days earlier harvest than traditional Basmati varieties",
+              "Saves valuable groundwater pumping electricity costs",
+              "Allows timely sowing of succeeding vegetable or potato crop"
+            ]
+          },
+          {
+            id: "seed-basmati-3",
+            name: "PB 1718 (BLB Resistant)",
+            tag: "Bacterial Blight Immune",
+            tagClass: "badge-blue",
+            company: "ICAR - IARI New Delhi",
+            score: 95,
+            duration: "138 Days",
+            rate: "8 kg / acre (Nursery)",
+            yield: "19 - 23 q/acre",
+            pricePerKg: "₹125 / kg",
+            pricePack: "₹1,000 / 8kg pack",
+            unitPrice: 1000,
+            packSize: "8 kg Poly Pack",
+            waterReq: "Medium-High",
+            droughtVigor: "Medium",
+            image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "Genetically incorporated resistance genes xa13 & Xa21 against BLB",
+              "Zero crop loss from devastating bacterial leaf blight epidemics",
+              "Maintains classical 1121 aroma and exceptional grain slender ratio"
+            ]
+          }
+        ]
+      },
+      "Chickpea": {
+        season: "Rabi Pulse / Gram",
+        subtitle: "High-protein chickpea seeds with built-in Fusarium wilt resistance, deep taproots, and high dal recovery.",
+        varieties: [
+          {
+            id: "seed-chickpea-1",
+            name: "JG 11 (Desi Chana)",
+            tag: "Top AI Recommendation",
+            tagClass: "badge-amber",
+            company: "ICRISAT / JNKVV Jabalpur",
+            score: 94,
+            duration: "100 Days",
+            rate: "30 kg / acre",
+            yield: "8.5 - 10.5 q/acre",
+            pricePerKg: "₹95 / kg",
+            pricePack: "₹2,850 / 30kg bag",
+            unitPrice: 2850,
+            packSize: "30 kg Certified Bag",
+            waterReq: "Very Low (1-2 Irrigations)",
+            droughtVigor: "High (Deep Taproot)",
+            image: "https://images.unsplash.com/photo-1515543237350-b3eea1ec8082?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "High genetic resistance to Fusarium wilt disease",
+              "Short compact duration escaping terminal heat stress",
+              "High dal recovery (>78%) favored by pulses millers"
+            ]
+          },
+          {
+            id: "seed-chickpea-2",
+            name: "JAKI 9218 (Bold Desi)",
+            tag: "High Pod-Bearing Yield",
+            tagClass: "badge-emerald",
+            company: "PDKV Akola • Certified NSC",
+            score: 92,
+            duration: "105 Days",
+            rate: "32 kg / acre",
+            yield: "9.0 - 11.0 q/acre",
+            pricePerKg: "₹98 / kg",
+            pricePack: "₹3,136 / 32kg bag",
+            unitPrice: 3136,
+            packSize: "32 kg Certified Bag",
+            waterReq: "Very Low",
+            droughtVigor: "High",
+            image: "https://images.unsplash.com/photo-1515543237350-b3eea1ec8082?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "Uniform bold brown seeds (test weight >23g/100 seeds)",
+              "Multi-locational stability across residual moisture soils",
+              "Commands ₹200-300 premium in APMC mandis"
+            ]
+          },
+          {
+            id: "seed-chickpea-3",
+            name: "KAK 2 (Kabuli Chana)",
+            tag: "Export Quality Extra Bold",
+            tagClass: "badge-blue",
+            company: "ICRISAT / MPKV Rahuri",
+            score: 90,
+            duration: "115 Days",
+            rate: "45 kg / acre",
+            yield: "9.0 - 12.0 q/acre",
+            pricePerKg: "₹150 / kg",
+            pricePack: "₹6,750 / 45kg bag",
+            unitPrice: 6750,
+            packSize: "45 kg Certified Bag",
+            waterReq: "Low",
+            droughtVigor: "Medium-High",
+            image: "https://images.unsplash.com/photo-1515543237350-b3eea1ec8082?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "Large white Kabuli chickpeas with high market value (₹7,500/q+)",
+              "Resistant to collar rot and root rot complexes",
+              "High export and institutional restaurant procurement appetite"
+            ]
+          }
+        ]
+      },
+      "Potato": {
+        season: "Rabi Horticulture / Tuber",
+        subtitle: "Certified disease-free potato seed tubers with high dry matter, late blight tolerance, and processing traits.",
+        varieties: [
+          {
+            id: "seed-potato-1",
+            name: "Kufri Jyoti (Table Standard)",
+            tag: "Top AI Recommendation",
+            tagClass: "badge-amber",
+            company: "ICAR - CPRI Shimla / Jalandhar Seed Stn",
+            score: 95,
+            duration: "95 Days",
+            rate: "1,200 kg / acre",
+            yield: "120 - 150 q/acre",
+            pricePerKg: "₹25 / kg",
+            pricePack: "₹30,000 / 12 quintals",
+            unitPrice: 30000,
+            packSize: "12 Quintal Seed Lot",
+            waterReq: "Medium-High (Frequent Light)",
+            droughtVigor: "Medium",
+            image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "Standard all-purpose oval white tuber with shallow eyes",
+              "Strong field resistance to Late Blight (Phytophthora infestans)",
+              "High bulk production with excellent storability in cold rooms"
+            ]
+          },
+          {
+            id: "seed-potato-2",
+            name: "Kufri Pukhraj (Early Bulker)",
+            tag: "Fast 75-Day Harvest",
+            tagClass: "badge-emerald",
+            company: "ICAR - CPRI Shimla",
+            score: 93,
+            duration: "75 Days",
+            rate: "1,200 kg / acre",
+            yield: "130 - 160 q/acre",
+            pricePerKg: "₹22 / kg",
+            pricePack: "₹26,400 / 12 quintals",
+            unitPrice: 26400,
+            packSize: "12 Quintal Seed Lot",
+            waterReq: "Medium",
+            droughtVigor: "Medium",
+            image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "Bulks very rapidly within 75 days to capture early Diwali mandi rates",
+              "Smooth yellow skin with pale yellow non-darkening flesh",
+              "Very high initial tuber setting count per plant"
+            ]
+          },
+          {
+            id: "seed-potato-3",
+            name: "Kufri Chipsona 1 (Processing Grade)",
+            tag: "Chips & Processing Crisp",
+            tagClass: "badge-blue",
+            company: "ICAR - CPRI Shimla",
+            score: 91,
+            duration: "105 Days",
+            rate: "1,100 kg / acre",
+            yield: "110 - 140 q/acre",
+            pricePerKg: "₹30 / kg",
+            pricePack: "₹33,000 / 11 quintals",
+            unitPrice: 33000,
+            packSize: "11 Quintal Seed Lot",
+            waterReq: "Medium-High",
+            droughtVigor: "Medium",
+            image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600&auto=format&fit=crop&q=80",
+            features: [
+              "High dry matter (>21%) and low reducing sugars (<0.1%)",
+              "Contracted at guaranteed buyback prices by PepsiCo & Haldiram's",
+              "Produces crisp golden chips with no browning or sogginess"
+            ]
+          }
+        ]
+      }
+    };
+
+    function getSelectedCropFromContext() {
+      // 1. Check URL query params ?crop=...
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlCrop = urlParams.get('crop');
+      if (urlCrop && SEED_DATABASE[urlCrop]) {
+        return urlCrop;
+      }
+      // 2. Check AgriState
+      if (window.AgriState && AgriState.selectedCrop && SEED_DATABASE[AgriState.selectedCrop]) {
+        return AgriState.selectedCrop;
+      }
+      // 3. Check localStorage
+      const stored = localStorage.getItem('agriwise_selected_crop');
+      if (stored && SEED_DATABASE[stored]) {
+        return stored;
+      }
+      return 'Maize';
+    }
+
+    function renderSeedPage(cropName) {
+      const cropData = SEED_DATABASE[cropName] || SEED_DATABASE['Maize'];
+
+      // Update Header Subtitle & Season
+      document.getElementById('pageSubtitle').innerText = cropData.subtitle;
+      document.getElementById('activeSeasonBadge').innerText = cropData.season;
+      document.getElementById('matrixHeaderTitle').innerText = `${cropName} Variety Side-by-Side Comparison Matrix`;
+
+      // Render Cards
+      const container = document.getElementById('seedCardsGrid');
+      container.innerHTML = '';
+
+      cropData.varieties.forEach((v, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.border = index === 0 ? '2px solid var(--primary-500)' : '1px solid var(--border-light)';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+
+        card.innerHTML = `
+          <img src="${v.image}" alt="${v.name}" class="seed-card-img" onerror="this.src='https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=600&auto=format&fit=crop&q=80'">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+            <div>
+              <span class="badge ${v.tagClass}" style="margin-bottom: 0.3rem;">${v.tag}</span>
+              <h3 style="font-size: 1.3rem; color: var(--primary-900); margin: 4px 0;">${v.name}</h3>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">${v.company}</div>
+            </div>
+            <div class="score-dial" style="width: 60px; height: 60px; ${index === 1 ? 'border-color: #f59e0b;' : index === 2 ? 'border-color: #0284c7;' : ''}">
+              <div class="score-number" style="font-size: 1.3rem; ${index === 1 ? 'color: #b45309;' : index === 2 ? 'color: #0369a1;' : ''}">${v.score}%</div>
+              <div class="score-label">MATCH</div>
+            </div>
+          </div>
+
+          <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.25rem;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; font-size: 0.84rem;">
+              <div><strong>Duration:</strong> ${v.duration}</div>
+              <div><strong>Seed Rate:</strong> ${v.rate}</div>
+              <div><strong>Yield Range:</strong> <span style="color: #059669; font-weight: 700;">${v.yield}</span></div>
+              <div><strong>Price:</strong> <span style="font-weight: 700; color: var(--primary-900);">${v.pricePack}</span></div>
+              <div><strong>Water Req:</strong> ${v.waterReq}</div>
+              <div><strong>Drought Vigor:</strong> ${v.droughtVigor}</div>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 1.25rem; flex: 1;">
+            <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.3rem;">Key Agronomic Features:</div>
+            <ul class="ai-reason-list" style="font-size: 0.82rem;">
+              ${v.features.map(f => `<li>${f}</li>`).join('')}
+            </ul>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: auto;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+              <a href="/cultivation-plan?seed=${encodeURIComponent(v.name)}&crop=${encodeURIComponent(cropName)}" class="btn btn-primary btn-sm" onclick="selectSeedVariety('${v.name}')">
+                <span>✓ Select Seed</span>
+              </a>
+              <button class="btn btn-outline-emerald btn-sm" onclick="addSeedToCart('${v.id}', '${v.name.replace(/'/g, "\\'")}', ${v.unitPrice}, '${v.packSize}', '${v.image}')">
+                <span>🛒 Add to Cart</span>
+              </button>
+            </div>
+            <a href="/seed-details?crop=${encodeURIComponent(cropName)}&id=${index + 1}" class="btn btn-secondary btn-sm" style="text-align: center;">
+              <span>View Specs Dossier</span>
+            </a>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      // Render Matrix Table
+      renderComparisonMatrix(cropName, cropData.varieties);
+    }
+
+    function renderComparisonMatrix(cropName, varieties) {
+      const v1 = varieties[0];
+      const v2 = varieties[1];
+      const v3 = varieties[2];
+
+      const table = document.getElementById('comparisonTable');
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th style="min-width: 180px;">Agronomic Parameter</th>
+            <th style="background: #ecfdf5; color: #065f46; min-width: 220px;">${v1.name} (Top AI)</th>
+            <th style="min-width: 220px;">${v2.name}</th>
+            <th style="min-width: 220px;">${v3.name}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>AI Suitability Score</strong></td>
+            <td style="background: #f0fdf4; font-weight: 800; color: #047857;">${v1.score}% (Highest)</td>
+            <td>${v2.score}%</td>
+            <td>${v3.score}%</td>
+          </tr>
+          <tr>
+            <td><strong>Breeder / Company</strong></td>
+            <td style="background: #f0fdf4;">${v1.company}</td>
+            <td>${v2.company}</td>
+            <td>${v3.company}</td>
+          </tr>
+          <tr>
+            <td><strong>Growing Duration</strong></td>
+            <td style="background: #f0fdf4;">${v1.duration}</td>
+            <td style="color: #059669; font-weight: 700;">${v2.duration}</td>
+            <td>${v3.duration}</td>
+          </tr>
+          <tr>
+            <td><strong>Expected Yield Potential</strong></td>
+            <td style="background: #f0fdf4; font-weight: 700; color: #059669;">${v1.yield}</td>
+            <td>${v2.yield}</td>
+            <td>${v3.yield}</td>
+          </tr>
+          <tr>
+            <td><strong>Seed Rate (Acre)</strong></td>
+            <td style="background: #f0fdf4;">${v1.rate}</td>
+            <td>${v2.rate}</td>
+            <td>${v3.rate}</td>
+          </tr>
+          <tr>
+            <td><strong>Pack Investment</strong></td>
+            <td style="background: #f0fdf4; font-weight: 700;">${v1.pricePack}</td>
+            <td style="color: #059669; font-weight: 700;">${v2.pricePack}</td>
+            <td>${v3.pricePack}</td>
+          </tr>
+          <tr>
+            <td><strong>Key Strengths</strong></td>
+            <td style="background: #f0fdf4; font-size: 0.84rem;">${v1.features[0]}</td>
+            <td style="font-size: 0.84rem;">${v2.features[0]}</td>
+            <td style="font-size: 0.84rem;">${v3.features[0]}</td>
+          </tr>
+          <tr>
+            <td><strong>Action</strong></td>
+            <td style="background: #f0fdf4;">
+              <a href="/cultivation-plan?seed=${encodeURIComponent(v1.name)}&crop=${encodeURIComponent(cropName)}" class="btn btn-primary btn-sm" onclick="selectSeedVariety('${v1.name}')">Select ${v1.name.split(' ')[0]}</a>
+            </td>
+            <td>
+              <a href="/cultivation-plan?seed=${encodeURIComponent(v2.name)}&crop=${encodeURIComponent(cropName)}" class="btn btn-secondary btn-sm" onclick="selectSeedVariety('${v2.name}')">Select ${v2.name.split(' ')[0]}</a>
+            </td>
+            <td>
+              <a href="/cultivation-plan?seed=${encodeURIComponent(v3.name)}&crop=${encodeURIComponent(cropName)}" class="btn btn-secondary btn-sm" onclick="selectSeedVariety('${v3.name}')">Select ${v3.name.split(' ')[0]}</a>
+            </td>
+          </tr>
+        </tbody>
+      `;
+    }
+
+    function onFilterCommodityChange(newCrop) {
+      if (window.AgriState) {
+        AgriState.setCrop(newCrop);
+      }
+      localStorage.setItem('agriwise_selected_crop', newCrop);
+      // Update URL query string
+      const url = new URL(window.location);
+      url.searchParams.set('crop', newCrop);
+      window.history.replaceState({}, '', url);
+
+      renderSeedPage(newCrop);
+    }
+
+    function selectSeedVariety(seedName) {
+      if (window.AgriState) {
+        AgriState.setSelectedSeed(seedName);
+      }
+      localStorage.setItem('agriwise_selected_seed', seedName);
+    }
+
+    function addSeedToCart(id, name, price, packSize, image) {
+      if (window.AgriCart) {
+        AgriCart.addItem({
+          id: id,
+          name: name,
+          category: 'Seeds',
+          price: price,
+          unit: packSize,
+          image: image,
+          dealer: 'Certified NSC Seed Depot'
+        });
+      } else {
+        alert(`${name} added to cart!`);
+      }
+    }
+
+    function toggleCompareModal() {
+      const el = document.getElementById('compareSection');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      const initialCrop = getSelectedCropFromContext();
+      const select = document.getElementById('commodityFilterSelect');
+      if (select) {
+        select.value = initialCrop;
+      }
+      renderSeedPage(initialCrop);
+    });
+  </script>
+</body>
+</html>

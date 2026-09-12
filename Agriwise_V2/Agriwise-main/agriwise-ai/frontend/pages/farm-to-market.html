@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🚜 Farm-to-Market Unified Decision Planner — AGRIWISE AI</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <style>
+    .flow-step-card {
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: relative;
+    }
+    .flow-connector-arrow {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 36px;
+      font-size: 1.5rem;
+      color: var(--primary-600);
+      font-weight: 800;
+    }
+    .flow-icon-box {
+      width: 60px;
+      height: 60px;
+      border-radius: var(--radius-md);
+      background: var(--primary-50);
+      color: var(--primary-700);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container" style="max-width: 960px;">
+      <!-- Title Section -->
+      <div class="page-title-bar">
+        <div class="page-title-left">
+          <h1>🚜 Farm-to-Market Unified Decision Planner</h1>
+          <p>The complete end-to-end agricultural lifecycle connected into a transparent, actionable roadmap.</p>
+        </div>
+        <div class="page-title-actions">
+          <a href="/farm-report" class="btn btn-primary btn-sm">
+            <span>📄 Generate Final Farm Dossier ➔</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Connected Flow Pipeline -->
+      <div style="display: flex; flex-direction: column;">
+        <!-- Step 1: Your Farm -->
+        <div class="flow-step-card">
+          <div class="flow-icon-box">📍</div>
+          <div style="flex: 1;">
+            <div style="font-size: 0.76rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">STEP 1 • YOUR LAND ASSET</div>
+            <h3 style="font-size: 1.25rem; color: var(--primary-900);">Sahnewal Golden Acre Farm (5.0 Acres)</h3>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">
+              Ludhiana, Punjab • Alluvial Loam (pH 6.8) • Tube-well & Drip Irrigation (EC 0.65 dS/m)
+            </div>
+          </div>
+          <a href="/farm-profile" class="btn btn-secondary btn-sm">Edit Farm</a>
+        </div>
+
+        <div class="flow-connector-arrow">↓</div>
+
+        <!-- Step 2: Recommended Crop & Seed -->
+        <div class="flow-step-card" style="border-left: 6px solid var(--primary-600);">
+          <div class="flow-icon-box" style="background: #f0fdf4; color: #047857;">🌽</div>
+          <div style="flex: 1;">
+            <div style="font-size: 0.76rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">STEP 2 • RECOMMENDED CROP & CERTIFIED SEED</div>
+            <h3 style="font-size: 1.25rem; color: var(--primary-900);">Maize (Pioneer P3396 Single Cross Hybrid)</h3>
+            <div style="font-size: 0.85rem; color: #059669; font-weight: 600;">
+              94% AI Suitability • 108-Day Kharif Cycle • Turcicum Blight Resistance • Seed Rate: 40 kg total (₹10,400)
+            </div>
+          </div>
+          <a href="/crop-recommendation" class="btn btn-secondary btn-sm">Crop Suitability</a>
+        </div>
+
+        <div class="flow-connector-arrow">↓</div>
+
+        <!-- Step 3: Expected Harvest Yield -->
+        <div class="flow-step-card">
+          <div class="flow-icon-box">🌾</div>
+          <div style="flex: 1;">
+            <div style="font-size: 0.76rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">STEP 3 • EXPECTED FIELD PRODUCTION</div>
+            <h3 style="font-size: 1.25rem; color: var(--text-main);">142.5 Quintals (14.25 Metric Tonnes)</h3>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">
+              Model Yield: 28.5 q/acre across 5.0 acres • Estimated Cultivation Cost: ₹69,100 (₹13,820/acre)
+            </div>
+          </div>
+          <a href="/cultivation-plan" class="btn btn-secondary btn-sm">Timeline</a>
+        </div>
+
+        <div class="flow-connector-arrow">↓</div>
+
+        <!-- Step 4: Recommended Buyer & Sourcing Mill -->
+        <div class="flow-step-card" style="border-left: 6px solid #f59e0b;">
+          <div class="flow-icon-box" style="background: #fef3c7; color: #b45309;">🏢</div>
+          <div style="flex: 1;">
+            <div style="font-size: 0.76rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">STEP 4 • OPTIMAL BUYER & DEMAND DEFICIT</div>
+            <h3 style="font-size: 1.25rem; color: var(--primary-900);">ABC Agro Foods & Millers (Khanna Industrial Hub)</h3>
+            <div style="font-size: 0.85rem; color: #b45309; font-weight: 700;">
+              Distance: 22 km • Direct Contract Price: ₹2,420 / quintal (+₹60/q over Mandi spot)
+            </div>
+          </div>
+          <a href="/buyer-marketplace" class="btn btn-secondary btn-sm">View Buyer</a>
+        </div>
+
+        <div class="flow-connector-arrow">↓</div>
+
+        <!-- Step 5: Mandi Logistics & Freight -->
+        <div class="flow-step-card">
+          <div class="flow-icon-box">🚛</div>
+          <div style="flex: 1;">
+            <div style="font-size: 0.76rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">STEP 5 • MANDI FREIGHT LOGISTICS</div>
+            <h3 style="font-size: 1.25rem; color: var(--text-main);">Balwinder Singh Transport (Tata 407 SFC Fleet)</h3>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">
+              4.5 km from farm • Dedicated farm-gate loading • Estimated freight to Khanna: ₹2,016 / shuttle
+            </div>
+          </div>
+          <a href="/transport-marketplace" class="btn btn-secondary btn-sm">Transport</a>
+        </div>
+
+        <div class="flow-connector-arrow">↓</div>
+
+        <!-- Step 6: Estimated Final Financial Realization -->
+        <div class="flow-step-card" style="background: linear-gradient(135deg, #064e3b 0%, #047857 100%); color: #ffffff; border: none;">
+          <div class="flow-icon-box" style="background: rgba(255,255,255,0.2); color: #fff;">💰</div>
+          <div style="flex: 1;">
+            <div style="font-size: 0.76rem; color: #a7f3d0; font-weight: 700; text-transform: uppercase;">FINAL REALIZATION • ESTIMATED FINANCIAL RETURN</div>
+            <h2 style="font-size: 2rem; color: #ffffff; margin: 4px 0;">Estimated Net Profit: ₹2,15,400</h2>
+            <div style="font-size: 0.95rem; color: #d1fae5;">
+              Gross Revenue: <strong>₹3,44,850</strong> • Total Cultivation Cost: <strong>₹69,100</strong> • Return on Investment: <strong style="color: #34d399;">102% ROI</strong>
+            </div>
+          </div>
+          <a href="/profit-estimator" class="btn btn-amber btn-sm">ROI Analysis</a>
+        </div>
+      </div>
+
+      <!-- Action Footer -->
+      <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 3rem; flex-wrap: wrap;">
+        <a href="/payment?type=escrow&amount=238000&recipient=ABC+Agro+Foods" class="btn btn-amber btn-lg">
+          <span>🔒 Secure Contract & Deposit Escrow (₹2,38,000)</span>
+        </a>
+        <a href="/farm-report" class="btn btn-primary btn-lg">
+          <span>📄 Print / Download Official Farm Dossier</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+</body>
+</html>

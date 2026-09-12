@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>💳 Agricultural Payment Gateway & Settlement — AGRIWISE AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/marketplace.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <!-- Page Header Container -->
+  <div class="container" style="margin-top: 1.5rem; margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 1.25rem;">
+      <div>
+        <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.4rem;">
+          <span class="badge badge-emerald">NPCI & PFMS Integrated</span>
+          <span class="badge badge-amber">Govt 3% KCC Subvention Active</span>
+          <span class="badge badge-blue">Zero MDR UPI Bharat QR</span>
+        </div>
+        <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.35rem;">
+          💳 Agricultural Payment & Settlement Gateway
+        </h1>
+        <p style="color: var(--text-muted); font-size: 1rem; max-width: 780px;">
+          Seamless digital transactions for Indian agriculture: Input dealer procurement, transport advance booking, Kisan Credit Card prompt repayment subvention, and Smart Escrow for wholesale grain procurement.
+        </p>
+      </div>
+
+      <!-- Quick Preset Context Switcher for Evaluators -->
+      <div style="display: flex; gap: 0.5rem; background: #f8fafc; padding: 6px; border-radius: var(--radius-md); border: 1px solid var(--border-light); flex-wrap: wrap;">
+        <button class="btn btn-sm btn-outline active-ctx" onclick="PaymentGateway.loadPreset('fertilizer')">🛒 Input Order (₹14,365)</button>
+        <button class="btn btn-sm btn-outline" onclick="PaymentGateway.loadPreset('transport')">🚛 Truck Advance (₹1,500)</button>
+        <button class="btn btn-sm btn-outline" onclick="PaymentGateway.loadPreset('escrow')">🔒 Buyer Escrow (₹2,38,000)</button>
+        <button class="btn btn-sm btn-outline" onclick="PaymentGateway.loadPreset('kcc')">🌾 KCC Dosing (₹10,400)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Payment Gateway Interface -->
+  <main class="container" style="margin-bottom: 4rem;">
+    <div class="payment-layout">
+      
+      <!-- Left Column: Payment Methods & Details -->
+      <div class="payment-main-section">
+        
+        <!-- Transaction Context Card -->
+        <div class="card" style="margin-bottom: 1.5rem; border-left: 4px solid var(--primary-600); background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+            <div>
+              <span id="ctxBadge" class="badge badge-emerald" style="margin-bottom: 0.4rem; display: inline-block;">Input Dealer Purchase</span>
+              <h3 id="ctxTitle" style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.2rem;">
+                Seasonal Fertilizer Package — Kisan Suvidha Kendra
+              </h3>
+              <p id="ctxDesc" style="color: var(--text-muted); font-size: 0.88rem; margin: 0;">
+                Urea (10 Bags) + DAP (3 Bags) + MOP (2 Bags) for 5.0 Acres Sahnewal Farm.
+              </p>
+            </div>
+            <div style="text-align: right;">
+              <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Payable Net</span>
+              <div id="ctxAmountDisplay" style="font-size: 1.8rem; font-weight: 800; color: var(--primary-700);">₹14,365</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Method Tabs -->
+        <div class="payment-method-nav">
+          <button class="pay-tab-btn active" onclick="PaymentGateway.switchTab('upi')">
+            <span class="pay-tab-icon">⚡</span>
+            <span>UPI & Bharat QR</span>
+          </button>
+          <button class="pay-tab-btn" onclick="PaymentGateway.switchTab('kcc')">
+            <span class="pay-tab-icon">🌾</span>
+            <span>Kisan Credit Card (KCC)</span>
+          </button>
+          <button class="pay-tab-btn" onclick="PaymentGateway.switchTab('netbanking')">
+            <span class="pay-tab-icon">🏛️</span>
+            <span>Agri NetBanking</span>
+          </button>
+          <button class="pay-tab-btn" onclick="PaymentGateway.switchTab('escrow')">
+            <span class="pay-tab-icon">🔒</span>
+            <span>Smart Escrow</span>
+          </button>
+        </div>
+
+        <!-- PANE 1: UPI & Bharat QR -->
+        <div id="pane-upi" class="pay-pane active">
+          <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+              <div>
+                <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem;">
+                  Scan & Pay with Any UPI App
+                </h4>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0;">
+                  Zero transaction surcharge (Zero MDR) under Government of India Digital Agri initiative.
+                </p>
+              </div>
+              <span class="badge badge-amber" id="qrCountdown">⏱ Expires in 04:58</span>
+            </div>
+
+            <div class="qr-container">
+              <div class="qr-scan-line"></div>
+              <div class="qr-box" id="qrBoxElement">
+                <!-- High-res stylized Bharat QR SVG with AgriWise seal -->
+                <svg width="190" height="190" viewBox="0 0 100 100" style="width: 100%; height: 100%;">
+                  <rect width="100" height="100" fill="#ffffff" />
+                  <!-- Corner Markers -->
+                  <rect x="5" y="5" width="26" height="26" fill="#0f172a" rx="3"/>
+                  <rect x="9" y="9" width="18" height="18" fill="#ffffff" rx="2"/>
+                  <rect x="13" y="13" width="10" height="10" fill="#047857" rx="1"/>
+
+                  <rect x="69" y="5" width="26" height="26" fill="#0f172a" rx="3"/>
+                  <rect x="73" y="9" width="18" height="18" fill="#ffffff" rx="2"/>
+                  <rect x="77" y="13" width="10" height="10" fill="#047857" rx="1"/>
+
+                  <rect x="5" y="69" width="26" height="26" fill="#0f172a" rx="3"/>
+                  <rect x="9" y="73" width="18" height="18" fill="#ffffff" rx="2"/>
+                  <rect x="13" y="77" width="10" height="10" fill="#047857" rx="1"/>
+
+                  <!-- QR Data Pattern Elements -->
+                  <rect x="36" y="8" width="6" height="6" fill="#1e293b"/>
+                  <rect x="46" y="8" width="8" height="6" fill="#1e293b"/>
+                  <rect x="58" y="8" width="6" height="6" fill="#1e293b"/>
+
+                  <rect x="36" y="18" width="10" height="6" fill="#1e293b"/>
+                  <rect x="50" y="18" width="6" height="6" fill="#1e293b"/>
+                  <rect x="60" y="18" width="5" height="6" fill="#1e293b"/>
+
+                  <rect x="8" y="36" width="6" height="8" fill="#1e293b"/>
+                  <rect x="18" y="36" width="10" height="6" fill="#1e293b"/>
+                  <rect x="36" y="36" width="6" height="6" fill="#10b981"/>
+                  <rect x="46" y="36" width="10" height="10" fill="#047857"/>
+                  <rect x="60" y="36" width="8" height="6" fill="#1e293b"/>
+                  <rect x="72" y="36" width="6" height="8" fill="#1e293b"/>
+                  <rect x="82" y="36" width="10" height="6" fill="#1e293b"/>
+
+                  <rect x="8" y="48" width="8" height="6" fill="#1e293b"/>
+                  <rect x="20" y="48" width="8" height="8" fill="#1e293b"/>
+                  <rect x="34" y="50" width="8" height="6" fill="#1e293b"/>
+                  <rect x="60" y="48" width="10" height="6" fill="#1e293b"/>
+                  <rect x="76" y="48" width="8" height="8" fill="#1e293b"/>
+
+                  <rect x="36" y="64" width="8" height="8" fill="#1e293b"/>
+                  <rect x="48" y="64" width="6" height="6" fill="#1e293b"/>
+                  <rect x="58" y="64" width="8" height="8" fill="#1e293b"/>
+                  <rect x="70" y="64" width="6" height="6" fill="#1e293b"/>
+                  <rect x="80" y="64" width="12" height="6" fill="#1e293b"/>
+
+                  <rect x="36" y="78" width="6" height="8" fill="#1e293b"/>
+                  <rect x="46" y="76" width="10" height="8" fill="#1e293b"/>
+                  <rect x="60" y="78" width="6" height="8" fill="#1e293b"/>
+                  <rect x="72" y="78" width="10" height="8" fill="#1e293b"/>
+                  <rect x="86" y="78" width="6" height="8" fill="#1e293b"/>
+
+                  <!-- Center Agri Shield Icon -->
+                  <circle cx="50" cy="50" r="11" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+                  <text x="50" y="54" font-size="10" text-anchor="middle" fill="#047857">🌾</text>
+                </svg>
+              </div>
+
+              <div style="font-weight: 700; color: var(--text-main); font-size: 1rem; margin-bottom: 0.2rem;">
+                UPI ID: <span style="color: var(--primary-700);">agriwise.settlement@sbi</span>
+              </div>
+              <div style="font-size: 0.84rem; color: var(--text-muted);">
+                Supported on all Indian UPI & BHIM Enabled Applications
+              </div>
+
+              <div class="upi-apps-row">
+                <div class="upi-app-badge"><span>🟢</span> Google Pay</div>
+                <div class="upi-app-badge"><span>🟣</span> PhonePe</div>
+                <div class="upi-app-badge"><span>🔵</span> Paytm</div>
+                <div class="upi-app-badge"><span>🟠</span> BHIM UPI</div>
+                <div class="upi-app-badge"><span>🏛️</span> YONO SBI</div>
+              </div>
+            </div>
+
+            <!-- VPA Input or Simulated App Push -->
+            <div style="margin-top: 1.75rem; padding-top: 1.5rem; border-top: 1px solid var(--border-light);">
+              <label class="form-label">Or Pay via UPI VPA Handle</label>
+              <div style="display: flex; gap: 0.75rem; margin-bottom: 1rem;">
+                <input type="text" id="vpaInput" class="form-control" value="gurpreet.singh@sbi" placeholder="e.g. mobile@upi or username@okhdfcbank">
+                <button class="btn btn-outline" style="white-space: nowrap;" onclick="PaymentGateway.verifyVpa()">Verify VPA</button>
+              </div>
+              <div id="vpaStatus" style="display: none; font-size: 0.85rem; color: #047857; margin-bottom: 1.25rem; font-weight: 600;">
+                ✓ VPA Verified: Sardar Gurpreet Singh (State Bank of India)
+              </div>
+
+              <button class="btn btn-primary btn-block" style="font-size: 1.05rem; padding: 0.85rem;" onclick="PaymentGateway.triggerProcessing('UPI_QR')">
+                <span>⚡ Complete Payment via UPI (₹<span class="btnNetPayable">14,365</span>)</span>
+                <span>➔</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANE 2: Kisan Credit Card (KCC) -->
+        <div id="pane-kcc" class="pay-pane">
+          <div class="card">
+            <!-- 3D KCC Card UI Mockup -->
+            <div class="kcc-card">
+              <div class="kcc-card-top">
+                <div class="kcc-chip"></div>
+                <div class="kcc-bank-title">
+                  <div id="cardBankLabel">State Bank of India</div>
+                  <div style="font-size: 0.68rem; opacity: 0.8;">Kisan Credit Card (KCC)</div>
+                </div>
+              </div>
+
+              <div class="kcc-number" id="cardDisplayNumber">
+                5044 &nbsp; 8912 &nbsp; 4432 &nbsp; 4912
+              </div>
+
+              <div class="kcc-card-bottom">
+                <div>
+                  <div style="font-size: 0.65rem; text-transform: uppercase; opacity: 0.8;">Cardholder</div>
+                  <div class="kcc-holder-name">Sardar Gurpreet Singh</div>
+                </div>
+                <div style="text-align: right;">
+                  <div class="kcc-subvention-badge">
+                    <span>★ 3% Govt Subvention</span>
+                  </div>
+                  <div style="font-size: 0.75rem; font-weight: 800; margin-top: 4px; letter-spacing: 0.05em;">RuPay 🌾</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Subvention Alert -->
+            <div class="alert alert-success" style="margin-bottom: 1.5rem;">
+              <div class="alert-icon">🎁</div>
+              <div class="alert-content">
+                <strong>Government of India Prompt Repayment Subvention:</strong>
+                <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem;">
+                  Eligible for 3% direct interest relief on timely repayment! Effective borrowing rate capped at 4% p.a. You save <strong id="kccSavingsBadge">₹431</strong> on this agricultural order.
+                </p>
+              </div>
+            </div>
+
+            <!-- Form -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+              <div>
+                <label class="form-label">Issuing Agriculture Bank</label>
+                <select id="kccBankSelect" class="form-control" onchange="PaymentGateway.updateCardBank(this.value)">
+                  <option value="SBI">State Bank of India (SBI Agriculture)</option>
+                  <option value="PNB">Punjab National Bank (Kisan Seva)</option>
+                  <option value="HDFC">HDFC Bank (Har Goan Vikas)</option>
+                  <option value="NABARD">Punjab State Cooperative Agricultural Bank</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">KCC Card Number</label>
+                <input type="text" id="kccCardNum" class="form-control" value="5044 8912 4432 4912" maxlength="19" oninput="PaymentGateway.formatCardNum(this)">
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+              <div>
+                <label class="form-label">Valid Thru</label>
+                <input type="text" class="form-control" value="08/29" placeholder="MM/YY">
+              </div>
+              <div>
+                <label class="form-label">Security CVV</label>
+                <input type="password" class="form-control" value="782" maxlength="3">
+              </div>
+              <div>
+                <label class="form-label">Land Holding Ref</label>
+                <input type="text" class="form-control" value="PB-LDH-5.0AC" readonly>
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-block" style="font-size: 1.05rem; padding: 0.85rem;" onclick="PaymentGateway.triggerProcessing('KCC_RUPAY')">
+              <span>🌾 Authorize KCC Transaction (₹<span class="btnNetPayable">13,934</span>)</span>
+              <span>➔</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- PANE 3: NetBanking -->
+        <div id="pane-netbanking" class="pay-pane">
+          <div class="card">
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">
+              Direct Mandi & Agriculture NetBanking (PFMS / DBT Linked)
+            </h4>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.25rem;">
+              Direct clearing through Reserve Bank of India / PFMS settlement framework for APMC grain transactions.
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; margin-bottom: 1.5rem;">
+              <div class="pay-tab-btn active" style="justify-content: center;" onclick="PaymentGateway.selectBank(this, 'State Bank of India')">
+                <span>🏛️ SBI Agri</span>
+              </div>
+              <div class="pay-tab-btn" style="justify-content: center;" onclick="PaymentGateway.selectBank(this, 'Punjab National Bank')">
+                <span>🏛️ PNB Kisan</span>
+              </div>
+              <div class="pay-tab-btn" style="justify-content: center;" onclick="PaymentGateway.selectBank(this, 'Canara Bank')">
+                <span>🏛️ Canara Bank</span>
+              </div>
+              <div class="pay-tab-btn" style="justify-content: center;" onclick="PaymentGateway.selectBank(this, 'Bank of Baroda')">
+                <span>🏛️ Bank of Baroda</span>
+              </div>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-light); margin-bottom: 1.5rem;">
+              <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.25rem;">Linked Beneficiary Account</div>
+              <div style="font-weight: 700; color: var(--text-main);">Punjab National Bank — A/C No: 0842000100914821</div>
+              <div style="font-size: 0.8rem; color: #047857; font-weight: 600; margin-top: 0.25rem;">
+                ✓ Verified DBT PFMS Mandi Account — Ludhiana Central Branch
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-block" style="font-size: 1.05rem; padding: 0.85rem;" onclick="PaymentGateway.triggerProcessing('NET_BANKING')">
+              <span>🏛️ Settle via Direct Bank Switch (₹<span class="btnNetPayable">14,365</span>)</span>
+              <span>➔</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- PANE 4: Smart Escrow -->
+        <div id="pane-escrow" class="pay-pane">
+          <div class="escrow-vault-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+              <div>
+                <span class="badge badge-amber" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4);">
+                  APMC Assured Quality Escrow
+                </span>
+                <h3 style="font-size: 1.35rem; font-weight: 800; margin-top: 0.4rem;">
+                  AgriWise Smart Escrow Vault
+                </h3>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;">Protected Vault Amount</div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #34d399;" id="escrowAmountHeader">₹2,38,000</div>
+              </div>
+            </div>
+
+            <p style="color: #cbd5e1; font-size: 0.9rem; margin: 1rem 0;">
+              Eliminate buyer default and farmer crop rejection risks. Funds are locked securely in an RBI-compliant bank escrow account and automatically disbursed to the farmer upon APMC assay moisture test approval.
+            </p>
+
+            <div class="escrow-step-indicator">
+              <div class="escrow-step active">
+                <div class="escrow-step-icon">1️⃣</div>
+                <div class="escrow-step-title">Buyer Deposit</div>
+                <div class="escrow-step-desc">100% funds locked in escrow before farm dispatch.</div>
+              </div>
+              <div class="escrow-step">
+                <div class="escrow-step-icon">2️⃣</div>
+                <div class="escrow-step-title">Assay Inspection</div>
+                <div class="escrow-step-desc">Moisture & aflatoxin verification (<12%).</div>
+              </div>
+              <div class="escrow-step">
+                <div class="escrow-step-icon">3️⃣</div>
+                <div class="escrow-step-title">Instant Disbursal</div>
+                <div class="escrow-step-desc">Direct DBT release into farmer PNB account.</div>
+              </div>
+            </div>
+
+            <div style="margin-top: 1.75rem;">
+              <button class="btn btn-primary btn-block" style="background: #10b981; border: none; font-size: 1.05rem; padding: 0.85rem;" onclick="PaymentGateway.triggerProcessing('ESCROW')">
+                <span>🔒 Deposit & Lock Contract Escrow (₹<span class="btnNetPayable">2,38,000</span>)</span>
+                <span>➔</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Order Bill Summary & Safety Notice -->
+      <div class="payment-sidebar-section">
+        
+        <!-- Order Bill Summary Card -->
+        <div class="order-summary-card">
+          <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.75rem;">
+            🧾 Agricultural Invoice Summary
+          </h4>
+
+          <div class="bill-row">
+            <span>Item Subtotal</span>
+            <span id="billBaseAmount">₹14,365</span>
+          </div>
+
+          <div class="bill-row">
+            <span>GST (CGST 2.5% + SGST 2.5%)</span>
+            <span id="billGstAmount">₹718</span>
+          </div>
+
+          <div class="bill-row bill-savings" id="billSubventionRow" style="display: none;">
+            <span>★ 3% KCC Interest Subvention</span>
+            <span id="billSubventionAmount">- ₹431</span>
+          </div>
+
+          <div class="bill-row">
+            <span>Platform Service Charge</span>
+            <span style="color: #047857; font-weight: 700;">FREE (Govt Grant)</span>
+          </div>
+
+          <div class="bill-row total">
+            <span>Net Payable Amount</span>
+            <span id="billNetAmount" style="color: var(--primary-700);">₹14,365</span>
+          </div>
+
+          <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
+            <div style="display: flex; gap: 0.5rem; align-items: center; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+              <span>🔒</span> 256-Bit SSL Encrypted Banking Channel
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+              <span>🏛️</span> NPCI Bharat BillPay & PFMS Assured
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center; font-size: 0.82rem; color: var(--text-muted);">
+              <span>🌾</span> Direct Benefit Transfer (DBT) Compatible
+            </div>
+          </div>
+
+          <div style="margin-top: 1.5rem;">
+            <a href="/farmer-orders" class="btn btn-outline btn-block btn-sm">View Previous Orders</a>
+          </div>
+        </div>
+
+        <!-- Safety Disclaimer -->
+        <div class="alert alert-info" style="margin-top: 1.5rem;">
+          <div class="alert-icon">ℹ️</div>
+          <div class="alert-content">
+            <strong>Agricultural Payment Advisory:</strong>
+            <p style="font-size: 0.82rem; margin: 0.25rem 0 0 0;">
+              Transactions are settled directly into registered APMC and dealer accounts. Keep your UTR and invoice for local Mandi cess credit and input subsidy claims.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Live Transaction Ledger Section -->
+    <div style="margin-top: 3.5rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.2rem;">
+            📊 Live Settlement Ledger & Transactions
+          </h3>
+          <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0;">
+            Real-time audit trail of all input payments, transport advances, and escrow settlements.
+          </p>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="btn btn-sm btn-outline" onclick="PaymentGateway.loadLedger()">🔄 Refresh Ledger</button>
+        </div>
+      </div>
+
+      <div class="card" style="padding: 0; overflow-x: auto;">
+        <table class="table" style="width: 100%; margin: 0;">
+          <thead>
+            <tr>
+              <th>TX ID</th>
+              <th>Date & Time</th>
+              <th>Type</th>
+              <th>Method</th>
+              <th>Parties Involved</th>
+              <th>Amount (INR)</th>
+              <th>Status</th>
+              <th>Receipt</th>
+            </tr>
+          </thead>
+          <tbody id="ledgerTableBody">
+            <tr>
+              <td colspan="8" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                Loading transaction ledger...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Live Payment Processing Simulation Modal -->
+  <div id="processingModal" class="processing-modal-overlay">
+    <div class="processing-card">
+      <div class="pulse-spinner"></div>
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.4rem;">
+        Connecting to Agricultural Payment Switch
+      </h3>
+      <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.5rem;">
+        Routing through NPCI / Bank Core Switch... Please do not close or refresh this window.
+      </p>
+
+      <div style="background: #f8fafc; border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.5rem;">
+        <div id="step1" class="flow-step-item done">✓ Initializing gateway session & handshake</div>
+        <div id="step2" class="flow-step-item current">⏳ Interfacing with NPCI / Banking Switch</div>
+        <div id="step3" class="flow-step-item">○ Validating Biometric / UPI PIN / 2FA OTP</div>
+        <div id="step4" class="flow-step-item">○ Generating official UTR & GST tax receipt</div>
+      </div>
+
+      <div style="font-size: 0.8rem; color: #64748b;">
+        🔒 Encrypted End-to-End Agri Banking Session
+      </div>
+    </div>
+  </div>
+
+  <!-- Digital Tax Invoice & Printable Receipt Modal -->
+  <div id="receiptModal" class="modal-overlay">
+    <div class="modal-card" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3 class="modal-title">🧾 Official Agri-Tax Invoice & Receipt</h3>
+        <button class="modal-close" onclick="PaymentGateway.closeReceiptModal()">&times;</button>
+      </div>
+
+      <div class="modal-body" style="padding: 1.5rem;">
+        <div class="receipt-paper" id="printableReceipt">
+          <div class="receipt-watermark">PAID & SETTLED</div>
+          
+          <!-- Receipt Header -->
+          <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #0f172a; padding-bottom: 1rem; margin-bottom: 1.25rem;">
+            <div>
+              <div style="font-size: 1.4rem; font-weight: 800; color: #047857;">🌾 AGRIWISE AI</div>
+              <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">AGRICULTURAL TRANSACTION SETTLEMENT ENGINE</div>
+              <div style="font-size: 0.75rem; color: #64748b;">GSTIN: 03AAGCI8821D1ZN</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 0.85rem; font-weight: 800; color: #0f172a;" id="recNumber">AGRI-REC-00108</div>
+              <div style="font-size: 0.75rem; color: #64748b;" id="recDate">10 Sep 2026, 11:15 AM</div>
+              <span class="badge badge-emerald" style="margin-top: 4px;" id="recStatusBadge">SUCCESS</span>
+            </div>
+          </div>
+
+          <!-- Transaction Identifiers -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; background: #f8fafc; padding: 0.85rem; border-radius: var(--radius-sm); margin-bottom: 1.25rem; font-size: 0.85rem;">
+            <div>
+              <span style="color: #64748b;">Transaction ID:</span><br>
+              <strong id="recTxId">AGRI-PAY-2026-1082</strong>
+            </div>
+            <div>
+              <span style="color: #64748b;">Bank Reference UTR:</span><br>
+              <strong id="recUtr">629112998341</strong>
+            </div>
+          </div>
+
+          <!-- Parties -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; font-size: 0.85rem;">
+            <div>
+              <div style="font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700;">Payer / Remitter:</div>
+              <strong id="recPayer">Sardar Gurpreet Singh</strong>
+              <div style="color: #64748b; font-size: 0.8rem;">Sahnewal, Ludhiana, Punjab</div>
+              <div style="color: #047857; font-size: 0.75rem;">A/C: XXXX-1091 (PNB)</div>
+            </div>
+            <div>
+              <div style="font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700;">Payee / Beneficiary:</div>
+              <strong id="recPayee">IFFCO Farmer Service Centre</strong>
+              <div style="color: #64748b; font-size: 0.8rem;">Sahnewal Mandi Bypass</div>
+              <div style="color: #64748b; font-size: 0.75rem;">Payment Method: <span id="recMethod">KCC_RUPAY</span></div>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div style="margin-bottom: 1.25rem; font-size: 0.85rem; border-top: 1px solid #e2e8f0; padding-top: 0.75rem;">
+            <div style="color: #64748b; font-size: 0.75rem; text-transform: uppercase; font-weight: 700;">Order Purpose / Items:</div>
+            <div id="recNotes" style="font-weight: 600; color: #1e293b; margin-top: 0.2rem;">
+              Fertilizer seasonal package: Urea (10 bags), DAP (3 bags), MOP (2 bags) with 3% prompt subvention
+            </div>
+          </div>
+
+          <!-- Breakdown Table -->
+          <div style="border-top: 2px solid #cbd5e1; padding-top: 0.75rem; margin-bottom: 1.25rem;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; margin-bottom: 0.4rem;">
+              <span>Base Agricultural Amount</span>
+              <span id="recBaseAmount">₹14,365.00</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; margin-bottom: 0.4rem;">
+              <span>GST (CGST 2.5% + SGST 2.5%)</span>
+              <span id="recGstAmount">₹718.25</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #047857; font-weight: 600; margin-bottom: 0.4rem;" id="recSubventionRow">
+              <span>Govt of India KCC Prompt Subvention</span>
+              <span id="recSubventionAmount">- ₹430.95</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 800; border-top: 1px dashed #cbd5e1; padding-top: 0.6rem; color: #0f172a;">
+              <span>Total Settled</span>
+              <span id="recNetAmount" style="color: #047857;">₹13,934.05</span>
+            </div>
+          </div>
+
+          <!-- Verification Stamp -->
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid #e2e8f0; padding-top: 1rem; font-size: 0.75rem; color: #64748b;">
+            <div>
+              <div>Verified by NPCI Bharat Switch & PFMS</div>
+              <div style="color: #047857; font-weight: 700; margin-top: 2px;">GOVERNMENT OF INDIA DBT / APMC ASSAY COMPLIANT</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-family: monospace; font-size: 0.9rem; font-weight: 700; color: #0f172a;">[DIGITALLY SEALED]</div>
+              <div>Authorized Clearing Officer</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="display: flex; justify-content: space-between; padding: 1.25rem 1.5rem;">
+        <button class="btn btn-outline" onclick="window.print()">🖨️ Print / Save PDF</button>
+        <button class="btn btn-primary" onclick="PaymentGateway.closeReceiptModal()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+
+  <script>
+    // Payment Gateway Logic Controller
+    const PaymentGateway = {
+      currentPreset: 'fertilizer',
+      currentTab: 'upi',
+      orderData: {
+        type: 'INPUT_PURCHASE',
+        amount: 14365,
+        title: 'Seasonal Fertilizer Package — Kisan Suvidha Kendra',
+        desc: 'Urea (10 Bags) + DAP (3 Bags) + MOP (2 Bags) for 5.0 Acres Sahnewal Farm',
+        payer: 'Sardar Gurpreet Singh',
+        payee: 'Kisan Suvidha Kendra',
+        orderId: null
+      },
+      timerInterval: null,
+
+      init() {
+        AgriNav.init();
+        this.parseUrlParams();
+        this.updateBillDisplay();
+        this.startCountdown(300);
+        this.loadLedger();
+      },
+
+      parseUrlParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const type = urlParams.get('type');
+        const amount = urlParams.get('amount');
+        const recipient = urlParams.get('recipient');
+        const orderId = urlParams.get('order_id');
+
+        if (type) {
+          if (type === 'transport') {
+            this.loadPreset('transport', amount, recipient);
+          } else if (type === 'escrow') {
+            this.loadPreset('escrow', amount, recipient);
+          } else if (type === 'kcc') {
+            this.loadPreset('kcc', amount, recipient);
+          } else {
+            this.loadPreset('fertilizer', amount, recipient);
+          }
+        }
+        if (orderId) {
+          this.orderData.orderId = parseInt(orderId);
+        }
+      },
+
+      loadPreset(preset, customAmount, customRecipient) {
+        this.currentPreset = preset;
+
+        // Highlight preset buttons
+        document.querySelectorAll('.active-ctx').forEach(b => b.classList.remove('active-ctx'));
+
+        if (preset === 'transport') {
+          this.orderData = {
+            type: 'TRANSPORT_ADVANCE',
+            amount: customAmount ? parseFloat(customAmount) : 1500,
+            title: '50% Freight Advance — ' + (customRecipient || 'Gurkirat Agri Logistics'),
+            desc: '10 Tonne Tata 407 dispatch from Sahnewal Farm to Khanna Mandi.',
+            payer: 'Sardar Gurpreet Singh',
+            payee: customRecipient || 'Gurkirat Agri Logistics',
+            orderId: null
+          };
+          this.switchTab('upi');
+        } else if (preset === 'escrow') {
+          this.orderData = {
+            type: 'BUYER_ESCROW',
+            amount: customAmount ? parseFloat(customAmount) : 238000,
+            title: 'Procurement Escrow Deposit — ' + (customRecipient || 'Godrej Agrovet Ltd'),
+            desc: '100 Quintals Yellow Maize at ₹2,380/Qtl. Subject to APMC assay moisture test.',
+            payer: customRecipient || 'Godrej Agrovet Procurement Ltd',
+            payee: 'Sardar Gurpreet Singh (AgriWise Escrow Lock)',
+            orderId: null
+          };
+          this.switchTab('escrow');
+        } else if (preset === 'kcc') {
+          this.orderData = {
+            type: 'INPUT_PURCHASE',
+            amount: customAmount ? parseFloat(customAmount) : 10400,
+            title: 'Certified Hybrid Seed Order — Kisan Seva Kendra',
+            desc: 'Pioneer P3396 Hybrid Maize Seed (10 Bags of 4kg each) with 3% KCC subvention.',
+            payer: 'Sardar Gurpreet Singh',
+            payee: 'Kisan Seva Kendra Sahnewal',
+            orderId: null
+          };
+          this.switchTab('kcc');
+        } else {
+          this.orderData = {
+            type: 'INPUT_PURCHASE',
+            amount: customAmount ? parseFloat(customAmount) : 14365,
+            title: 'Seasonal Fertilizer Package — Kisan Suvidha Kendra',
+            desc: 'Urea (10 Bags) + DAP (3 Bags) + MOP (2 Bags) for 5.0 Acres Sahnewal Farm.',
+            payer: 'Sardar Gurpreet Singh',
+            payee: customRecipient || 'Kisan Suvidha Kendra',
+            orderId: null
+          };
+          this.switchTab('upi');
+        }
+
+        // Update DOM elements
+        document.getElementById('ctxBadge').textContent = this.orderData.type.replace('_', ' ');
+        document.getElementById('ctxTitle').textContent = this.orderData.title;
+        document.getElementById('ctxDesc').textContent = this.orderData.desc;
+        document.getElementById('ctxAmountDisplay').textContent = window.AgriState.formatCurrency(this.orderData.amount);
+
+        this.updateBillDisplay();
+      },
+
+      switchTab(tab) {
+        this.currentTab = tab;
+        document.querySelectorAll('.pay-tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.pay-pane').forEach(pane => pane.classList.remove('active'));
+
+        const targetBtn = Array.from(document.querySelectorAll('.pay-tab-btn')).find(b => b.textContent.toLowerCase().includes(tab));
+        if (targetBtn) targetBtn.classList.add('active');
+
+        const pane = document.getElementById(`pane-${tab}`);
+        if (pane) pane.classList.add('active');
+
+        this.updateBillDisplay();
+      },
+
+      updateBillDisplay() {
+        const base = this.orderData.amount;
+        const gst = this.orderData.type === 'INPUT_PURCHASE' ? Math.round(base * 0.05) : 0;
+        const subvention = (this.currentTab === 'kcc' && this.orderData.type === 'INPUT_PURCHASE') ? Math.round(base * 0.03) : 0;
+        const net = base + gst - subvention;
+
+        document.getElementById('billBaseAmount').textContent = window.AgriState.formatCurrency(base);
+        document.getElementById('billGstAmount').textContent = window.AgriState.formatCurrency(gst);
+        
+        const subventionRow = document.getElementById('billSubventionRow');
+        if (subvention > 0) {
+          subventionRow.style.display = 'flex';
+          document.getElementById('billSubventionAmount').textContent = `- ${window.AgriState.formatCurrency(subvention)}`;
+          document.getElementById('kccSavingsBadge').textContent = window.AgriState.formatCurrency(subvention);
+        } else {
+          subventionRow.style.display = 'none';
+        }
+
+        document.getElementById('billNetAmount').textContent = window.AgriState.formatCurrency(net);
+        document.querySelectorAll('.btnNetPayable').forEach(span => {
+          span.textContent = net.toLocaleString('en-IN');
+        });
+
+        const escrowHdr = document.getElementById('escrowAmountHeader');
+        if (escrowHdr) escrowHdr.textContent = window.AgriState.formatCurrency(net);
+      },
+
+      startCountdown(seconds) {
+        let remaining = seconds;
+        const el = document.getElementById('qrCountdown');
+        if (this.timerInterval) clearInterval(this.timerInterval);
+
+        this.timerInterval = setInterval(() => {
+          remaining--;
+          if (remaining <= 0) {
+            remaining = seconds;
+          }
+          const m = Math.floor(remaining / 60).toString().padStart(2, '0');
+          const s = (remaining % 60).toString().padStart(2, '0');
+          if (el) el.textContent = `⏱ Expires in ${m}:${s}`;
+        }, 1000);
+      },
+
+      verifyVpa() {
+        const vpa = document.getElementById('vpaInput').value.trim();
+        const status = document.getElementById('vpaStatus');
+        if (vpa.includes('@')) {
+          status.style.display = 'block';
+          status.textContent = `✓ VPA Verified: Sardar Gurpreet Singh (${vpa})`;
+        } else {
+          alert('Please enter a valid UPI address (e.g. mobile@upi or name@okhdfcbank)');
+        }
+      },
+
+      updateCardBank(bank) {
+        const label = document.getElementById('cardBankLabel');
+        if (bank === 'SBI') label.textContent = 'State Bank of India';
+        else if (bank === 'PNB') label.textContent = 'Punjab National Bank';
+        else if (bank === 'HDFC') label.textContent = 'HDFC Bank Agri';
+        else label.textContent = 'Punjab State Co-op Bank';
+      },
+
+      formatCardNum(input) {
+        let v = input.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+        let matches = v.match(/\d{4,16}/g);
+        let match = matches && matches[0] || '';
+        let parts = [];
+        for (let i = 0, len = match.length; i < len; i += 4) {
+          parts.push(match.substring(i, i + 4));
+        }
+        if (parts.length) {
+          input.value = parts.join(' ');
+          document.getElementById('cardDisplayNumber').textContent = input.value;
+        }
+      },
+
+      selectBank(btn, bankName) {
+        btn.parentElement.querySelectorAll('.pay-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      },
+
+      async triggerProcessing(method) {
+        const modal = document.getElementById('processingModal');
+        modal.style.display = 'flex';
+
+        // Step 1: Create intent on backend
+        try {
+          const intent = await AgriAPI.createPaymentIntent({
+            amount_inr: this.orderData.amount,
+            payment_type: this.orderData.type,
+            payment_method: method,
+            payer_name: this.orderData.payer,
+            payee_name: this.orderData.payee,
+            notes: this.orderData.title,
+            order_id: this.orderData.orderId
+          });
+
+          // Simulate micro-steps with visual feedback
+          setTimeout(() => {
+            document.getElementById('step2').className = 'flow-step-item done';
+            document.getElementById('step3').className = 'flow-step-item current';
+          }, 800);
+
+          setTimeout(() => {
+            document.getElementById('step3').className = 'flow-step-item done';
+            document.getElementById('step4').className = 'flow-step-item current';
+          }, 1600);
+
+          // Step 2: Verify payment on backend
+          setTimeout(async () => {
+            document.getElementById('step4').className = 'flow-step-item done';
+            
+            const verification = await AgriAPI.verifyPayment({
+              transaction_id: intent.transaction_id,
+              payment_method: method
+            });
+
+            modal.style.display = 'none';
+
+            // Reset step classes
+            document.getElementById('step2').className = 'flow-step-item current';
+            document.getElementById('step3').className = 'flow-step-item';
+            document.getElementById('step4').className = 'flow-step-item';
+
+            // Load and show receipt modal
+            this.showReceipt(intent.transaction_id);
+            this.loadLedger();
+          }, 2400);
+
+        } catch (err) {
+          modal.style.display = 'none';
+          alert('Gateway processing simulation error: ' + err.message);
+        }
+      },
+
+      async showReceipt(txId) {
+        try {
+          const receipt = await AgriAPI.getPaymentReceipt(txId);
+          document.getElementById('recNumber').textContent = receipt.receipt_number;
+          document.getElementById('recDate').textContent = receipt.date_time;
+          document.getElementById('recStatusBadge').textContent = receipt.status;
+          document.getElementById('recTxId').textContent = receipt.transaction_id;
+          document.getElementById('recUtr').textContent = receipt.utr_number;
+          document.getElementById('recPayer').textContent = receipt.payer_name;
+          document.getElementById('recPayee').textContent = receipt.payee_name;
+          document.getElementById('recMethod').textContent = receipt.payment_method;
+          document.getElementById('recNotes').textContent = receipt.notes;
+
+          document.getElementById('recBaseAmount').textContent = window.AgriState.formatCurrency(receipt.base_amount_inr);
+          document.getElementById('recGstAmount').textContent = window.AgriState.formatCurrency(receipt.gst_amount_inr);
+
+          const subRow = document.getElementById('recSubventionRow');
+          if (receipt.subsidy_amount_inr > 0) {
+            subRow.style.display = 'flex';
+            document.getElementById('recSubventionAmount').textContent = `- ${window.AgriState.formatCurrency(receipt.subsidy_amount_inr)}`;
+          } else {
+            subRow.style.display = 'none';
+          }
+
+          document.getElementById('recNetAmount').textContent = window.AgriState.formatCurrency(receipt.net_amount_inr);
+
+          document.getElementById('receiptModal').classList.add('active');
+        } catch (err) {
+          console.error(err);
+        }
+      },
+
+      closeReceiptModal() {
+        document.getElementById('receiptModal').classList.remove('active');
+      },
+
+      async loadLedger() {
+        const tbody = document.getElementById('ledgerTableBody');
+        try {
+          const transactions = await AgriAPI.getPaymentTransactions();
+          if (!transactions || transactions.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 2rem;">No transactions recorded.</td></tr>';
+            return;
+          }
+
+          tbody.innerHTML = transactions.map(t => {
+            let statusBadge = 'badge-emerald';
+            if (t.status === 'ESCROW_LOCKED') statusBadge = 'badge-amber';
+            if (t.status === 'DISBURSED') statusBadge = 'badge-blue';
+
+            return `
+              <tr>
+                <td><strong style="font-family: monospace; font-size: 0.85rem;">${t.transaction_id}</strong></td>
+                <td style="font-size: 0.82rem; color: var(--text-muted);">${t.created_at}</td>
+                <td><span class="badge badge-outline" style="font-size: 0.75rem;">${t.payment_type}</span></td>
+                <td style="font-size: 0.85rem; font-weight: 600;">${t.payment_method}</td>
+                <td style="font-size: 0.82rem;">
+                  <div>From: <strong>${t.payer_name}</strong></div>
+                  <div style="color: var(--text-muted);">To: ${t.payee_name}</div>
+                </td>
+                <td>
+                  <strong style="font-size: 0.95rem; color: var(--text-main);">${window.AgriState.formatCurrency(t.net_amount_inr)}</strong>
+                  ${t.subsidy_amount_inr > 0 ? `<div style="font-size: 0.72rem; color: #047857;">-₹${t.subsidy_amount_inr.toFixed(0)} subvention</div>` : ''}
+                </td>
+                <td>
+                  <span class="badge ${statusBadge}">${t.status}</span>
+                  ${t.status === 'ESCROW_LOCKED' ? `
+                    <button class="btn btn-sm btn-outline" style="margin-top: 4px; padding: 2px 6px; font-size: 0.72rem;" onclick="PaymentGateway.releaseEscrow('${t.transaction_id}')">
+                      Release Escrow
+                    </button>
+                  ` : ''}
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-outline" style="padding: 4px 8px; font-size: 0.75rem;" onclick="PaymentGateway.showReceipt('${t.transaction_id}')">
+                    🧾 Receipt
+                  </button>
+                </td>
+              </tr>
+            `;
+          }).join('');
+
+        } catch (err) {
+          tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: #ef4444; padding: 1.5rem;">Failed to load transactions: ${err.message}</td></tr>`;
+        }
+      },
+
+      async releaseEscrow(txId) {
+        if (!confirm('Simulate APMC Assay Quality Pass (<12% moisture) and disburse escrow funds to the farmer?')) return;
+        try {
+          const res = await AgriAPI.releaseEscrow(txId);
+          alert('✓ ' + res.message);
+          this.loadLedger();
+        } catch (err) {
+          alert('Escrow release failed: ' + err.message);
+        }
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      PaymentGateway.init();
+    });
+  </script>
+</body>
+</html>

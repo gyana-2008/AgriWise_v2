@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🚛 Local Farm Logistics & Transport Marketplace — AGRIWISE AI</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <!-- Title Section -->
+      <div class="page-title-bar">
+        <div class="page-title-left">
+          <h1>🚛 Farm Logistics & Mandi Transport Marketplace</h1>
+          <p>Book verified rural commercial vehicles and truck fleets with transparent per-kilometer freight rates for farm-gate harvest pickup.</p>
+        </div>
+        <div class="page-title-actions">
+          <a href="/farm-to-market" class="btn btn-primary btn-sm">Next: End-to-End Planner ➔</a>
+        </div>
+      </div>
+
+      <!-- Quick Fleet Summary -->
+      <div class="card" style="margin-bottom: 2rem; background: #f8fafc;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <span class="badge badge-emerald">Real-time GPS Tracking Available</span>
+            <div style="font-weight: 700; font-size: 1rem; color: var(--text-main); margin-top: 4px;">Available Fleets Near Sahnewal & Ludhiana</div>
+            <div style="font-size: 0.84rem; color: var(--text-muted);">
+              3 commercial transport operators within 10 km radius of your farm.
+            </div>
+          </div>
+          <div style="font-size: 0.85rem; font-weight: 700; color: #059669;">
+            ✓ All operators verified with commercial fitness & goods transit insurance.
+          </div>
+        </div>
+      </div>
+
+      <!-- Transporters Grid -->
+      <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
+        <!-- Transporter 1: Balwinder Singh (Tata 407) -->
+        <div class="card" style="border: 2px solid var(--primary-500); border-left: 6px solid var(--primary-600);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                <span class="badge badge-emerald">Recommended For 5-Acre Harvest</span>
+                <span class="badge badge-amber">Available Now</span>
+              </div>
+              <h3 style="font-size: 1.35rem; color: var(--primary-900);">Balwinder Singh Transport (Tata 407 Open Bed)</h3>
+              <div style="font-size: 0.84rem; color: var(--text-muted);">
+                Sahnewal GT Road Bypass • <strong>4.5 km from farm (15 min ETA)</strong> • Driver: Balwinder Singh
+              </div>
+            </div>
+
+            <div style="text-align: right;">
+              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">FREIGHT TARIFF</div>
+              <div style="font-size: 1.8rem; font-weight: 800; color: var(--primary-800);">₹28 / km</div>
+              <div style="font-size: 0.78rem; color: var(--text-muted);">Base loading charge: ₹1,400</div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; background: #f8fafc; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1rem;">
+            <div><strong>Vehicle Model:</strong> Tata 407 Gold SFC</div>
+            <div><strong>Payload Capacity:</strong> <span style="color: #059669; font-weight: 700;">4.5 Tonnes (45 Quintals)</span></div>
+            <div><strong>Tarpaulin Cover:</strong> Waterproof Double-layer</div>
+            <div><strong>Operator Rating:</strong> 4.8 ★ (68 completed trips)</div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div style="font-size: 0.88rem; color: #334155;">
+              Estimated trip to <strong>Khanna ABC Foods (22 km)</strong>: <strong style="color: #059669; font-size: 1.05rem;">~₹2,016 / trip</strong> (requires 3 shuttles for 140 quintals)
+            </div>
+
+            <div style="display: flex; gap: 0.75rem;">
+              <button class="btn btn-secondary btn-sm" onclick="callDriver('Balwinder Singh', '+91 98722 89012')">
+                <span>📞 Call Driver</span>
+              </button>
+              <button class="btn btn-primary btn-sm" onclick="openBookingModal('Balwinder Singh (Tata 407)', 4.5, 28, 1400)">
+                <span>⚡ Request Pickup at Farm</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transporter 2: Khanna Express (10-Tonne) -->
+        <div class="card" style="border-left: 6px solid #0284c7;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                <span class="badge badge-blue">Bulk Heavy Commercial Vehicle</span>
+                <span class="badge badge-emerald">Available Today</span>
+              </div>
+              <h3 style="font-size: 1.35rem; color: var(--text-main);">Khanna Express Truck Fleet (Ashok Leyland 10-Tonne)</h3>
+              <div style="font-size: 0.84rem; color: var(--text-muted);">
+                Khanna Transport Nagar • <strong>9.0 km from farm (25 min ETA)</strong> • Lead: Manmohan Joshi
+              </div>
+            </div>
+
+            <div style="text-align: right;">
+              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">FREIGHT TARIFF</div>
+              <div style="font-size: 1.8rem; font-weight: 800; color: #0284c7;">₹42 / km</div>
+              <div style="font-size: 0.78rem; color: var(--text-muted);">Base loading charge: ₹2,400</div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; background: #f8fafc; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1rem;">
+            <div><strong>Vehicle Model:</strong> Ashok Leyland 1618</div>
+            <div><strong>Payload Capacity:</strong> <span style="color: #059669; font-weight: 700;">10.0 Tonnes (100 Quintals)</span></div>
+            <div><strong>Tarpaulin Cover:</strong> Full Heavy Canvas</div>
+            <div><strong>Operator Rating:</strong> 4.9 ★ (140 trips)</div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div style="font-size: 0.88rem; color: #334155;">
+              Estimated single trip for 10 Tonnes: <strong style="color: #059669; font-size: 1.05rem;">~₹3,324</strong> (Ideal for full field harvest clearance)
+            </div>
+
+            <div style="display: flex; gap: 0.75rem;">
+              <button class="btn btn-secondary btn-sm" onclick="callDriver('Khanna Express', '+91 98140 33221')">
+                <span>📞 Call Fleet Manager</span>
+              </button>
+              <button class="btn btn-primary btn-sm" onclick="openBookingModal('Khanna Express (10-Tonne)', 10.0, 42, 2400)">
+                <span>⚡ Request Pickup at Farm</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transporter 3: Bolero Maxi-Truck -->
+        <div class="card" style="border-left: 6px solid #f59e0b;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                <span class="badge badge-amber">Small Fast Pickup</span>
+              </div>
+              <h3 style="font-size: 1.35rem; color: var(--text-main);">Sher-e-Punjab Mahindra Bolero Maxi-Truck</h3>
+              <div style="font-size: 0.84rem; color: var(--text-muted);">
+                Sahnewal Focal Point • <strong>3.2 km from farm (10 min ETA)</strong> • Driver: Jagtar Singh
+              </div>
+            </div>
+
+            <div style="text-align: right;">
+              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">FREIGHT TARIFF</div>
+              <div style="font-size: 1.8rem; font-weight: 800; color: #b45309;">₹18 / km</div>
+              <div style="font-size: 0.78rem; color: var(--text-muted);">Base loading charge: ₹750</div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; background: #f8fafc; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1rem;">
+            <div><strong>Vehicle Model:</strong> Mahindra Bolero Maxi-Truck Plus</div>
+            <div><strong>Payload Capacity:</strong> <span style="color: #059669; font-weight: 700;">1.7 Tonnes (17 Quintals)</span></div>
+            <div><strong>Tarpaulin Cover:</strong> Fitted Waterproof Cover</div>
+            <div><strong>Operator Rating:</strong> 4.7 ★ (45 trips)</div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div style="font-size: 0.88rem; color: #334155;">
+              Estimated trip for partial harvest lots: <strong style="color: #059669; font-size: 1.05rem;">~₹1,146 / trip</strong>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem;">
+              <button class="btn btn-secondary btn-sm" onclick="callDriver('Jagtar Singh', '+91 98788 77665')">
+                <span>📞 Call Driver</span>
+              </button>
+              <button class="btn btn-primary btn-sm" onclick="openBookingModal('Mahindra Bolero Maxi-Truck', 1.7, 18, 750)">
+                <span>⚡ Request Pickup</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Transport Booking Modal -->
+  <div id="bookingModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: #fff; border-radius: 16px; max-width: 480px; width: 100%; padding: 2rem; box-shadow: var(--shadow-xl);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3 style="font-size: 1.25rem; color: var(--primary-900);">🚛 Book Farm-Gate Pickup</h3>
+        <button onclick="closeBookingModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+      </div>
+
+      <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.25rem;">
+        <div style="font-weight: 700; color: var(--text-main);" id="bookTransName">Balwinder Singh (Tata 407)</div>
+        <div style="font-size: 0.84rem; color: var(--text-muted);">Base: <strong id="bookBase">₹1,400</strong> • Rate: <strong id="bookRate">₹28/km</strong></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Destination Mandi / Processing Mill</label>
+        <select id="bookDest" class="form-control" onchange="calcTripPrice()">
+          <option value="22">Khanna Industrial Area — ABC Foods (22 km)</option>
+          <option value="12">Ludhiana New Grain Market (12 km)</option>
+          <option value="130">Karnal Poultry Feed Cluster (130 km)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Harvest Commodity & Quantity</label>
+        <input type="text" id="bookCargo" class="form-control" value="Maize Grain (approx. 45 Quintals / 4.5 Tonnes)">
+      </div>
+
+      <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 1.5rem; padding-top: 0.5rem; border-top: 1px solid var(--border-light);">
+        <span>Estimated Freight Fare:</span>
+        <span style="font-size: 1.3rem; color: var(--primary-900);" id="bookTotal">₹2,016</span>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+        <button class="btn btn-primary btn-block" style="padding: 0.75rem;" onclick="payAdvanceFreight()">
+          <span>💳 Pay 50% Freight Advance via UPI / Gateway</span>
+          <span>➔</span>
+        </button>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem;">
+          <button class="btn btn-secondary" onclick="closeBookingModal()">Cancel</button>
+          <button class="btn btn-outline" onclick="confirmBooking()">Book on Cash</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script>
+    let activeBooking = { name: "", cap: 4.5, rate: 28, base: 1400 };
+
+    function callDriver(name, phone) {
+      alert(`📞 Calling ${name} at ${phone}...\nDriver is active and on standby.`);
+    }
+
+    function openBookingModal(name, cap, rate, base) {
+      activeBooking = { name, cap, rate, base };
+      document.getElementById('bookTransName').innerText = name;
+      document.getElementById('bookBase').innerText = `₹${base}`;
+      document.getElementById('bookRate').innerText = `₹${rate}/km`;
+      calcTripPrice();
+      document.getElementById('bookingModal').style.display = 'flex';
+    }
+
+    function calcTripPrice() {
+      const dist = parseFloat(document.getElementById('bookDest').value) || 22;
+      const total = activeBooking.base + (dist * activeBooking.rate);
+      document.getElementById('bookTotal').innerText = `₹${total.toLocaleString('en-IN')}`;
+    }
+
+    function closeBookingModal() {
+      document.getElementById('bookingModal').style.display = 'none';
+    }
+
+    function payAdvanceFreight() {
+      const dist = parseFloat(document.getElementById('bookDest').value) || 22;
+      const total = activeBooking.base + (dist * activeBooking.rate);
+      const advance = Math.round(total * 0.5);
+      window.location.href = `/payment?type=transport&amount=${advance}&recipient=${encodeURIComponent(activeBooking.name)}`;
+    }
+
+    async function confirmBooking() {
+      const dist = parseFloat(document.getElementById('bookDest').value) || 22;
+      const total = activeBooking.base + (dist * activeBooking.rate);
+      const cargo = document.getElementById('bookCargo').value;
+
+      try {
+        await AgriAPI.createOrder({
+          order_type: "TRANSPORT",
+          item_title: `Transport Booking (${activeBooking.name})`,
+          quantity: cargo,
+          amount_inr: total,
+          partner_name: activeBooking.name
+        });
+        alert(`✅ Transport Booked! ${activeBooking.name} confirmed for farm-gate pickup.\nTrip details recorded in your Farmer Orders.`);
+        closeBookingModal();
+        window.location.href = "/farmer-orders";
+      } catch (e) {
+        alert("Booking saved locally. Proceeding to orders.");
+        window.location.href = "/farmer-orders";
+      }
+    }
+  </script>
+</body>
+</html>

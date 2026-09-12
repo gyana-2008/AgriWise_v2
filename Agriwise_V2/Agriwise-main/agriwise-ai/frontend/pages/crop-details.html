@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌾 Crop Agronomic Dossier — AGRIWISE AI</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <!-- Title Section -->
+      <div class="page-title-bar">
+        <div class="page-title-left">
+          <h1 id="cropHeaderTitle">🌽 Crop Agronomic Dossier</h1>
+          <p id="cropHeaderSubtitle">Complete cultivation parameters, thermal thresholds, and certified seed catalog.</p>
+        </div>
+        <div class="page-title-actions">
+          <a href="/crop-recommendation" class="btn btn-secondary btn-sm">⬅ Back to Crop Rankings</a>
+          <a href="/seed-recommendation" class="btn btn-primary btn-sm" id="selectSeedBtn">Select Seed Variety ➔</a>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;" id="quickMetricsGrid">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Main 2-Column Content -->
+      <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 2rem; margin-bottom: 2rem;" id="mainTwoColLayout">
+        <!-- Left: Description & Varieties -->
+        <div>
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="icon">📖</span>
+                <span>Crop Description & Market Context</span>
+              </div>
+            </div>
+            <p style="font-size: 0.95rem; color: #334155; line-height: 1.6;" id="cropDescriptionText">
+              <!-- Rendered by JS -->
+            </p>
+          </div>
+
+          <!-- Certified Varieties for this Crop -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="icon">🌱</span>
+                <span>Certified High-Yield Varieties</span>
+              </div>
+              <a href="/seed-recommendation" class="btn btn-outline-emerald btn-sm" id="compareVarietiesBtn">Compare Varieties ➔</a>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 1rem;" id="varietiesListContainer">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Economic Metrics & Calendar -->
+        <div>
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="icon">💰</span>
+                <span>Economic Viability (Per Acre)</span>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;" id="economicMetricsContainer">
+              <!-- Rendered by JS -->
+            </div>
+
+            <a href="/profit-estimator" class="btn btn-amber btn-sm btn-full" style="margin-top: 1.25rem;" id="runProfitBtn">
+              <span>📊 Run Detailed Profit Estimator</span>
+            </a>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="icon">📅</span>
+                <span>Cultivation Calendar</span>
+              </div>
+            </div>
+            <div style="font-size: 0.88rem; color: #334155; line-height: 1.6;" id="calendarContainer">
+              <!-- Rendered by JS -->
+            </div>
+            <a href="/cultivation-plan" class="btn btn-secondary btn-sm btn-full" style="margin-top: 1rem;" id="viewPlanBtn">
+              <span>View Day 0 to Harvest Timeline ➔</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script>
+    const CROP_DETAILS_DATA = {
+      "Maize": {
+        icon: "🌽",
+        name: "Maize (Corn)",
+        cycle: "108 Days",
+        season: "Kharif / Zaid Season",
+        water: "Medium",
+        waterDetail: "450 - 600 mm total",
+        temp: "18°C - 33°C",
+        tempDetail: "Optimum Vegetative",
+        ph: "5.8 - 7.5",
+        phDetail: "Alluvial & Sandy Loam",
+        desc: "Maize is one of India's most dynamic commercial and industrial cereals. Beyond rural food use, strong macroeconomic demand from poultry feed compounding, bio-ethanol distilleries, and wet-milling starch factories in Khanna, Ludhiana, and Karnal has created an acute structural supply deficit (+41.8% regional shortage), maintaining spot mandi prices well above the government Minimum Support Price (MSP).",
+        msp: "₹2,090 / quintal",
+        spot: "₹2,360 / quintal",
+        premium: "+₹270 / quintal",
+        costAcre: "₹14,500 / acre",
+        netAcre: "₹43,000 / acre",
+        calendar: {
+          sowing: "May 25 - June 20",
+          vegetative: "25 - 45 Days After Sowing",
+          flowering: "50 - 65 Days (Tasseling & Silking)",
+          filling: "65 - 90 Days After Sowing",
+          harvest: "95 - 110 Days (Moisture < 15%)"
+        },
+        varieties: [
+          { name: "Pioneer P3396 Hybrid (Corteva)", duration: "108 Days", rate: "8 kg/acre", price: "₹260/kg", score: "95% Suitability", desc: "Heavy cob girth with deep kernel setting. High resistance to Turcicum Leaf Blight. High shelling >82%.", yield: "27.0 - 32.0 q/acre" },
+          { name: "Kaveri 50 Super Hybrid", duration: "102 Days", rate: "7.5 kg/acre", price: "₹220/kg", score: "89% Suitability", desc: "6-day shorter duration; frees fields early for November wheat rotation. Excellent drought resilience.", yield: "24.5 - 28.5 q/acre" }
+        ]
+      },
+      "Wheat": {
+        icon: "🌾",
+        name: "Wheat (Gehu)",
+        cycle: "140 Days",
+        season: "Rabi Main Season",
+        water: "Medium",
+        waterDetail: "350 - 450 mm (4-5 Irrigations)",
+        temp: "12°C - 25°C",
+        tempDetail: "Cool Winter Tillering",
+        ph: "6.2 - 8.0",
+        phDetail: "Well-Drained Loam",
+        desc: "Wheat is the primary staple Rabi foodgrain of northern India. The Indo-Gangetic alluvial plains provide optimal thermal chill hours for prolific crown-root initiation and tillering. High industrial demand from roller flour mills, biscuit bakeries, and FCI central pool buffer stocks ensures guaranteed liquidity and immediate cash monetization at Mandi gates.",
+        msp: "₹2,275 / quintal",
+        spot: "₹2,450 / quintal",
+        premium: "+₹175 / quintal",
+        costAcre: "₹13,200 / acre",
+        netAcre: "₹40,700 / acre",
+        calendar: {
+          sowing: "November 1 - November 20",
+          vegetative: "21 - 45 Days (CRI & Tillering)",
+          flowering: "70 - 85 Days (Booting & Heading)",
+          filling: "90 - 120 Days (Milky / Dough)",
+          harvest: "130 - 140 Days (Moisture < 12%)"
+        },
+        varieties: [
+          { name: "HD-2967 (Pusa Wheat)", duration: "140 Days", rate: "40 kg/acre", price: "₹42/kg", score: "96% Suitability", desc: "Immunity to yellow/stripe rust, high tillering, and soft amber lustrous grain preferred by flour mills.", yield: "22.0 - 26.0 q/acre" },
+          { name: "DBW-187 (Karan Vandana)", duration: "120 Days", rate: "40 kg/acre", price: "₹48/kg", score: "94% Suitability", desc: "Terminal heat tolerance and bio-fortified high zinc and iron grain content.", yield: "24.0 - 28.0 q/acre" }
+        ]
+      },
+      "Mustard": {
+        icon: "🌼",
+        name: "Mustard (Sarson)",
+        cycle: "115 Days",
+        season: "Rabi Oilseed Season",
+        water: "Low",
+        waterDetail: "200 - 250 mm (2 Irrigations)",
+        temp: "10°C - 25°C",
+        tempDetail: "Sunny Dry Days",
+        ph: "6.0 - 7.8",
+        phDetail: "Light to Medium Loam",
+        desc: "Mustard is the king of northern edible oilseeds. Amid high domestic cooking oil import dependence, the Government of India has instituted remunerative MSP support. With exceptionally low irrigation needs (only 2 waterings), it offers one of the highest returns per rupee invested across North Indian farms.",
+        msp: "₹5,650 / quintal",
+        spot: "₹5,720 / quintal",
+        premium: "+₹70 / quintal",
+        costAcre: "₹9,800 / acre",
+        netAcre: "₹44,540 / acre",
+        calendar: {
+          sowing: "October 10 - October 25",
+          vegetative: "20 - 45 Days (Branching)",
+          flowering: "50 - 65 Days (Golden Bloom)",
+          filling: "70 - 95 Days (Siliqua Development)",
+          harvest: "105 - 115 Days (Moisture < 9%)"
+        },
+        varieties: [
+          { name: "Pusa Bold (High Oil)", duration: "115 Days", rate: "2.0 kg/acre", price: "₹280/kg", score: "95% Suitability", desc: "40.5% oil recovery, high frost tolerance, non-shattering pods.", yield: "8.5 - 10.5 q/acre" },
+          { name: "Giriraj (RH-749)", duration: "125 Days", rate: "2.5 kg/acre", price: "₹310/kg", score: "92% Suitability", desc: "Extensive multi-branching canopy yielding up to 40 pods per branch.", yield: "9.0 - 11.5 q/acre" }
+        ]
+      },
+      "Soybean": {
+        icon: "🌱",
+        name: "Soybean (Pili Soy)",
+        cycle: "98 Days",
+        season: "Kharif Oilseed",
+        water: "Medium",
+        waterDetail: "450 - 550 mm Rainfed",
+        temp: "20°C - 32°C",
+        tempDetail: "Monsoon Warmth",
+        ph: "6.5 - 7.5",
+        phDetail: "Alluvial & Black Soil",
+        desc: "Soybean is the dual-purpose golden bean of India, providing high-value cooking oil and high-protein de-oiled cake (DOC) for poultry feeds. As a legume, it fixes its own atmospheric nitrogen, enriching the soil for subsequent winter crops while slashing synthetic urea expenses.",
+        msp: "₹4,600 / quintal",
+        spot: "₹4,750 / quintal",
+        premium: "+₹150 / quintal",
+        costAcre: "₹11,500 / acre",
+        netAcre: "₹43,125 / acre",
+        calendar: {
+          sowing: "June 20 - July 10",
+          vegetative: "15 - 35 Days (Nodulation)",
+          flowering: "35 - 50 Days",
+          filling: "60 - 75 Days (Pod Swelling)",
+          harvest: "90 - 98 Days (Leaves Shed)"
+        },
+        varieties: [
+          { name: "JS 335 (Benchmark)", duration: "98 Days", rate: "30 kg/acre", price: "₹85/kg", score: "94% Suitability", desc: "High field emergence, resistance to pod shattering, heavy nodulation.", yield: "10.0 - 12.0 q/acre" },
+          { name: "JS 95-60 (Early)", duration: "88 Days", rate: "32 kg/acre", price: "₹90/kg", score: "91% Suitability", desc: "Ultra-early 88-day cycle enabling 3-crop rotations before early potato.", yield: "9.0 - 11.0 q/acre" }
+        ]
+      },
+      "Basmati Rice": {
+        icon: "🍚",
+        name: "Basmati Rice (Pusa Dhan)",
+        cycle: "145 Days",
+        season: "Kharif Premium Paddy",
+        water: "High",
+        waterDetail: "1,100 - 1,400 mm",
+        temp: "22°C - 35°C",
+        tempDetail: "Humid Monsoon",
+        ph: "6.0 - 7.5",
+        phDetail: "Clay Loam Hardpan",
+        desc: "Geographically Indicated (GI) Basmati rice is India's flagship agricultural export earner. Aromatic varieties like Pusa 1121 and PB 1509 fetch premium market realizations far surpassing ordinary coarse paddy, driven by robust institutional procurement and Middle Eastern export contracts.",
+        msp: "₹2,183 / quintal (Paddy Common)",
+        spot: "₹3,920 / quintal (Basmati 1121)",
+        premium: "+₹1,737 Export Premium",
+        costAcre: "₹17,000 / acre",
+        netAcre: "₹53,560 / acre",
+        calendar: {
+          sowing: "Nursery: May 25 - June 10",
+          vegetative: "Transplant: June 25 - July 10",
+          flowering: "85 - 105 Days (Panicle & Heading)",
+          filling: "110 - 130 Days (Dough Stage)",
+          harvest: "140 - 145 Days (Golden Panicles)"
+        },
+        varieties: [
+          { name: "Pusa Basmati 1121", duration: "145 Days", rate: "8 kg/acre", price: "₹115/kg", score: "96% Suitability", desc: "World benchmark 8.4mm slender grain with unmatched post-cooking elongation.", yield: "18.0 - 22.0 q/acre" },
+          { name: "Pusa Basmati 1509", duration: "120 Days", rate: "8 kg/acre", price: "₹110/kg", score: "93% Suitability", desc: "Saves 30 days and 3-4 irrigations, clearing fields for timely potato/wheat.", yield: "20.0 - 25.0 q/acre" }
+        ]
+      },
+      "Chickpea": {
+        icon: "🧆",
+        name: "Chickpea (Chana)",
+        cycle: "100 Days",
+        season: "Rabi Pulse Season",
+        water: "Very Low",
+        waterDetail: "150 - 200 mm (1-2 Irrigations)",
+        temp: "15°C - 28°C",
+        tempDetail: "Mild Dry Winter",
+        ph: "6.0 - 7.8",
+        phDetail: "Well-Drained Sandy Loam",
+        desc: "Chickpea is India's most widely consumed pulse crop. It boasts an exceptionally deep taproot system that scavenges moisture and phosphates from deep soil horizons, requiring virtually zero irrigation. High dal miller demand ensures year-round liquidity in wholesale mandis.",
+        msp: "₹5,440 / quintal",
+        spot: "₹5,650 / quintal",
+        premium: "+₹210 / quintal",
+        costAcre: "₹9,200 / acre",
+        netAcre: "₹44,475 / acre",
+        calendar: {
+          sowing: "October 15 - November 10",
+          vegetative: "20 - 35 Days (Nipping/Branching)",
+          flowering: "45 - 60 Days",
+          filling: "65 - 85 Days (Pod Setting)",
+          harvest: "95 - 100 Days (Dry Rattle)"
+        },
+        varieties: [
+          { name: "JG 11 (Desi Chana)", duration: "100 Days", rate: "30 kg/acre", price: "₹95/kg", score: "94% Suitability", desc: "Fusarium wilt resistant, high pod set, high dal recovery (>78%).", yield: "8.5 - 10.5 q/acre" },
+          { name: "KAK 2 (Kabuli Chana)", duration: "115 Days", rate: "45 kg/acre", price: "₹150/kg", score: "90% Suitability", desc: "Large bold white Kabuli chickpea fetching premium restaurant export prices.", yield: "9.0 - 12.0 q/acre" }
+        ]
+      },
+      "Potato": {
+        icon: "🥔",
+        name: "Potato (Aloo)",
+        cycle: "95 Days",
+        season: "Rabi Horticulture / Tuber",
+        water: "Medium-High",
+        waterDetail: "400 - 500 mm (Furrow Irrigations)",
+        temp: "15°C - 22°C",
+        tempDetail: "Cool Night Temperatures",
+        ph: "5.5 - 6.8",
+        phDetail: "Loose Friable Sandy Loam",
+        desc: "Potato is India's heavyweight commercial vegetable and industrial processing crop. Jalandhar and Doaba regions are national epicenters for seed and table potato production. Processing varieties are contracted by snack conglomerates like PepsiCo and Haldiram's at assured buyback rates.",
+        msp: "Market Price Driven",
+        spot: "₹1,450 / quintal",
+        premium: "High Processing Contract Premium",
+        costAcre: "₹28,500 / acre",
+        netAcre: "₹1,60,000 / acre",
+        calendar: {
+          sowing: "October 1 - October 25",
+          vegetative: "20 - 25 Days (Earthing-up)",
+          flowering: "35 - 50 Days (Tuber Initiation)",
+          filling: "65 - 75 Days (Tuber Bulking)",
+          harvest: "90 - 95 Days (De-haulmed Digging)"
+        },
+        varieties: [
+          { name: "Kufri Jyoti (Certified Tubers)", duration: "95 Days", rate: "12 q/acre", price: "₹25/kg", score: "95% Suitability", desc: "Late blight resistant, excellent table ration and long cold-store life.", yield: "120 - 150 q/acre" },
+          { name: "Kufri Chipsona 1", duration: "105 Days", rate: "11 q/acre", price: "₹30/kg", score: "91% Suitability", desc: "High dry matter (>21%) and low sugar (<0.1%) preferred for potato chips.", yield: "110 - 140 q/acre" }
+        ]
+      }
+    };
+
+    function renderCropDetails() {
+      const urlParams = new URLSearchParams(window.location.search);
+      let crop = urlParams.get('crop');
+      if (!crop || !CROP_DETAILS_DATA[crop]) {
+        crop = (window.AgriState && AgriState.selectedCrop && CROP_DETAILS_DATA[AgriState.selectedCrop]) ? AgriState.selectedCrop : 'Maize';
+      }
+
+      const c = CROP_DETAILS_DATA[crop] || CROP_DETAILS_DATA['Maize'];
+
+      // Header
+      document.getElementById('cropHeaderTitle').innerText = `${c.icon} ${c.name} Agronomic Dossier`;
+      document.getElementById('cropHeaderSubtitle').innerText = `Complete cultivation parameters, thermal thresholds, and certified seed catalog.`;
+
+      // Update Navigation Buttons
+      document.getElementById('selectSeedBtn').href = `/seed-recommendation?crop=${encodeURIComponent(crop)}`;
+      document.getElementById('compareVarietiesBtn').href = `/seed-recommendation?crop=${encodeURIComponent(crop)}`;
+      document.getElementById('viewPlanBtn').href = `/cultivation-plan?crop=${encodeURIComponent(crop)}`;
+      document.getElementById('runProfitBtn').href = `/profit-estimator`;
+
+      // Quick Metrics Grid
+      document.getElementById('quickMetricsGrid').innerHTML = `
+        <div class="card">
+          <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">GROWING CYCLE</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin: 4px 0;">${c.cycle}</div>
+          <div style="font-size: 0.8rem; color: var(--primary-700);">${c.season}</div>
+        </div>
+
+        <div class="card">
+          <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">WATER REQUIREMENT</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: var(--accent-sky); margin: 4px 0;">${c.water}</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">${c.waterDetail}</div>
+        </div>
+
+        <div class="card">
+          <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">THERMAL RANGE</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: var(--accent-amber); margin: 4px 0;">${c.temp}</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">${c.tempDetail}</div>
+        </div>
+
+        <div class="card">
+          <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">SOIL pH WINDOW</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: #10b981; margin: 4px 0;">${c.ph}</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">${c.phDetail}</div>
+        </div>
+      `;
+
+      // Description
+      document.getElementById('cropDescriptionText').innerText = c.desc;
+
+      // Varieties
+      const varContainer = document.getElementById('varietiesListContainer');
+      varContainer.innerHTML = '';
+      c.varieties.forEach(v => {
+        const el = document.createElement('div');
+        el.style.background = '#f8fafc';
+        el.style.border = '1px solid var(--border-light)';
+        el.style.borderRadius = 'var(--radius-md)';
+        el.style.padding = '1.25rem';
+        el.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <h4 style="font-size: 1.15rem; color: var(--primary-900); margin: 0;">${v.name}</h4>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">Duration: ${v.duration} • Rate: ${v.rate} • Price: ${v.price}</div>
+            </div>
+            <span class="badge badge-emerald">${v.score}</span>
+          </div>
+          <p style="font-size: 0.85rem; color: #334155; margin-bottom: 0.5rem;">${v.desc}</p>
+          <div style="font-weight: 700; color: var(--primary-700); font-size: 0.88rem;">
+            Expected Yield: ${v.yield}
+          </div>
+        `;
+        varContainer.appendChild(el);
+      });
+
+      // Economics
+      document.getElementById('economicMetricsContainer').innerHTML = `
+        <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+          <span style="color: var(--text-muted); font-size: 0.9rem;">Mandi Spot Price:</span>
+          <strong style="font-size: 0.95rem; color: #059669;">${c.spot}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+          <span style="color: var(--text-muted); font-size: 0.9rem;">Government MSP:</span>
+          <strong style="font-size: 0.95rem;">${c.msp}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+          <span style="color: var(--text-muted); font-size: 0.9rem;">Price Advantage:</span>
+          <strong style="font-size: 0.95rem; color: #d97706;">${c.premium}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+          <span style="color: var(--text-muted); font-size: 0.9rem;">Estimated Cost / Acre:</span>
+          <strong style="font-size: 0.95rem;">${c.costAcre}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-muted); font-size: 0.9rem;">Net Margin / Acre:</span>
+          <strong style="font-size: 1.15rem; color: var(--primary-800);">${c.netAcre}</strong>
+        </div>
+      `;
+
+      // Calendar
+      document.getElementById('calendarContainer').innerHTML = `
+        <div><strong>Sowing:</strong> ${c.calendar.sowing}</div>
+        <div><strong>Vegetative:</strong> ${c.calendar.vegetative}</div>
+        <div><strong>Flowering:</strong> ${c.calendar.flowering}</div>
+        <div><strong>Filling:</strong> ${c.calendar.filling}</div>
+        <div><strong>Harvesting:</strong> ${c.calendar.harvest}</div>
+      `;
+    }
+
+    document.addEventListener('DOMContentLoaded', renderCropDetails);
+  </script>
+</body>
+</html>

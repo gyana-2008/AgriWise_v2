@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⛅ Live Weather & Agronomic Advisory — AGRIWISE AI</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <style>
+    .hourly-scroll-container {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      padding-bottom: 0.75rem;
+      scrollbar-width: thin;
+    }
+    .hourly-card {
+      min-width: 90px;
+      background: #f8fafc;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 0.75rem 0.5rem;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .forecast-day-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .forecast-day-row:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <!-- Title Section -->
+      <div class="page-title-bar">
+        <div class="page-title-left">
+          <h1>⛅ Live Weather & Dynamic Agronomic Advisory</h1>
+          <p>Real-time meteorological observation from <strong>Open-Meteo Global Station</strong> for <strong>Sahnewal, Ludhiana (30.9010° N, 75.8573° E)</strong>.</p>
+        </div>
+        <div class="page-title-actions">
+          <button class="btn btn-secondary btn-sm" onclick="refreshWeather()">🔄 Refresh Live Data</button>
+          <a href="/crop-recommendation" class="btn btn-primary btn-sm">Next: AI Crop Recommendations ➔</a>
+        </div>
+      </div>
+
+      <!-- Current Weather Hero Card -->
+      <div class="card" style="margin-bottom: 2rem; background: radial-gradient(circle at 90% 10%, #ecfdf5 0%, #ffffff 70%);">
+        <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 2rem; align-items: center;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+              <span class="badge badge-emerald" id="liveBadge">Open-Meteo Live</span>
+              <span style="font-size: 0.82rem; color: var(--text-muted);" id="weatherTimestamp">Updated: Just Now</span>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.25rem;">
+              <div style="font-size: 4.5rem; line-height: 1;" id="curWeatherIcon">⛅</div>
+              <div>
+                <div style="font-size: 3.2rem; font-weight: 800; color: var(--text-main); line-height: 1;" id="curTemp">29.4°C</div>
+                <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-muted); margin-top: 4px;" id="curCondition">Partly Cloudy / Scattered Clouds</div>
+                <div style="font-size: 0.84rem; color: var(--text-muted);">Feels like <span id="curApparent">31.2°C</span> • Low Dew Point</div>
+              </div>
+            </div>
+
+            <!-- Meteorological Details Chips -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+              <div style="background: #f8fafc; padding: 0.65rem 0.85rem; border-radius: var(--radius-md);">
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Relative Humidity</div>
+                <div style="font-weight: 700; font-size: 1.05rem;" id="curHumidity">68%</div>
+              </div>
+              <div style="background: #f8fafc; padding: 0.65rem 0.85rem; border-radius: var(--radius-md);">
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Wind Speed</div>
+                <div style="font-weight: 700; font-size: 1.05rem;" id="curWind">14.2 km/h</div>
+              </div>
+              <div style="background: #f8fafc; padding: 0.65rem 0.85rem; border-radius: var(--radius-md);">
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Precipitation</div>
+                <div style="font-weight: 700; font-size: 1.05rem;" id="curRain">0.0 mm</div>
+              </div>
+              <div style="background: #f8fafc; padding: 0.65rem 0.85rem; border-radius: var(--radius-md);">
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Solar UV Index</div>
+                <div style="font-weight: 700; font-size: 1.05rem;" id="curUV">7.4 (High)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic Agronomic Advisories Panel -->
+          <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 1.25rem; box-shadow: var(--shadow-sm);">
+            <div style="font-weight: 700; color: var(--primary-900); font-size: 1rem; margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.5rem;">
+              <span>🌾 Dynamic Field Advisories (Live Rules)</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;" id="advisoryContainer">
+              <!-- Dynamically populated from weather service -->
+              <div style="background: #eff6ff; border-left: 4px solid var(--accent-sky); padding: 0.65rem 0.85rem; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;">
+                <div style="font-size: 0.78rem; font-weight: 700; color: #1e40af;">✨ Optimal Spray Window</div>
+                <div style="font-size: 0.82rem; color: #1e3a8a;">Calm wind conditions (<18 km/h). Safe for foliar micronutrient and zinc sulfate applications.</div>
+              </div>
+              <div style="background: #fffbeb; border-left: 4px solid var(--accent-amber); padding: 0.65rem 0.85rem; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;">
+                <div style="font-size: 0.78rem; font-weight: 700; color: #92400e;">🌧 Upcoming Rainfall Alert</div>
+                <div style="font-size: 0.82rem; color: #78350f;">Showers predicted in 48h. Avoid broadcasting Urea or top-dressing immediately before precipitation to prevent runoff.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hourly 24-Hour Forecast Timeline -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="icon">⏱</span>
+            <span>Next 24 Hours Hourly Temperature & Rain Probability</span>
+          </div>
+        </div>
+
+        <div class="hourly-scroll-container" id="hourlyStrip">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- 7-Day Forecast & Temperature Trend Chart -->
+      <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2rem;">
+        <!-- Left: 7-Day Weather Forecast List -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">📅</span>
+              <span>7-Day Agricultural Forecast</span>
+            </div>
+          </div>
+
+          <div id="forecastList">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Right: 7-Day Max Temperature Curve Chart -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">📈</span>
+              <span>7-Day Max Temperature (°C) Curve</span>
+            </div>
+          </div>
+
+          <canvas id="weatherTrendCanvas" style="width: 100%; height: 260px;"></canvas>
+          <div style="text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
+            Peak thermal envelope consistent with Kharif vegetative growth threshold (22°C - 34°C).
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/charts.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script>
+    async function loadWeatherData() {
+      try {
+        const data = await AgriAPI.getLiveWeather(30.9010, 75.8573, "Sahnewal, Ludhiana");
+        renderWeather(data);
+      } catch (e) {
+        console.warn("Using offline fallback", e);
+      }
+    }
+
+    function renderWeather(data) {
+      if (!data || !data.current) return;
+      const cur = data.current;
+      document.getElementById('curTemp').innerText = `${cur.temperature_c}°C`;
+      document.getElementById('curCondition').innerText = cur.condition;
+      document.getElementById('curApparent').innerText = `${cur.apparent_temperature_c}°C`;
+      document.getElementById('curHumidity').innerText = `${cur.humidity_pct}%`;
+      document.getElementById('curWind').innerText = `${cur.wind_speed_kmh} km/h`;
+      document.getElementById('curRain').innerText = `${cur.rain_mm} mm`;
+      document.getElementById('curUV').innerText = `${cur.uv_index}`;
+      document.getElementById('weatherTimestamp').innerText = `Source: ${data.source}`;
+      document.getElementById('liveBadge').innerText = data.is_live ? "Open-Meteo Live API" : "Simulated Model";
+
+      // Render Advisories
+      if (data.agronomic_advisory && data.agronomic_advisory.length > 0) {
+        const advHtml = data.agronomic_advisory.map(adv => `
+          <div style="background: ${adv.type.includes('WARNING') ? '#fffbeb' : '#f0fdf4'}; border-left: 4px solid ${adv.type.includes('WARNING') ? '#d97706' : '#059669'}; padding: 0.75rem 1rem; border-radius: 0 8px 8px 0;">
+            <div style="font-size: 0.82rem; font-weight: 700; color: ${adv.type.includes('WARNING') ? '#92400e' : '#065f46'}; margin-bottom: 2px;">
+              ${adv.icon} ${adv.badge}
+            </div>
+            <div style="font-size: 0.84rem; color: #334155; line-height: 1.4;">${adv.text}</div>
+          </div>
+        `).join('');
+        document.getElementById('advisoryContainer').innerHTML = advHtml;
+      }
+
+      // Render Hourly
+      if (data.hourly_24h) {
+        const hHtml = data.hourly_24h.map(h => `
+          <div class="hourly-card">
+            <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">${h.time}</div>
+            <div style="font-size: 1.4rem; margin: 4px 0;">⛅</div>
+            <div style="font-weight: 700; font-size: 0.95rem;">${h.temp}°</div>
+            <div style="font-size: 0.72rem; color: #0284c7; font-weight: 600;">💧 ${h.rain_prob}%</div>
+          </div>
+        `).join('');
+        document.getElementById('hourlyStrip').innerHTML = hHtml;
+      }
+
+      // Render 7-day
+      if (data.forecast_7day) {
+        const fHtml = data.forecast_7day.map(d => `
+          <div class="forecast-day-row">
+            <div style="width: 100px; font-weight: 700;">${d.day_name} <span style="font-weight: 400; font-size: 0.8rem; color: var(--text-muted);">${d.date.slice(5)}</span></div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; width: 140px;">
+              <span>⛅</span>
+              <span style="font-size: 0.84rem; color: var(--text-main);">${d.condition}</span>
+            </div>
+            <div style="width: 80px; font-size: 0.82rem; color: #0284c7;">💧 ${d.rain_prob_pct}% (${d.precip_sum_mm}mm)</div>
+            <div style="font-weight: 700; text-align: right;">
+              <span style="color: var(--text-main);">${d.max_temp}°</span>
+              <span style="color: var(--text-muted); font-size: 0.85rem; margin-left: 4px;">/ ${d.min_temp}°</span>
+            </div>
+          </div>
+        `).join('');
+        document.getElementById('forecastList').innerHTML = fHtml;
+
+        // Draw Line Chart
+        const labels = data.forecast_7day.map(d => d.day_name);
+        const maxTemps = data.forecast_7day.map(d => d.max_temp);
+        AgriCharts.drawLineChart('weatherTrendCanvas', labels, maxTemps, {
+          lineColor: '#059669',
+          fillColor: 'rgba(16, 185, 129, 0.2)',
+          prefix: ''
+        });
+      }
+    }
+
+    function refreshWeather() {
+      loadWeatherData();
+      alert("Refreshing live weather from Open-Meteo satellite feed...");
+    }
+
+    document.addEventListener('DOMContentLoaded', loadWeatherData);
+  </script>
+</body>
+</html>

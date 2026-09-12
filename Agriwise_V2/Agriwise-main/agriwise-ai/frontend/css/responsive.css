@@ -1,0 +1,188 @@
+/* ==========================================================================
+   🌾 AGRIWISE AI - Responsive & Mobile Layout Stylesheet
+   Mobile Navigation Drawer, Touch-friendly Targets & Responsive Breakpoints
+   ========================================================================== */
+
+/* Mobile Bottom Navigation Bar (Visible only on screens < 768px) */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: #ffffff;
+  border-top: 1px solid var(--border-light);
+  z-index: 1000;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+  grid-template-columns: repeat(6, 1fr);
+  align-items: center;
+}
+
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-decoration: none;
+  height: 100%;
+  padding: 0 2px;
+}
+
+.mobile-nav-item.active, .mobile-nav-item:hover {
+  color: var(--primary-600);
+}
+
+.mobile-nav-icon {
+  font-size: 1.25rem;
+  margin-bottom: 2px;
+}
+
+/* Prevent horizontal scroll blowout on all screens */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1rem;
+}
+
+/* Breakpoint: Desktop & Tablets (< 1024px) */
+@media (max-width: 1024px) {
+  .marketplace-layout {
+    grid-template-columns: 1fr;
+  }
+  .filter-sidebar {
+    position: static;
+    margin-bottom: 1.5rem;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  .nav-container {
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 1240px) and (min-width: 769px) {
+  .nav-links {
+    gap: 0.15rem;
+  }
+  .nav-link {
+    font-size: 0.78rem;
+    padding: 0.28rem 0.38rem;
+  }
+}
+
+/* Breakpoint: Mobile Devices (< 768px) */
+@media (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .demo-journey-banner {
+    padding: 0 0.75rem;
+    font-size: 0.76rem;
+  }
+
+  .demo-journey-banner .demo-banner-left span.banner-text-long {
+    display: none;
+  }
+
+  /* Show mobile hamburger toggle, hide desktop nav links */
+  .mobile-menu-toggle {
+    display: inline-flex;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .mobile-bottom-nav {
+    display: grid;
+  }
+
+  .page-wrapper {
+    padding-bottom: 5.5rem;
+  }
+
+  .page-title-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .page-title-left h1 {
+    font-size: 1.5rem;
+  }
+
+  .page-title-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  /* Compact header buttons on mobile */
+  .nav-cart-btn .cart-btn-label {
+    display: none;
+  }
+
+  .nav-cart-btn {
+    padding: 6px 8px;
+  }
+
+  .user-role-badge {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+
+  .header-actions {
+    gap: 0.5rem;
+  }
+
+  /* Responsive Modals */
+  .agri-order-modal,
+  .modal-dialog {
+    max-width: 95vw !important;
+    padding: 1.25rem !important;
+  }
+}
+
+/* Extra small devices (< 480px) */
+@media (max-width: 480px) {
+  .user-role-badge .badge-role-text {
+    display: none;
+  }
+  .lang-select {
+    max-width: 75px;
+    padding: 4px 6px;
+    font-size: 0.75rem;
+  }
+}

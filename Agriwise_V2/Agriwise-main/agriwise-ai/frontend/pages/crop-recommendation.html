@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌱 AI Crop Recommendation Engine — AGRIWISE AI</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <style>
+    .crop-rank-card {
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      display: grid;
+      grid-template-columns: 80px 1.5fr 1fr 1fr 180px;
+      gap: 1.5rem;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+    .crop-rank-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary-300);
+      transform: translateY(-2px);
+    }
+    .rank-number-badge {
+      width: 60px;
+      height: 60px;
+      border-radius: var(--radius-full);
+      background: var(--primary-50);
+      color: var(--primary-800);
+      font-size: 1.5rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--primary-200);
+    }
+    .crop-rank-card.rank-1 .rank-number-badge {
+      background: #fef3c7;
+      color: #92400e;
+      border-color: #f59e0b;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <!-- Title Section -->
+      <div class="page-title-bar">
+        <div class="page-title-left">
+          <h1>🌱 AI Crop Suitability Recommendations</h1>
+          <p>Scientific multi-vector ranking based on soil N-P-K reserves, local Kharif temperature envelope, and regional mandi shortages.</p>
+        </div>
+        <div class="page-title-actions">
+          <a href="/farm-analysis" class="btn btn-secondary btn-sm">🔬 Adjust Soil Test</a>
+          <a href="/seed-recommendation" class="btn btn-primary btn-sm">Next: Recommended Seeds ➔</a>
+        </div>
+      </div>
+
+      <!-- Configurable Decision Weights Indicator -->
+      <div class="card" style="margin-bottom: 2rem; background: #f8fafc;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 1.25rem;">⚖️</span>
+            <div>
+              <div style="font-weight: 700; color: var(--text-main); font-size: 0.95rem;">Active Decision Engine Scoring Weights:</div>
+              <div style="font-size: 0.82rem; color: var(--text-muted);">
+                Climate (20%) + Soil (20%) + Water (15%) + Weather (15%) + Season (10%) + Market Deficit (10%) + Economic ROI (10%)
+              </div>
+            </div>
+          </div>
+          <a href="/admin" class="btn btn-secondary btn-sm">⚙ Tune Weights in Admin</a>
+        </div>
+      </div>
+
+      <!-- Interactive Season & Filter Navigation Bar -->
+      <div class="card" style="margin-bottom: 2rem; background: #fff; border-top: 4px solid var(--primary-600);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;" id="seasonTabButtons">
+            <button class="btn btn-sm btn-primary" onclick="setSeason('all', this)">🌟 All Seasons</button>
+            <button class="btn btn-sm btn-secondary" onclick="setSeason('rabi', this)">❄️ Rabi (Winter: Oct - Mar)</button>
+            <button class="btn btn-sm btn-secondary" onclick="setSeason('kharif', this)">🌧️ Kharif (Monsoon: Jun - Oct)</button>
+            <button class="btn btn-sm btn-secondary" onclick="setSeason('zaid', this)">☀️ Zaid (Summer: Mar - Jun)</button>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <label style="font-size: 0.88rem; font-weight: 700; color: var(--text-main);">Soil Match:</label>
+            <select id="soilFilterSelect" class="form-control" style="width: 175px; padding: 0.35rem 0.6rem; font-size: 0.85rem;" onchange="filterCrops()">
+              <option value="all">All Soil Types</option>
+              <option value="alluvial" selected>Alluvial Loam (pH 6.8)</option>
+              <option value="black">Black Cotton Soil</option>
+              <option value="sandy">Sandy Loam</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ranked Crops Container -->
+      <div id="rankedCropsList">
+        <!-- Rendered dynamically by filterCrops() -->
+      </div>
+
+      <!-- Agricultural Safety Banner -->
+      <div class="safety-notice-box">
+        <div class="notice-title">⚠️ Agricultural Decision Safety Notice:</div>
+        <p>
+          Crop recommendations and profitability figures are based on mathematical and agronomic models using typical ICAR and state agricultural university data. Actual farm yields and mandi sales depend on climatic variations, field management, and live market volatility.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script>
+    let currentSeason = 'all';
+
+    const cropsDatabase = [
+      // Rabi (Winter)
+      {
+        name: "Wheat (Gehu)",
+        localName: "गेहूं (Gehu) • ਕਣਕ (Kanak) • Rabi Cereal",
+        season: "rabi",
+        seasonBadge: "❄️ Rabi Season",
+        badgeText: "Top Winter Recommendation",
+        badgeClass: "badge-amber",
+        soilTypes: ["alluvial", "black", "sandy"],
+        reasons: [
+          "Optimal cool vegetative envelope (18-24°C) with strong winter tillering",
+          "Neutral alluvial loam (pH 6.8) allows maximum N-P-K nutrient uptake efficiency",
+          "High regional food processor demand (ITC, Britannia) with MSP safety net (₹2,275/q)"
+        ],
+        suitability: 96,
+        confidence: "0.96",
+        yield_acre: "22.0 Quintals / Acre",
+        mandi_price: "₹2,450/q (Khanna Mandi)",
+        estimated_profit: "Estimated Profit: ~₹42,500/acre",
+        selectedCropKey: "Wheat"
+      },
+      {
+        name: "Mustard (Sarson)",
+        localName: "सरसों (Sarson) • ਸਰ੍ਹੋਂ • Rabi Oilseed",
+        season: "rabi",
+        seasonBadge: "❄️ Rabi Season",
+        badgeText: "High Cash Margin",
+        badgeClass: "badge-emerald",
+        soilTypes: ["alluvial", "sandy"],
+        reasons: [
+          "Low water footprint (only 2-3 irrigations required throughout winter lifecycle)",
+          "Thrives on residual loam soil moisture with high oil content development (>40.5%)",
+          "Crushing mills offering ₹5,520/quintal spot price; low overall cultivation investment"
+        ],
+        suitability: 92,
+        confidence: "0.93",
+        yield_acre: "9.5 Quintals / Acre",
+        mandi_price: "₹5,520/q (Bharatpur / Alwar APMC)",
+        estimated_profit: "Estimated Profit: ~₹39,800/acre",
+        selectedCropKey: "Mustard"
+      },
+      {
+        name: "Chickpea (Desi Chana)",
+        localName: "चना (Chana) • ਛੋਲੇ • Rabi Pulse",
+        season: "rabi",
+        seasonBadge: "❄️ Rabi Season",
+        badgeText: "Soil Restorer",
+        badgeClass: "badge-blue",
+        soilTypes: ["alluvial", "black"],
+        reasons: [
+          "Biological nitrogen fixation restores natural soil fertility for subsequent Kharif cycle",
+          "Deep root system taps subsoil moisture reserves during winter dry spells",
+          "Strong wholesale dal mill demand; remunerative market rates at ₹5,850/quintal"
+        ],
+        suitability: 88,
+        confidence: "0.89",
+        yield_acre: "11.0 Quintals / Acre",
+        mandi_price: "₹5,850/q (Indore / MP Mandi)",
+        estimated_profit: "Estimated Profit: ~₹37,000/acre",
+        selectedCropKey: "Chickpea"
+      },
+      {
+        name: "Potato (Aaloo)",
+        localName: "आलू (Aaloo) • ਆਲੂ • Rabi Tuber Cash Crop",
+        season: "rabi",
+        seasonBadge: "❄️ Rabi Season",
+        badgeText: "Rapid 90-Day Turnover",
+        badgeClass: "badge-purple",
+        soilTypes: ["alluvial", "sandy"],
+        reasons: [
+          "Short 90-100 day crop cycle fits seamlessly between early Kharif and late Zaid",
+          "Loose, well-drained alluvial soil allows rapid tuber bulking with minimal deformity",
+          "High gross volume cash generation with direct cold storage and processing tie-ups"
+        ],
+        suitability: 85,
+        confidence: "0.87",
+        yield_acre: "110.0 Quintals / Acre",
+        mandi_price: "₹1,450/q (Jalandhar Mandi)",
+        estimated_profit: "Estimated Profit: ~₹62,000/acre",
+        selectedCropKey: "Potato"
+      },
+
+      // Kharif (Monsoon)
+      {
+        name: "Maize (Corn)",
+        localName: "मक्का (Makka) • ਮੱਕੀ (Makki) • Kharif Cereal",
+        season: "kharif",
+        seasonBadge: "🌧️ Kharif Season",
+        badgeText: "Top Recommendation",
+        badgeClass: "badge-amber",
+        soilTypes: ["alluvial", "black", "sandy"],
+        reasons: [
+          "Optimal thermal envelope matching local 29.4°C summer temperature",
+          "Neutral alluvial soil (pH 6.8) allows high nitrogen nutrient uptake",
+          "Surging industrial feed demand (41.8% regional shortage in Punjab)"
+        ],
+        suitability: 94,
+        confidence: "0.94",
+        yield_acre: "28.5 Quintals / Acre",
+        mandi_price: "₹2,360/q (Khanna Mandi)",
+        estimated_profit: "Estimated Profit: ~₹43,000/acre",
+        selectedCropKey: "Maize"
+      },
+      {
+        name: "Soybean",
+        localName: "सोयाबीन • Kharif Legume Oilseed",
+        season: "kharif",
+        seasonBadge: "🌧️ Kharif Season",
+        badgeText: "High Margin",
+        badgeClass: "badge-emerald",
+        soilTypes: ["alluvial", "black"],
+        reasons: [
+          "Biological nitrogen fixation reduces costly chemical fertilizer requirements",
+          "Excellent rotation break crop restoring organic carbon in alluvial loam",
+          "Strong domestic crushing bids offering ₹4,720/quintal"
+        ],
+        suitability: 89,
+        confidence: "0.91",
+        yield_acre: "12.0 Quintals / Acre",
+        mandi_price: "₹4,720/q (Indore Hub)",
+        estimated_profit: "Estimated Profit: ~₹38,000/acre",
+        selectedCropKey: "Soybean"
+      },
+      {
+        name: "Basmati Rice (Pusa 1121)",
+        localName: "बासमती • ਬਾਸਮਤੀ ਚਾਵਲ • Aromatic Cereal",
+        season: "kharif",
+        seasonBadge: "🌧️ Kharif Season",
+        badgeText: "Export Premium",
+        badgeClass: "badge-blue",
+        soilTypes: ["alluvial"],
+        reasons: [
+          "High commercial export value in Amritsar & Delhi logistics hubs",
+          "Alluvial clay-loam soil provides optimal standing water retention for grain elongation",
+          "Assured private millers contract procurement (KRBL, LT Foods) at ₹3,890/quintal"
+        ],
+        suitability: 86,
+        confidence: "0.88",
+        yield_acre: "20.0 Quintals / Acre",
+        mandi_price: "₹3,890/q (Amritsar Mandi)",
+        estimated_profit: "Estimated Profit: ~₹41,000/acre",
+        selectedCropKey: "Basmati Rice"
+      },
+      {
+        name: "Cotton (Bt Cotton)",
+        localName: "कपास (Kapas) • ਨਰਮਾ (Narma) • Kharif Commercial Fibre",
+        season: "kharif",
+        seasonBadge: "🌧️ Kharif Season",
+        badgeText: "Industrial Cash Crop",
+        badgeClass: "badge-purple",
+        soilTypes: ["alluvial", "black"],
+        reasons: [
+          "High ginning factory bids across Malwa cotton belt (₹7,100/quintal)",
+          "Bollgard II resistance shields crop from traditional pink bollworm pressures",
+          "Well-drained deep loam prevents water stagnation while supporting heavy boll retention"
+        ],
+        suitability: 83,
+        confidence: "0.85",
+        yield_acre: "12.0 Quintals / Acre",
+        mandi_price: "₹7,100/q (Bathinda / Abohar APMC)",
+        estimated_profit: "Estimated Profit: ~₹48,000/acre",
+        selectedCropKey: "Cotton"
+      },
+
+      // Zaid (Summer)
+      {
+        name: "Moong (Green Gram)",
+        localName: "मूँग (Moong Dal) • ਮੂੰਗੀ • Zaid Short Pulse",
+        season: "zaid",
+        seasonBadge: "☀️ Zaid Season",
+        badgeText: "60-Day Soil Restorer",
+        badgeClass: "badge-emerald",
+        soilTypes: ["alluvial", "sandy", "black"],
+        reasons: [
+          "Ultra-fast 60-day crop cycle utilizes empty window between wheat harvest and paddy transplanting",
+          "Enriches field with ~35 kg atmospheric Nitrogen/acre through root nodule fixation",
+          "Strong domestic pulse demand fetching record mandi prices of ₹8,200/quintal"
+        ],
+        suitability: 92,
+        confidence: "0.93",
+        yield_acre: "6.5 Quintals / Acre",
+        mandi_price: "₹8,200/q (Regional Dal Mandis)",
+        estimated_profit: "Estimated Profit: ~₹31,000/acre",
+        selectedCropKey: "Moong"
+      },
+      {
+        name: "Summer Watermelon",
+        localName: "तरबूज (Tarbooj) • ਹਦਵਾਣਾ • Zaid Cucurbit Cash Crop",
+        season: "zaid",
+        seasonBadge: "☀️ Zaid Season",
+        badgeText: "High Summer Cash Flow",
+        badgeClass: "badge-amber",
+        soilTypes: ["alluvial", "sandy"],
+        reasons: [
+          "High consumer summer hydration demand across northern urban centers",
+          "Sandy-alluvial riverine soil warms quickly for sweet TSS sugar accumulation (>11° Brix)",
+          "Quick revenue turnaround with weekly harvest pickings over a 65-day period"
+        ],
+        suitability: 88,
+        confidence: "0.89",
+        yield_acre: "85.0 Quintals / Acre",
+        mandi_price: "₹1,250/q (Delhi Azadpur Wholesale)",
+        estimated_profit: "Estimated Profit: ~₹52,000/acre",
+        selectedCropKey: "Watermelon"
+      }
+    ];
+
+    function setSeason(season, btn) {
+      currentSeason = season;
+      const buttons = document.getElementById('seasonTabButtons').querySelectorAll('button');
+      buttons.forEach(b => {
+        b.className = 'btn btn-sm btn-secondary';
+      });
+      btn.className = 'btn btn-sm btn-primary';
+      filterCrops();
+    }
+
+    function filterCrops() {
+      const soil = document.getElementById('soilFilterSelect').value;
+      const container = document.getElementById('rankedCropsList');
+
+      let filtered = cropsDatabase.filter(c => {
+        const matchSeason = currentSeason === 'all' || c.season === currentSeason;
+        const matchSoil = soil === 'all' || c.soilTypes.includes(soil);
+        return matchSeason && matchSoil;
+      });
+
+      // Sort by suitability descending
+      filtered.sort((a, b) => b.suitability - a.suitability);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="card" style="text-align: center; padding: 3rem; background: #fff;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+            <h3 style="color: var(--primary-900); margin-bottom: 0.5rem;">No Crops Match Selected Filter</h3>
+            <p style="color: var(--text-muted); max-width: 480px; margin: 0 auto 1.5rem;">
+              No specific crop models matched both season "${currentSeason}" and soil "${soil}". Try selecting "All Soil Types" or "All Seasons".
+            </p>
+            <button class="btn btn-primary btn-sm" onclick="resetCropFilters()">Reset Filters</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map((c, index) => {
+        const rank = index + 1;
+        const isTop = rank === 1;
+        const borderStyle = isTop ? 'border-left: 6px solid #f59e0b;' : 'border-left: 6px solid var(--border-light);';
+        const cardRankClass = isTop ? 'crop-rank-card rank-1' : 'crop-rank-card';
+
+        return `
+          <div class="${cardRankClass}" style="${borderStyle}">
+            <div class="rank-number-badge">#${rank}</div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem; flex-wrap: wrap;">
+                <h3 style="font-size: 1.35rem; color: var(--primary-900); font-weight: 800; margin: 0;">${c.name}</h3>
+                <span class="badge ${c.badgeClass}">${c.badgeText}</span>
+                <span class="badge badge-blue" style="font-size: 0.72rem;">${c.seasonBadge}</span>
+              </div>
+              <div style="font-size: 0.84rem; color: var(--text-muted);">${c.localName}</div>
+              <ul class="ai-reason-list" style="margin-top: 0.6rem;">
+                ${c.reasons.map(r => `<li>${r}</li>`).join('')}
+              </ul>
+            </div>
+
+            <div>
+              <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Suitability & Confidence</div>
+              <div style="font-size: 1.8rem; font-weight: 800; color: var(--primary-700);">${c.suitability}%</div>
+              <div style="font-size: 0.78rem; color: var(--text-muted);">Confidence Score: <strong>${c.confidence}</strong></div>
+              <div class="progress-bar-container" style="margin-top: 4px;">
+                <div class="progress-bar-fill" style="width: ${c.suitability}%;"></div>
+              </div>
+            </div>
+
+            <div>
+              <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Market & Yield Outlook</div>
+              <div style="font-weight: 700; color: var(--text-main);">${c.yield_acre}</div>
+              <div style="font-size: 0.85rem; color: #059669; font-weight: 700;">${c.mandi_price}</div>
+              <div style="font-size: 0.78rem; color: #d97706; font-weight: 700;">${c.estimated_profit}</div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <a href="/seed-recommendation?crop=${encodeURIComponent(c.selectedCropKey)}" class="btn btn-primary btn-sm btn-full" onclick="selectCrop('${c.selectedCropKey}')">
+                <span>🌾 Select & Find Seeds</span>
+              </a>
+              <a href="/crop-details?crop=${encodeURIComponent(c.selectedCropKey)}" class="btn btn-secondary btn-sm btn-full">
+                <span>Agronomic Details</span>
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectCrop(cropName) {
+      if (window.AgriState && AgriState.setSelectedCrop) {
+        AgriState.setSelectedCrop(cropName);
+      }
+    }
+
+    function resetCropFilters() {
+      currentSeason = 'all';
+      document.getElementById('soilFilterSelect').value = 'all';
+      const buttons = document.getElementById('seasonTabButtons').querySelectorAll('button');
+      buttons.forEach((b, i) => {
+        b.className = i === 0 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-secondary';
+      });
+      filterCrops();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      filterCrops();
+    });
+  </script>
+</body>
+</html>

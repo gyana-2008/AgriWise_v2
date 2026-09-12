@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏢 Wholesale Crop Buyer Marketplace — AGRIWISE AI</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <!-- Title Section -->
+      <div class="page-title-bar">
+        <div class="page-title-left">
+          <h1>🏢 Institutional & Wholesale Crop Buyer Marketplace</h1>
+          <p>Bypass middlemen: Connect directly with industrial food processors, poultry feed manufacturers, and certified grain exporters.</p>
+        </div>
+        <div class="page-title-actions">
+          <a href="/transport-marketplace" class="btn btn-primary btn-sm">Next: Book Local Transport ➔</a>
+        </div>
+      </div>
+
+      <!-- Commodity & Location Filter Bar -->
+      <div class="card" style="margin-bottom: 2rem; background: #064e3b; color: #fff;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <div style="font-weight: 700; color: #34d399;">Filter by Crop:</div>
+              <select id="buyerCropFilter" class="form-control" style="width: 220px; background: #042f24; color: #fff; border-color: #059669; font-weight: 700;" onchange="filterBuyers()">
+                <option value="all">🌟 All Crops</option>
+                <option value="Maize" selected>🌽 Maize (Corn)</option>
+                <option value="Wheat">🌾 Wheat (Gehu)</option>
+                <option value="Soybean">🌱 Soybean (Pili Soy)</option>
+                <option value="Basmati Rice">🍚 Basmati Rice</option>
+                <option value="Mustard">🌼 Mustard (Sarson)</option>
+                <option value="Tomato">🍅 Tomato (Tamatar)</option>
+                <option value="Potato">🥔 Potato (Aloo)</option>
+                <option value="Chickpea">🧆 Chickpea (Chana)</option>
+              </select>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <div style="font-weight: 700; color: #34d399;">State / Region:</div>
+              <select id="buyerStateFilter" class="form-control" style="width: 180px; background: #042f24; color: #fff; border-color: #059669; font-weight: 700;" onchange="filterBuyers()">
+                <option value="all">All States</option>
+                <option value="Punjab">Punjab</option>
+                <option value="Haryana">Haryana</option>
+                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                <option value="Rajasthan">Rajasthan</option>
+                <option value="Delhi">Delhi NCR</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="font-size: 0.88rem; color: #a7f3d0; font-weight: 600;" id="buyerCountLabel">
+            Showing verified wholesale institutional buyers
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Tenders Dynamic Container -->
+      <div id="buyersContainer" style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
+        <!-- Dynamically rendered by loadBuyers() -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Proposal Modal -->
+  <div id="proposalModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: #fff; border-radius: 16px; max-width: 480px; width: 100%; padding: 2rem; box-shadow: var(--shadow-xl);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3 style="font-size: 1.25rem; color: var(--primary-900);">🌾 Submit Harvest Crop Offer</h3>
+        <button onclick="closeProposalModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+      </div>
+
+      <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.25rem;">
+        <div style="font-weight: 700; color: var(--text-main);" id="propBuyerName">ABC Agro Foods & Millers</div>
+        <div style="font-size: 0.84rem; color: var(--text-muted);">Contract Price: <strong id="propPrice" style="color: #059669;">₹2,420 / q</strong></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Offered Harvest Quantity (Quintals)</label>
+        <input type="number" id="propQty" class="form-control" value="140" min="10" max="2000" oninput="calcPropTotal()">
+        <small style="color: var(--text-muted);">Your 5-acre expected yield: ~142.5 Quintals</small>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 1.5rem; padding-top: 0.5rem; border-top: 1px solid var(--border-light);">
+        <span>Estimated Deal Value:</span>
+        <span style="font-size: 1.3rem; color: var(--primary-900);" id="propTotal">₹3,38,800</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+        <button class="btn btn-secondary" onclick="closeProposalModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitProposal()">Send Formal Offer</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script>
+    let allBuyers = [];
+    let activeBuyer = { name: "", price: 2420, crop: "Maize" };
+
+    const fallbackBuyers = [
+      {
+        id: 1,
+        company_name: "ABC Agro Foods & Millers",
+        buyer_type: "Food Processor & Miller",
+        contact_person: "Vikram Ahuja (VP Procurement)",
+        phone: "+91 98555 67890",
+        location: "Khanna Industrial Area, Punjab (22 km away)",
+        crop_required: "Maize",
+        quantity_required_tonnes: 500,
+        offered_price_q: 2420,
+        deadline_date: "25 Oct 2026",
+        quality_specs: "Moisture < 12.0%, Foreign Matter < 1.0%, Broken grains < 2.0%, Aflatoxin compliant",
+        rating: 4.9,
+        verified: true
+      },
+      {
+        id: 2,
+        company_name: "Punjab Agro Industries Corp",
+        buyer_type: "State Procurement Agency",
+        contact_person: "Gursharan Singh (District Officer)",
+        phone: "+91 98760 12345",
+        location: "Ludhiana Mandi Complex, Punjab (12 km away)",
+        crop_required: "Maize",
+        quantity_required_tonnes: 1200,
+        offered_price_q: 2350,
+        deadline_date: "10 Nov 2026",
+        quality_specs: "Fair Average Quality (FAQ) norms, Moisture < 14.0%",
+        rating: 4.8,
+        verified: true
+      },
+      {
+        id: 3,
+        company_name: "Karnal Premium Poultry Feed Mills",
+        buyer_type: "Feed Manufacturer",
+        contact_person: "Ramesh Chawla",
+        phone: "+91 98960 55443",
+        location: "GT Road, Karnal, Haryana (130 km away)",
+        crop_required: "Maize",
+        quantity_required_tonnes: 800,
+        offered_price_q: 2480,
+        deadline_date: "20 Oct 2026",
+        quality_specs: "Yellow maize, High protein (>8.5%), Dry kernels (<11.5% moisture)",
+        rating: 4.7,
+        verified: true
+      },
+      {
+        id: 4,
+        company_name: "ITC Choupal Fresh Flour Division",
+        buyer_type: "Industrial Flour Miller & FMCG",
+        contact_person: "Sunil Verma (Procurement Lead)",
+        phone: "+91 98110 44321",
+        location: "Khanna Mandi Hub, Punjab (20 km away)",
+        crop_required: "Wheat",
+        quantity_required_tonnes: 1500,
+        offered_price_q: 2520,
+        deadline_date: "15 Nov 2026",
+        quality_specs: "Sharbati & HD-2967 Grade 1, Moisture < 11%, Gluten > 11.5%, Hectolitre weight > 78 kg/hl",
+        rating: 4.9,
+        verified: true
+      },
+      {
+        id: 5,
+        company_name: "Britannia Industries Agri Supply",
+        buyer_type: "Bakery & Biscuit Manufacturer",
+        contact_person: "Pooja Malhotra (Sourcing Mgr)",
+        phone: "+91 98720 33211",
+        location: "Rajpura Industrial Cluster, Punjab (38 km away)",
+        crop_required: "Wheat",
+        quantity_required_tonnes: 950,
+        offered_price_q: 2480,
+        deadline_date: "05 Nov 2026",
+        quality_specs: "Semi-hard grain, Moisture < 12%, Foreign matter < 0.5%, Zero pesticide residue",
+        rating: 4.8,
+        verified: true
+      },
+      {
+        id: 6,
+        company_name: "Adani Agri Logistics Modern Silos",
+        buyer_type: "Bulk Grain Handling & Storage",
+        contact_person: "Harpreet Brar",
+        phone: "+91 98144 88776",
+        location: "Moga Automated Silo Terminal, Punjab (65 km away)",
+        crop_required: "Wheat",
+        quantity_required_tonnes: 3000,
+        offered_price_q: 2460,
+        deadline_date: "30 Nov 2026",
+        quality_specs: "Automated conveyor intake, Moisture < 12.5%, FAQ Grade A",
+        rating: 5.0,
+        verified: true
+      },
+      {
+        id: 7,
+        company_name: "Adani Wilmar Agri Crushing Hub",
+        buyer_type: "National Edible Oil Refiner",
+        contact_person: "Sanjay Deshmukh",
+        phone: "+91 98200 77665",
+        location: "Indore Agri Park, Madhya Pradesh",
+        crop_required: "Soybean",
+        quantity_required_tonnes: 2500,
+        offered_price_q: 4820,
+        deadline_date: "28 Oct 2026",
+        quality_specs: "Yellow bold soybean, Oil content > 19.5%, Moisture < 10.0%, Sand/Silica < 0.5%",
+        rating: 5.0,
+        verified: true
+      },
+      {
+        id: 8,
+        company_name: "Ruchi Soya Industries (Patanjali)",
+        buyer_type: "Solvent Extraction & Protein Plant",
+        contact_person: "Kailash Patidar",
+        phone: "+91 94250 11223",
+        location: "Pithampur SEZ, Madhya Pradesh",
+        crop_required: "Soybean",
+        quantity_required_tonnes: 1800,
+        offered_price_q: 4790,
+        deadline_date: "15 Nov 2026",
+        quality_specs: "Moisture < 11%, Protein > 38%, Low green bean content (< 2%)",
+        rating: 4.8,
+        verified: true
+      },
+      {
+        id: 9,
+        company_name: "KRBL Limited (India Gate Basmati)",
+        buyer_type: "Global Basmati Rice Exporter",
+        contact_person: "Anil Mittal (VP Sourcing)",
+        phone: "+91 98100 88991",
+        location: "Alipur Rice Mill Complex, Delhi / Sonipat (190 km away)",
+        crop_required: "Basmati Rice",
+        quantity_required_tonnes: 2000,
+        offered_price_q: 3980,
+        deadline_date: "20 Nov 2026",
+        quality_specs: "Pusa 1121 & 1509 Paddy, Moisture < 13%, Kernel length > 8.3mm, Extra aroma",
+        rating: 4.9,
+        verified: true
+      },
+      {
+        id: 10,
+        company_name: "LT Foods (Daawat Basmati Heritage)",
+        buyer_type: "Premium Rice Miller & Exporter",
+        contact_person: "Simranjit Chawla",
+        phone: "+91 98780 44556",
+        location: "Amritsar Mandi Logistics Center, Punjab (110 km away)",
+        crop_required: "Basmati Rice",
+        quantity_required_tonnes: 1400,
+        offered_price_q: 3940,
+        deadline_date: "10 Nov 2026",
+        quality_specs: "1718 Basmati Paddy, Chalky grain < 3%, Admixture < 1%",
+        rating: 4.8,
+        verified: true
+      },
+      {
+        id: 11,
+        company_name: "Dhara Vegetable Oil Cooperative (NDDB)",
+        buyer_type: "Mustard Oil Cooperative",
+        contact_person: "Rajendra Sharma",
+        phone: "+91 94140 33445",
+        location: "Bharatpur Industrial Area, Rajasthan",
+        crop_required: "Mustard",
+        quantity_required_tonnes: 1200,
+        offered_price_q: 5550,
+        deadline_date: "25 Nov 2026",
+        quality_specs: "Pungency index high, Oil content > 40.5%, Moisture < 8.0%",
+        rating: 4.9,
+        verified: true
+      },
+      {
+        id: 12,
+        company_name: "Khandelwal Agro Crushing Mills",
+        buyer_type: "Cold-Pressed Kacchi Ghani Miller",
+        contact_person: "Mohan Khandelwal",
+        phone: "+91 98290 66778",
+        location: "Alwar APMC Zone, Rajasthan",
+        crop_required: "Mustard",
+        quantity_required_tonnes: 850,
+        offered_price_q: 5500,
+        deadline_date: "15 Nov 2026",
+        quality_specs: "Bold seed, Moisture < 7.5%, Mechanical cleanliness > 99%",
+        rating: 4.7,
+        verified: true
+      },
+      {
+        id: 13,
+        company_name: "Mother Dairy Safal Fresh Fruits & Veg",
+        buyer_type: "Organized Retail & Processing",
+        contact_person: "Deepak Mehra",
+        phone: "+91 98180 55667",
+        location: "Delhi Azadpur Hub / Mangolpuri Cold Depot",
+        crop_required: "Tomato",
+        quantity_required_tonnes: 350,
+        offered_price_q: 2150,
+        deadline_date: "12 Oct 2026",
+        quality_specs: "Firm red ripe table tomatoes, Weight 80-120g, Crates packed, Zero rot",
+        rating: 4.8,
+        verified: true
+      },
+      {
+        id: 14,
+        company_name: "Cremica Agro Foods (Sauce & Puree)",
+        buyer_type: "Ketchup & Puree Processor",
+        contact_person: "Baldev Raj Bector",
+        phone: "+91 98155 22110",
+        location: "Phillaur Industrial Zone, Punjab (25 km away)",
+        crop_required: "Tomato",
+        quantity_required_tonnes: 600,
+        offered_price_q: 2050,
+        deadline_date: "18 Oct 2026",
+        quality_specs: "Processing Roma variety, TSS > 4.5° Brix, High lycopene deep red color",
+        rating: 4.7,
+        verified: true
+      },
+      {
+        id: 15,
+        company_name: "PepsiCo India Frito-Lay Plant",
+        buyer_type: "Snack Foods & Crisp Manufacturer",
+        contact_person: "Sandeep Ahuja (Agronomy Sourcing)",
+        phone: "+91 98765 11234",
+        location: "Channo / Zahura Industrial Complex, Punjab (55 km away)",
+        crop_required: "Potato",
+        quantity_required_tonnes: 3500,
+        offered_price_q: 1500,
+        deadline_date: "15 Jan 2027",
+        quality_specs: "Kufri Chipsona, Dry matter >21%, Reducing sugar <0.1%, Diameter 45-75mm",
+        rating: 4.9,
+        verified: true
+      },
+      {
+        id: 16,
+        company_name: "Ludhiana Pulses & Dal Millers Consortium",
+        buyer_type: "Commercial Dal Processor",
+        contact_person: "Vipin Singhal",
+        phone: "+91 98144 66789",
+        location: "Dana Mandi, Ludhiana, Punjab (12 km away)",
+        crop_required: "Chickpea",
+        quantity_required_tonnes: 800,
+        offered_price_q: 5650,
+        deadline_date: "28 Feb 2027",
+        quality_specs: "JG 11 / JAKI 9218 Desi Chana, Moisture <10%, Dal recovery >78%",
+        rating: 4.8,
+        verified: true
+      }
+    ];
+
+    async function loadBuyers() {
+      // Sync with global state if available
+      if (window.AgriState && AgriState.selectedCrop) {
+        const cropSelect = document.getElementById('buyerCropFilter');
+        for (let i = 0; i < cropSelect.options.length; i++) {
+          if (cropSelect.options[i].value.toLowerCase() === AgriState.selectedCrop.toLowerCase()) {
+            cropSelect.selectedIndex = i;
+            break;
+          }
+        }
+      }
+
+      try {
+        const data = await AgriAPI.getBuyers();
+        if (Array.isArray(data) && data.length > 0) {
+          allBuyers = data;
+        } else {
+          allBuyers = fallbackBuyers;
+        }
+      } catch (e) {
+        console.warn("Using offline fallback buyer directory:", e);
+        allBuyers = fallbackBuyers;
+      }
+      filterBuyers();
+    }
+
+    function filterBuyers() {
+      const cropFilter = document.getElementById('buyerCropFilter').value;
+      const stateFilter = document.getElementById('buyerStateFilter').value;
+
+      if (window.AgriState && cropFilter !== 'all') {
+        AgriState.setCrop(cropFilter);
+      }
+
+      const filtered = allBuyers.filter(b => {
+        const matchCrop = cropFilter === 'all' || (b.crop_required && b.crop_required.toLowerCase().includes(cropFilter.toLowerCase()));
+        const matchState = stateFilter === 'all' || (b.location && b.location.toLowerCase().includes(stateFilter.toLowerCase()));
+        return matchCrop && matchState;
+      });
+
+      renderBuyers(filtered, cropFilter, stateFilter);
+    }
+
+    function resetBuyerFilters() {
+      document.getElementById('buyerCropFilter').value = 'all';
+      document.getElementById('buyerStateFilter').value = 'all';
+      filterBuyers();
+    }
+
+    function renderBuyers(buyers, cropFilter, stateFilter) {
+      const container = document.getElementById('buyersContainer');
+      const countLabel = document.getElementById('buyerCountLabel');
+      
+      const cropText = cropFilter === 'all' ? 'all commodities' : cropFilter;
+      const stateText = stateFilter === 'all' ? 'all regions' : stateFilter;
+      countLabel.innerText = `Showing ${buyers.length} verified tenders for ${cropText} in ${stateText}`;
+
+      if (buyers.length === 0) {
+        container.innerHTML = `
+          <div class="card" style="text-align: center; padding: 3rem 1.5rem; background: #fff; border-radius: var(--radius-lg);">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🌾</div>
+            <h3 style="color: var(--primary-900); margin-bottom: 0.5rem; font-size: 1.3rem;">No Active Wholesale Tenders Found</h3>
+            <p style="color: var(--text-muted); max-width: 480px; margin: 0 auto 1.5rem; font-size: 0.95rem;">
+              No buyers currently posted requirements for <strong>${cropText}</strong> in <strong>${stateText}</strong>. Try selecting "All Crops" or another state.
+            </p>
+            <button class="btn btn-primary btn-sm" onclick="resetBuyerFilters()">Show All Verified Buyers</button>
+          </div>
+        `;
+        return;
+      }
+
+      const colors = ['#059669', '#0284c7', '#d97706', '#7c3aed', '#dc2626'];
+      const badgeClasses = ['badge-green', 'badge-blue', 'badge-amber', 'badge-purple', 'badge-rose'];
+
+      container.innerHTML = buyers.map((b, idx) => {
+        const color = colors[idx % colors.length];
+        const badgeClass = badgeClasses[idx % badgeClasses.length];
+        const ratingStars = '★'.repeat(Math.floor(b.rating || 4.8)) + ' ' + (b.rating || 4.8);
+
+        return `
+          <div class="card" style="border-left: 6px solid ${color}; transition: transform 0.2s, box-shadow 0.2s;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem; flex-wrap: wrap;">
+                  <span class="badge ${badgeClass}">${b.buyer_type || 'Verified Buyer'}</span>
+                  ${b.verified ? '<span class="badge badge-green" style="font-size: 0.72rem;">✓ Verified GST & APMC</span>' : ''}
+                  <span style="font-size: 0.8rem; font-weight: 700; color: #f59e0b;">${ratingStars}</span>
+                </div>
+                <h3 style="font-size: 1.35rem; color: var(--text-main); font-weight: 800; margin: 0.25rem 0;">${b.company_name}</h3>
+                <div style="font-size: 0.86rem; color: var(--text-muted);">
+                  📍 ${b.location} • 👤 Direct Lead: <strong>${b.contact_person || 'Procurement Desk'}</strong>
+                </div>
+              </div>
+
+              <div style="text-align: right;">
+                <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Offered Contract Price</div>
+                <div style="font-size: 1.9rem; font-weight: 800; color: ${color};">₹${Number(b.offered_price_q).toLocaleString('en-IN')} <span style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted);">/ quintal</span></div>
+                <div style="font-size: 0.78rem; color: #059669; font-weight: 700;">Direct APMC/Factory Gate Intaking</div>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; background: #f8fafc; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1rem; border: 1px solid var(--border-light);">
+              <div><strong style="color: var(--primary-900);">Target Crop:</strong> ${b.crop_required}</div>
+              <div><strong style="color: var(--primary-900);">Required Volume:</strong> ${Number(b.quantity_required_tonnes).toLocaleString()} Tonnes (~${(b.quantity_required_tonnes * 10).toLocaleString()} Qtl)</div>
+              <div><strong style="color: var(--primary-900);">Intake Deadline:</strong> ${b.deadline_date || 'Open Tender'}</div>
+              <div><strong style="color: var(--primary-900);">Payment Clearance:</strong> Escrow Bank RTGS within 24h</div>
+            </div>
+
+            <div style="font-size: 0.85rem; color: #334155; margin-bottom: 1.25rem; line-height: 1.5;">
+              <strong style="color: #0f172a;">Quality & Assaying Specifications:</strong> ${b.quality_specs || 'Fair Average Quality (FAQ) standard; moisture < 12%'}
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="contactBuyer('${b.company_name.replace(/'/g, "\\'")}', '${b.phone || '+91 98000 00000'}')">
+                <span>📞 Call Procurement Desk (${b.phone || 'Toll-free'})</span>
+              </button>
+              <button class="btn btn-primary btn-sm" onclick="openProposalModal('${b.company_name.replace(/'/g, "\\'")}', ${b.offered_price_q}, '${b.crop_required}')">
+                <span>🤝 Submit Crop Offer</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function contactBuyer(name, phone) {
+      alert(`📞 Connecting to ${name} Procurement Desk at ${phone}...\nDirect procurement representative is available.`);
+    }
+
+    function openProposalModal(name, price, crop) {
+      activeBuyer = { name, price: Number(price) || 2420, crop: crop || "Maize" };
+      document.getElementById('propBuyerName').innerText = name;
+      document.getElementById('propPrice').innerText = `₹${activeBuyer.price.toLocaleString('en-IN')} / quintal`;
+      calcPropTotal();
+      document.getElementById('proposalModal').style.display = 'flex';
+    }
+
+    function calcPropTotal() {
+      const q = parseFloat(document.getElementById('propQty').value) || 140;
+      const total = q * activeBuyer.price;
+      document.getElementById('propTotal').innerText = `₹${total.toLocaleString('en-IN')}`;
+    }
+
+    function closeProposalModal() {
+      document.getElementById('proposalModal').style.display = 'none';
+    }
+
+    async function submitProposal() {
+      const q = parseFloat(document.getElementById('propQty').value) || 140;
+      const total = q * activeBuyer.price;
+
+      try {
+        await AgriAPI.createOrder({
+          order_type: "BUYER_OFFER",
+          item_title: `Harvest Supply Tender: ${q} Quintals ${activeBuyer.crop}`,
+          quantity: `${q} Quintals`,
+          amount_inr: total,
+          partner_name: activeBuyer.name
+        });
+        alert(`✅ Offer Sent! Your harvest proposal for ${q} Quintals ${activeBuyer.crop} submitted to ${activeBuyer.name}.\nTrack buyer response on your Farmer Orders page.`);
+        closeProposalModal();
+        window.location.href = "/farmer-orders";
+      } catch (e) {
+        alert(`Offer for ${activeBuyer.crop} recorded in browser session. Proceeding to orders.`);
+        window.location.href = "/farmer-orders";
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', loadBuyers);
+  </script>
+</body>
+</html>

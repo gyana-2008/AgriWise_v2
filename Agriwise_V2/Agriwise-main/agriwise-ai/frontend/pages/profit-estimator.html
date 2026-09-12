@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>💰 Multi-Scenario Agricultural Profit Estimator — AGRIWISE AI</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <!-- Title Section -->
+      <div class="page-title-bar">
+        <div class="page-title-left">
+          <h1>💰 Multi-Scenario Agricultural Profit Estimator</h1>
+          <p>Transparent sensitivity calculation of itemized cultivation costs, gross revenues, and ROI percentages across Conservative, Expected, and Optimistic scenarios.</p>
+        </div>
+        <div class="page-title-actions">
+          <a href="/farm-to-market" class="btn btn-secondary btn-sm">🚜 Farm-to-Market Planner</a>
+          <a href="/buyer-marketplace" class="btn btn-primary btn-sm">Next: Wholesale Buyers ➔</a>
+        </div>
+      </div>
+
+      <!-- Crop Selection & Area Control Bar -->
+      <div class="card" style="margin-bottom: 2rem; background: #064e3b; color: #fff;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <div style="font-weight: 700; color: #34d399;">Select Crop / Commodity:</div>
+              <select id="profitCropSelect" class="form-control" style="width: 230px; background: #042f24; color: #fff; border-color: #059669; font-weight: 700;" onchange="onCropChange()">
+                <option value="Maize" selected>🌽 Maize (Corn)</option>
+                <option value="Wheat">🌾 Wheat (Gehu)</option>
+                <option value="Soybean">🌱 Soybean (Pili Soy)</option>
+                <option value="Basmati Rice">🍚 Basmati Rice</option>
+                <option value="Mustard">🌼 Mustard (Sarson)</option>
+                <option value="Cotton">🧶 Cotton (Kapas)</option>
+                <option value="Tomato">🍅 Tomato (Tamatar)</option>
+                <option value="Potato">🥔 Potato (Aaloo)</option>
+              </select>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <div style="font-weight: 700; color: #34d399;">Cultivation Area:</div>
+              <select id="profitAreaSelect" class="form-control" style="width: 150px; background: #042f24; color: #fff; border-color: #059669; font-weight: 700;" onchange="onCropChange()">
+                <option value="1">1 Acre</option>
+                <option value="2">2 Acres</option>
+                <option value="5" selected>5 Acres (Standard)</option>
+                <option value="10">10 Acres</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="font-size: 0.88rem; color: #a7f3d0; font-weight: 600;" id="cropBaselineSummary">
+            Expected Yield: 28.5 q/acre • Modal Price: ₹2,350/q
+          </div>
+        </div>
+      </div>
+
+      <!-- 3-Scenario Summary Cards Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+        <!-- Scenario 1: Conservative -->
+        <div class="card" style="border-top: 5px solid #f59e0b;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span class="badge badge-amber">Conservative Scenario</span>
+            <span style="font-weight: 700; color: #b45309;" id="cRoi">64% ROI</span>
+          </div>
+          <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.75rem;">Lower seasonal rain • Subdued spot rates</div>
+
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Estimated Net Profit:</div>
+          <div style="font-size: 2rem; font-weight: 800; color: #b45309; line-height: 1.1;" id="cProfit">₹1,42,800</div>
+
+          <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border-subtle); font-size: 0.84rem; display: flex; justify-content: space-between;">
+            <span>Revenue: <strong id="cRev">₹2,14,200</strong></span>
+            <span>Cost: <strong id="cCost">₹71,400</strong></span>
+          </div>
+        </div>
+
+        <!-- Scenario 2: Expected (Baseline) -->
+        <div class="card" style="border: 2px solid var(--primary-500); border-top: 5px solid var(--primary-600); background: #f0fdf4;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span class="badge badge-emerald">Expected Baseline (AI Model)</span>
+            <span style="font-weight: 800; color: #047857;" id="eRoi">102% ROI</span>
+          </div>
+          <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.75rem;">Recommended nutrient dose • Normal monsoon</div>
+
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Estimated Net Profit:</div>
+          <div style="font-size: 2.3rem; font-weight: 800; color: #047857; line-height: 1.1;" id="eProfit">₹2,15,400</div>
+
+          <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--primary-200); font-size: 0.84rem; display: flex; justify-content: space-between;">
+            <span>Revenue: <strong id="eRev">₹3,34,875</strong></span>
+            <span>Cost: <strong id="eCost">₹69,100</strong></span>
+          </div>
+        </div>
+
+        <!-- Scenario 3: Optimistic -->
+        <div class="card" style="border-top: 5px solid #0284c7;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span class="badge badge-blue">Optimistic Scenario</span>
+            <span style="font-weight: 700; color: #0369a1;" id="oRoi">138% ROI</span>
+          </div>
+          <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.75rem;">Peak hybrid vigor • Direct food miller contract</div>
+
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Estimated Net Profit:</div>
+          <div style="font-size: 2rem; font-weight: 800; color: #0284c7; line-height: 1.1;" id="oProfit">₹2,85,600</div>
+
+          <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border-subtle); font-size: 0.84rem; display: flex; justify-content: space-between;">
+            <span>Revenue: <strong id="oRev">₹3,96,200</strong></span>
+            <span>Cost: <strong id="oCost">₹66,300</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Multi-Scenario Bar Chart -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="icon">📊</span>
+            <span>Comparative Gross Revenue vs Net Profit Matrix</span>
+          </div>
+        </div>
+        <canvas id="scenarioBarCanvas" style="width: 100%; height: 280px;"></canvas>
+      </div>
+
+      <!-- Cost Inputs & Transparent Calculation Engine -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+        <!-- Left: Editable Cost Assumptions -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">📝</span>
+              <span id="costTitle">Itemized Cultivation Investment (5 Acres - Maize)</span>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="recalculateProfit()">Recalculate</button>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" id="seedLabel">Seed Cost (Hybrid Certified)</label>
+              <input type="number" id="costSeed" class="form-control" value="10400" oninput="recalculateProfit()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Fertilizer & Nutrition</label>
+              <input type="number" id="costFert" class="form-control" value="15200" oninput="recalculateProfit()">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Farm Labor (Sowing, Weeding, Picking)</label>
+              <input type="number" id="costLabor" class="form-control" value="12500" oninput="recalculateProfit()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Irrigation & Power</label>
+              <input type="number" id="costIrrig" class="form-control" value="6500" oninput="recalculateProfit()">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Tractor, Diesel & Machine</label>
+              <input type="number" id="costMachine" class="form-control" value="11000" oninput="recalculateProfit()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Crop Protection / Bio-sprays</label>
+              <input type="number" id="costProtection" class="form-control" value="4800" oninput="recalculateProfit()">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Mandi Transport Logistics</label>
+              <input type="number" id="costTransport" class="form-control" value="5800" oninput="recalculateProfit()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Contingency Miscellaneous</label>
+              <input type="number" id="costOther" class="form-control" value="3000" oninput="recalculateProfit()">
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Transparent Calculation Mathematical Formulas -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">📐</span>
+              <span>Transparent Profit Mathematical Engine</span>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.92rem;">
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);" id="mathFormula1">
+              <strong>1. Gross Revenue Calculation:</strong><br>
+              <code>Revenue = Expected Yield (q) × Expected Selling Price (₹/q)</code><br>
+              <span style="color: var(--text-muted); font-size: 0.84rem;" id="mathRevDetail">= 142.5 quintals × ₹2,350/quintal = <strong>₹3,34,875</strong></span>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);" id="mathFormula2">
+              <strong>2. Net Return Calculation:</strong><br>
+              <code>Estimated Profit = Gross Revenue - Total Cultivation Cost</code><br>
+              <span style="color: var(--text-muted); font-size: 0.84rem;" id="mathProfitDetail">= ₹3,34,875 - ₹69,200 = <strong>₹2,65,675</strong></span>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);" id="mathFormula3">
+              <strong>3. Return on Investment (ROI):</strong><br>
+              <code>ROI % = (Estimated Profit / Total Cost) × 100</code><br>
+              <span style="color: var(--text-muted); font-size: 0.84rem;" id="mathRoiDetail">= (₹2,65,675 / ₹69,200) × 100 = <strong>383%</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Critical Legal Safety Notice (Section 20 & 54 requirement) -->
+      <div class="safety-notice-box">
+        <div class="notice-title">
+          <span>⚠️ Mandatory Agricultural Safety Rule & Financial Disclosure:</span>
+        </div>
+        <p>
+          The platform explicitly states: <strong>"Estimated profit under the selected mathematical assumptions."</strong> We do NOT guarantee financial earnings or crop yield outputs. Agricultural earnings are subject to weather variability, actual Mandi arrival spot fluctuations, seed germination vitality, and biological pest dynamics.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/charts.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script>
+    const cropProfiles = {
+      "Maize": {
+        name: "Maize",
+        variety: "Pioneer P3396 Hybrid",
+        seedLabel: "Seed Cost (Pioneer Hybrid, 10 bags)",
+        yield_q_acre: 28.5,
+        selling_price_q: 2350,
+        costsPerAcre: {
+          seed: 2080,
+          fertilizer: 3040,
+          labor: 2500,
+          irrigation: 1300,
+          machinery: 2200,
+          protection: 960,
+          transport: 1160,
+          other: 600
+        }
+      },
+      "Wheat": {
+        name: "Wheat",
+        variety: "HD-2967 Certified",
+        seedLabel: "Seed Cost (HD-2967 Certified, 200 kg)",
+        yield_q_acre: 22.0,
+        selling_price_q: 2450,
+        costsPerAcre: {
+          seed: 1440,
+          fertilizer: 2760,
+          labor: 1900,
+          irrigation: 1040,
+          machinery: 2500,
+          protection: 720,
+          transport: 1040,
+          other: 500
+        }
+      },
+      "Soybean": {
+        name: "Soybean",
+        variety: "JS-335 / JS-9560 Certified",
+        seedLabel: "Seed Cost (JS-335 Seed, 125 kg)",
+        yield_q_acre: 11.5,
+        selling_price_q: 4750,
+        costsPerAcre: {
+          seed: 2360,
+          fertilizer: 2240,
+          labor: 2100,
+          irrigation: 760,
+          machinery: 1960,
+          protection: 1100,
+          transport: 840,
+          other: 560
+        }
+      },
+      "Basmati Rice": {
+        name: "Basmati Rice",
+        variety: "Pusa 1121 Paddy",
+        seedLabel: "Seed Cost (Pusa 1121 Certified, 25 kg)",
+        yield_q_acre: 18.0,
+        selling_price_q: 3920,
+        costsPerAcre: {
+          seed: 1300,
+          fertilizer: 2900,
+          labor: 3600,
+          irrigation: 2840,
+          machinery: 2600,
+          protection: 1240,
+          transport: 1120,
+          other: 700
+        }
+      },
+      "Mustard": {
+        name: "Mustard",
+        variety: "Pioneer 45S46 Hybrid",
+        seedLabel: "Seed Cost (Pioneer 45S46 Hybrid, 7.5 kg)",
+        yield_q_acre: 9.5,
+        selling_price_q: 5520,
+        costsPerAcre: {
+          seed: 960,
+          fertilizer: 1780,
+          labor: 1500,
+          irrigation: 800,
+          machinery: 1700,
+          protection: 760,
+          transport: 700,
+          other: 440
+        }
+      },
+      "Cotton": {
+        name: "Cotton",
+        variety: "Bollgard II Bt Hybrid",
+        seedLabel: "Seed Cost (Bt Hybrid Seed, 10 packets)",
+        yield_q_acre: 12.0,
+        selling_price_q: 7100,
+        costsPerAcre: {
+          seed: 2500,
+          fertilizer: 3200,
+          labor: 4400,
+          irrigation: 1700,
+          machinery: 1900,
+          protection: 1700,
+          transport: 960,
+          other: 760
+        }
+      },
+      "Tomato": {
+        name: "Tomato",
+        variety: "US 440 F1 Hybrid",
+        seedLabel: "Seed Cost (Hybrid Seed & Nursery Trays)",
+        yield_q_acre: 120.0,
+        selling_price_q: 2050,
+        costsPerAcre: {
+          seed: 3600,
+          fertilizer: 5600,
+          labor: 6400,
+          irrigation: 2200,
+          machinery: 1600,
+          protection: 3300,
+          transport: 3600,
+          other: 1200
+        }
+      },
+      "Potato": {
+        name: "Potato",
+        variety: "Kufri Pukhraj Seed Tubers",
+        seedLabel: "Seed Cost (Seed Tubers, 60 quintals)",
+        yield_q_acre: 110.0,
+        selling_price_q: 1450,
+        costsPerAcre: {
+          seed: 7200,
+          fertilizer: 4400,
+          labor: 3200,
+          irrigation: 1800,
+          machinery: 3000,
+          protection: 2200,
+          transport: 3000,
+          other: 1000
+        }
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Sync with global state if available
+      if (window.AgriState && AgriState.selectedCrop) {
+        const cropSelect = document.getElementById('profitCropSelect');
+        for (let i = 0; i < cropSelect.options.length; i++) {
+          if (cropSelect.options[i].value.toLowerCase() === AgriState.selectedCrop.toLowerCase()) {
+            cropSelect.selectedIndex = i;
+            break;
+          }
+        }
+      }
+      onCropChange();
+    });
+
+    function onCropChange() {
+      const cropKey = document.getElementById('profitCropSelect').value;
+      const acres = parseFloat(document.getElementById('profitAreaSelect').value) || 5.0;
+      const profile = cropProfiles[cropKey] || cropProfiles["Maize"];
+
+      if (window.AgriState) {
+        AgriState.setCrop(cropKey);
+      }
+
+      // Update seed label
+      document.getElementById('seedLabel').innerText = profile.seedLabel;
+      document.getElementById('costTitle').innerText = `Itemized Cultivation Investment (${acres} Acres - ${cropKey})`;
+      
+      const totalYield = (profile.yield_q_acre * acres).toFixed(1);
+      document.getElementById('cropBaselineSummary').innerText = 
+        `Expected Yield: ${profile.yield_q_acre} q/acre (${totalYield} q total) • Baseline Spot Price: ₹${profile.selling_price_q.toLocaleString('en-IN')}/q`;
+
+      // Populate itemized costs
+      document.getElementById('costSeed').value = Math.round(profile.costsPerAcre.seed * acres);
+      document.getElementById('costFert').value = Math.round(profile.costsPerAcre.fertilizer * acres);
+      document.getElementById('costLabor').value = Math.round(profile.costsPerAcre.labor * acres);
+      document.getElementById('costIrrig').value = Math.round(profile.costsPerAcre.irrigation * acres);
+      document.getElementById('costMachine').value = Math.round(profile.costsPerAcre.machinery * acres);
+      document.getElementById('costProtection').value = Math.round(profile.costsPerAcre.protection * acres);
+      document.getElementById('costTransport').value = Math.round(profile.costsPerAcre.transport * acres);
+      document.getElementById('costOther').value = Math.round(profile.costsPerAcre.other * acres);
+
+      recalculateProfit();
+    }
+
+    async function recalculateProfit() {
+      const cropKey = document.getElementById('profitCropSelect').value;
+      const acres = parseFloat(document.getElementById('profitAreaSelect').value) || 5.0;
+      const profile = cropProfiles[cropKey] || cropProfiles["Maize"];
+
+      const seed = parseFloat(document.getElementById('costSeed').value) || 0;
+      const fert = parseFloat(document.getElementById('costFert').value) || 0;
+      const labor = parseFloat(document.getElementById('costLabor').value) || 0;
+      const irrig = parseFloat(document.getElementById('costIrrig').value) || 0;
+      const mach = parseFloat(document.getElementById('costMachine').value) || 0;
+      const prot = parseFloat(document.getElementById('costProtection').value) || 0;
+      const trans = parseFloat(document.getElementById('costTransport').value) || 0;
+      const other = parseFloat(document.getElementById('costOther').value) || 0;
+
+      const totalCost = seed + fert + labor + irrig + mach + prot + trans + other;
+
+      let scenarios = null;
+
+      try {
+        const res = await AgriAPI.estimateProfit({
+          area_acres: acres,
+          crop_name: cropKey,
+          seed_variety: profile.variety,
+          seed_cost_inr: seed,
+          fertilizer_cost_inr: fert,
+          labour_cost_inr: labor,
+          irrigation_cost_inr: irrig,
+          machinery_diesel_cost_inr: mach,
+          pest_management_cost_inr: prot,
+          transport_logistics_cost_inr: trans,
+          other_miscellaneous_cost_inr: other,
+          baseline_yield_q_acre: profile.yield_q_acre,
+          baseline_selling_price_q: profile.selling_price_q
+        });
+
+        if (res && res.scenarios) {
+          scenarios = res.scenarios;
+        }
+      } catch (err) {
+        console.warn("API estimate unavailable, calculating locally:", err);
+      }
+
+      // Local fallback calculation engine if offline or API error
+      if (!scenarios) {
+        const c_yield_tot = profile.yield_q_acre * 0.85 * acres;
+        const c_price = profile.selling_price_q * 0.92;
+        const c_cost = totalCost * 1.08;
+        const c_rev = c_yield_tot * c_price;
+        const c_profit = c_rev - c_cost;
+        const c_roi = c_cost > 0 ? (c_profit / c_cost) * 100 : 0;
+
+        const e_yield_tot = profile.yield_q_acre * acres;
+        const e_price = profile.selling_price_q;
+        const e_cost = totalCost;
+        const e_rev = e_yield_tot * e_price;
+        const e_profit = e_rev - e_cost;
+        const e_roi = e_cost > 0 ? (e_profit / e_cost) * 100 : 0;
+
+        const o_yield_tot = profile.yield_q_acre * 1.12 * acres;
+        const o_price = profile.selling_price_q * 1.06;
+        const o_cost = totalCost * 0.96;
+        const o_rev = o_yield_tot * o_price;
+        const o_profit = o_rev - o_cost;
+        const o_roi = o_cost > 0 ? (o_profit / o_cost) * 100 : 0;
+
+        scenarios = {
+          conservative: {
+            expected_revenue_inr: Math.round(c_rev),
+            total_cost_inr: Math.round(c_cost),
+            estimated_net_profit_inr: Math.round(c_profit),
+            roi_percentage: Math.round(c_roi)
+          },
+          expected: {
+            expected_revenue_inr: Math.round(e_rev),
+            total_cost_inr: Math.round(e_cost),
+            estimated_net_profit_inr: Math.round(e_profit),
+            roi_percentage: Math.round(e_roi),
+            total_yield_quintals: Math.round(e_yield_tot * 10) / 10,
+            selling_price_per_q_inr: e_price
+          },
+          optimistic: {
+            expected_revenue_inr: Math.round(o_rev),
+            total_cost_inr: Math.round(o_cost),
+            estimated_net_profit_inr: Math.round(o_profit),
+            roi_percentage: Math.round(o_roi)
+          }
+        };
+      }
+
+      // Update UI cards
+      const sc = scenarios;
+      document.getElementById('cProfit').innerText = `₹${Math.round(sc.conservative.estimated_net_profit_inr).toLocaleString('en-IN')}`;
+      document.getElementById('cRoi').innerText = `${Math.round(sc.conservative.roi_percentage)}% ROI`;
+      document.getElementById('cRev').innerText = `₹${Math.round(sc.conservative.expected_revenue_inr).toLocaleString('en-IN')}`;
+      document.getElementById('cCost').innerText = `₹${Math.round(sc.conservative.total_cost_inr).toLocaleString('en-IN')}`;
+
+      document.getElementById('eProfit').innerText = `₹${Math.round(sc.expected.estimated_net_profit_inr).toLocaleString('en-IN')}`;
+      document.getElementById('eRoi').innerText = `${Math.round(sc.expected.roi_percentage)}% ROI`;
+      document.getElementById('eRev').innerText = `₹${Math.round(sc.expected.expected_revenue_inr).toLocaleString('en-IN')}`;
+      document.getElementById('eCost').innerText = `₹${Math.round(sc.expected.total_cost_inr).toLocaleString('en-IN')}`;
+
+      document.getElementById('oProfit').innerText = `₹${Math.round(sc.optimistic.estimated_net_profit_inr).toLocaleString('en-IN')}`;
+      document.getElementById('oRoi').innerText = `${Math.round(sc.optimistic.roi_percentage)}% ROI`;
+      document.getElementById('oRev').innerText = `₹${Math.round(sc.optimistic.expected_revenue_inr).toLocaleString('en-IN')}`;
+      document.getElementById('oCost').innerText = `₹${Math.round(sc.optimistic.total_cost_inr).toLocaleString('en-IN')}`;
+
+      // Update transparent formula box with real numbers
+      const totalYield = (profile.yield_q_acre * acres).toFixed(1);
+      const expectedRev = Math.round(sc.expected.expected_revenue_inr);
+      const expectedCost = Math.round(sc.expected.total_cost_inr);
+      const expectedProfit = Math.round(sc.expected.estimated_net_profit_inr);
+      const expectedRoi = Math.round(sc.expected.roi_percentage);
+
+      document.getElementById('mathRevDetail').innerHTML = 
+        `= ${totalYield} quintals (${cropKey}) × ₹${profile.selling_price_q.toLocaleString('en-IN')}/quintal = <strong>₹${expectedRev.toLocaleString('en-IN')}</strong>`;
+      document.getElementById('mathProfitDetail').innerHTML = 
+        `= ₹${expectedRev.toLocaleString('en-IN')} - ₹${expectedCost.toLocaleString('en-IN')} = <strong>₹${expectedProfit.toLocaleString('en-IN')}</strong>`;
+      document.getElementById('mathRoiDetail').innerHTML = 
+        `= (₹${expectedProfit.toLocaleString('en-IN')} / ₹${expectedCost.toLocaleString('en-IN')}) × 100 = <strong>${expectedRoi}%</strong>`;
+
+      if (window.AgriCharts && AgriCharts.drawScenarioBarChart) {
+        AgriCharts.drawScenarioBarChart('scenarioBarCanvas', sc);
+      }
+    }
+  </script>
+</body>
+</html>

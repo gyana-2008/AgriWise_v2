@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🚛 Rural Fleet Transporter Dashboard — AGRIWISE AI</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <!-- Title Section -->
+      <div class="page-title-bar">
+        <div class="page-title-left">
+          <h1>🚛 Commercial Fleet Transporter Dashboard</h1>
+          <p>Logged in as <strong>Balwinder Singh</strong> • Balwinder Logistics (Sahnewal GT Road Bypass)</p>
+        </div>
+        <div class="page-title-actions">
+          <button class="btn btn-primary btn-sm" onclick="addVehiclePrompt()">+ Register Vehicle</button>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+        <div class="card" style="border-left: 4px solid var(--primary-600);">
+          <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">MONTHLY FREIGHT EARNINGS</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: var(--primary-900); margin: 4px 0;">₹1,42,800</div>
+          <div style="font-size: 0.8rem; color: #059669;">▲ +22% Mandi Dispatch Surge</div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid var(--accent-amber);">
+          <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">ACTIVE TRIPS TODAY</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #b45309; margin: 4px 0;">3 Trips</div>
+          <div style="font-size: 0.8rem; color: #b45309;">2 Sahnewal ➔ Khanna Mill Shuttles</div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid var(--accent-sky);">
+          <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">REGISTERED FLEET</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #0284c7; margin: 4px 0;">2 Vehicles</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">Tata 407 SFC + Pickup</div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid #10b981;">
+          <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">DRIVER RATING</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #059669; margin: 4px 0;">4.8 ★</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">68 Verified Farmer Trips</div>
+        </div>
+      </div>
+
+      <!-- Active Pickup Requests & Fleet Status -->
+      <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 2rem;">
+        <!-- Left: Incoming Farmer Pickup Requests -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">📋</span>
+              <span>Incoming Farm-Gate Booking Requests</span>
+            </div>
+            <span class="badge badge-amber">Action Required</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1.25rem;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                <div>
+                  <h4 style="font-size: 1.1rem; color: var(--text-main);">Gurpreet Singh • Sahnewal Farm</h4>
+                  <div style="font-size: 0.82rem; color: var(--text-muted);">Pickup: Sahnewal Village • Drop: Khanna ABC Agro Foods (22 km)</div>
+                  <div style="font-size: 0.84rem; color: #059669; font-weight: 700; margin-top: 2px;">Cargo: 4.5 Tonnes Maize Grain</div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 1.3rem; font-weight: 800; color: var(--primary-900);">₹2,016</div>
+                  <span class="badge badge-emerald">Ready for Loading</span>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1rem;">
+                <button class="btn btn-secondary btn-sm" onclick="alert('Booking declined.')">Decline</button>
+                <button class="btn btn-primary btn-sm" onclick="alert('✅ Booking Accepted! SMS sent to farmer with live GPS tracking link.')">Accept & Dispatch</button>
+              </div>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1.25rem;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                <div>
+                  <h4 style="font-size: 1.1rem; color: var(--text-main);">Harinder Dhaliwal • Gill Road Farm</h4>
+                  <div style="font-size: 0.82rem; color: var(--text-muted);">Pickup: Gill Road • Drop: Ludhiana New Grain Market (12 km)</div>
+                  <div style="font-size: 0.84rem; color: #059669; font-weight: 700; margin-top: 2px;">Cargo: 35 Bags Basmati Seedling</div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 1.3rem; font-weight: 800; color: var(--primary-900);">₹1,736</div>
+                  <span class="badge badge-amber">Pending Response</span>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1rem;">
+                <button class="btn btn-secondary btn-sm" onclick="alert('Booking declined.')">Decline</button>
+                <button class="btn btn-primary btn-sm" onclick="alert('✅ Booking Accepted!')">Accept & Dispatch</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Registered Fleet Status -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">🚛</span>
+              <span>Fleet Operational Status</span>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div style="background: #f0fdf4; padding: 1rem; border-radius: var(--radius-md); border: 1px solid #bbf7d0;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-weight: 700; color: var(--primary-900);">PB-10-CZ-4521 (Tata 407 SFC)</div>
+                <span class="badge badge-emerald">On Standby</span>
+              </div>
+              <div style="font-size: 0.82rem; color: #166534; margin-top: 4px;">
+                Capacity: 4.5 Tonnes • Location: Sahnewal Bypass • Tariff: ₹28/km
+              </div>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-weight: 700; color: var(--text-main);">PB-10-BX-8812 (Mahindra Pickup)</div>
+                <span class="badge badge-blue">En Route</span>
+              </div>
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">
+                Capacity: 1.7 Tonnes • Location: GT Road Khanna • ETA Return: 45 min
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script>
+    function addVehiclePrompt() {
+      const plate = prompt("Enter Commercial Vehicle Registration Number:", "PB-10-DY-1234");
+      if (plate) {
+        alert(`Vehicle ${plate} registered successfully into your logistics fleet!`);
+      }
+    }
+  </script>
+</body>
+</html>

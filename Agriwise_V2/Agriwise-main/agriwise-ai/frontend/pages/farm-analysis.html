@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔬 Farm & Soil Health Analysis — AGRIWISE AI</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <!-- Title Section -->
+      <div class="page-title-bar">
+        <div class="page-title-left">
+          <h1>🔬 Farm & Soil Health Analysis</h1>
+          <p>Scientific diagnostic evaluation of soil nutrients, water chemistry, and micro-climatic suitability.</p>
+        </div>
+        <div class="page-title-actions">
+          <a href="/weather" class="btn btn-secondary btn-sm">⛅ Live Weather</a>
+          <a href="/crop-recommendation" class="btn btn-primary btn-sm">Next: AI Crop Recommendations ➔</a>
+        </div>
+      </div>
+
+      <!-- Top Banner: Overall Farm Suitability Score & Radar -->
+      <div class="card" style="margin-bottom: 2rem; background: radial-gradient(circle at 10% 20%, #f0fdf4 0%, #ffffff 70%);">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
+          <!-- Left: Big Dial & Breakdown -->
+          <div>
+            <div class="suitability-score-box" style="margin-bottom: 1.5rem;">
+              <div class="score-dial" style="width: 90px; height: 90px; border-color: var(--primary-600);">
+                <div class="score-number" style="font-size: 2.2rem;">87</div>
+                <div class="score-label">OUT OF 100</div>
+              </div>
+              <div class="score-info">
+                <h4>Overall Farm Health Index</h4>
+                <p>Status: <strong style="color: var(--primary-700);">High Agronomic Vigor</strong> • Excellent buffer capacity with no sodium toxicity risks detected.</p>
+              </div>
+            </div>
+
+            <!-- Breakdown Progress Bars -->
+            <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 600;">
+                  <span>Climate Thermal Envelope</span>
+                  <span style="color: var(--primary-700);">91 / 100</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill" style="width: 91%;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 600;">
+                  <span>Soil N-P-K & Carbon Reserve</span>
+                  <span style="color: var(--primary-700);">83 / 100</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill" style="width: 83%;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 600;">
+                  <span>Irrigation Water Salinity (EC/TDS)</span>
+                  <span style="color: var(--primary-700);">86 / 100</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill" style="width: 86%;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 600;">
+                  <span>Precipitation Pattern & Forecast</span>
+                  <span style="color: var(--primary-700);">89 / 100</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill" style="width: 89%;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 600;">
+                  <span>Regional Market Liquidity</span>
+                  <span style="color: var(--primary-700);">84 / 100</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill" style="width: 84%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Multi-vector Radar Chart -->
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: #fff; padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-light); box-shadow: var(--shadow-xs);">
+            <div style="font-weight: 700; color: var(--primary-900); font-size: 1rem; margin-bottom: 0.5rem;">
+              🌾 Multi-Vector Agronomic Radar
+            </div>
+            <canvas id="farmRadarCanvas" style="max-width: 320px; max-height: 320px;"></canvas>
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem;">
+              Evaluates 7 distinct environmental & market axes
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Soil & Water Test Chemistry Grids -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+        <!-- Soil Parameters Card -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">🌱</span>
+              <span>Soil Chemistry & Nutrients</span>
+            </div>
+            <span class="badge badge-emerald">Laboratory Calibrated</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+              <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">SOIL pH</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);">6.8</div>
+              <div style="font-size: 0.78rem; color: #059669;">Optimal / Neutral buffer</div>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+              <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">ORGANIC CARBON</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);">0.62 %</div>
+              <div style="font-size: 0.78rem; color: #059669;">Medium (0.5 - 0.75% band)</div>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+              <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">NITROGEN (Available)</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);">260 kg/ha</div>
+              <div style="font-size: 0.78rem; color: var(--accent-amber);">Medium Reserve</div>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+              <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">PHOSPHORUS (Olsen P)</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);">22.5 kg/ha</div>
+              <div style="font-size: 0.78rem; color: #059669;">Adequate / High</div>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+              <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">POTASSIUM (K2O)</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);">280 kg/ha</div>
+              <div style="font-size: 0.78rem; color: #059669;">High Reserve</div>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+              <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">ELECTRICAL COND. (EC)</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);">0.45 dS/m</div>
+              <div style="font-size: 0.78rem; color: #059669;">Non-saline (&lt;1.0)</div>
+            </div>
+          </div>
+
+          <div style="background: #eff6ff; padding: 1rem; border-radius: var(--radius-md); border: 1px solid #bfdbfe;">
+            <div style="font-weight: 700; color: #1e40af; font-size: 0.88rem; margin-bottom: 2px;">Agronomic Soil Assessment:</div>
+            <p style="font-size: 0.82rem; color: #1e3a8a; margin-bottom: 0;">
+              Alluvial loamy profile provides high cation exchange capacity (CEC). Low salinity ensures zero osmotic restriction on seed germination. Basal DAP and split urea will produce peak hybrid grain filling.
+            </p>
+          </div>
+        </div>
+
+        <!-- Water Quality Parameters Card -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">💧</span>
+              <span>Irrigation Water Quality Diagnostic</span>
+            </div>
+            <span class="badge badge-emerald">Safe For Drip</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+              <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">WATER SOURCE</div>
+              <div style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin-top: 4px;">Deep Tube-well</div>
+              <div style="font-size: 0.78rem; color: var(--text-muted);">180 ft aquifer depth</div>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+              <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">WATER pH</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);">7.2</div>
+              <div style="font-size: 0.78rem; color: #059669;">Safe Irrigation Class</div>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+              <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">ELECTRICAL COND. (EC)</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);">0.65 dS/m</div>
+              <div style="font-size: 0.78rem; color: #059669;">Good Quality (&lt;1.5)</div>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+              <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">TOTAL DISSOLVED SOLIDS</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);">420 ppm</div>
+              <div style="font-size: 0.78rem; color: #059669;">Safe Freshwater Class</div>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+              <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">TOTAL HARDNESS</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);">180 mg/L</div>
+              <div style="font-size: 0.78rem; color: #059669;">Moderate Hardness</div>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+              <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">SODIUM HAZARD (SAR)</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);">&lt; 3.0</div>
+              <div style="font-size: 0.78rem; color: #059669;">Low Sodium Hazard</div>
+            </div>
+          </div>
+
+          <div style="background: #f0fdf4; padding: 1rem; border-radius: var(--radius-md); border: 1px solid #bbf7d0;">
+            <div style="font-weight: 700; color: #166534; font-size: 0.88rem; margin-bottom: 2px;">Irrigation Compatibility Verdict:</div>
+            <p style="font-size: 0.82rem; color: #14532d; margin-bottom: 0;">
+              Water is completely suitable for all surface drip irrigation emitters without risk of chemical precipitation or emitter clogging. No acid treatment required.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/charts.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Draw Multi-vector radar chart
+      AgriCharts.drawRadarChart('farmRadarCanvas', {
+        climate: 91,
+        soil: 83,
+        water: 86,
+        weather: 89,
+        season: 95,
+        market: 84,
+        economics: 92
+      });
+    });
+  </script>
+</body>
+</html>

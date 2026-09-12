@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📄 Official Farm Decision Dossier & Report — AGRIWISE AI</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <style>
+    @media print {
+      .main-header, .demo-journey-banner, .page-title-actions, .main-footer, .btn, .mobile-bottom-nav {
+        display: none !important;
+      }
+      .page-wrapper {
+        padding: 0 !important;
+      }
+      .card {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container" style="max-width: 960px;">
+      <!-- Title Section -->
+      <div class="page-title-bar">
+        <div class="page-title-left">
+          <h1>📄 Comprehensive Farm Decision Dossier</h1>
+          <p>Official Agronomic Advisory, Input Dosing & Market Logistics Summary for <strong>Gurpreet Singh</strong>.</p>
+        </div>
+        <div class="page-title-actions">
+          <button class="btn btn-secondary btn-sm" onclick="exportDossierJSON()">📥 Export JSON</button>
+          <button class="btn btn-primary btn-sm" onclick="window.print()">🖨 Print Official Report</button>
+        </div>
+      </div>
+
+      <!-- Formal Document Card -->
+      <div class="card" style="padding: 2.5rem; border-top: 8px solid var(--primary-600); margin-bottom: 3rem;">
+        <!-- Header & Watermark -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 1.5rem; border-bottom: 2px solid var(--border-light); margin-bottom: 2rem;">
+          <div>
+            <div style="font-size: 1.8rem; font-weight: 800; color: var(--primary-900); display: flex; align-items: center; gap: 0.5rem;">
+              <span>🌾 AGRIWISE AI</span>
+              <span class="badge badge-emerald" style="font-size: 0.72rem;">ICAR Agronomy Standard</span>
+            </div>
+            <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
+              Intelligent Agriculture Decision, Input Recommendation & Crop Market Intelligence Platform
+            </div>
+          </div>
+          <div style="text-align: right; font-size: 0.82rem; color: var(--text-muted);">
+            <div><strong>Dossier Ref:</strong> AGRI-2026-PB-90412</div>
+            <div><strong>Issue Date:</strong> 10 September 2026</div>
+            <div><strong>Location:</strong> Sahnewal, Ludhiana, Punjab</div>
+          </div>
+        </div>
+
+        <!-- Section 1: Farm Baseline Profile -->
+        <div style="margin-bottom: 2rem;">
+          <h3 style="font-size: 1.15rem; color: var(--primary-900); border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.4rem; margin-bottom: 1rem;">
+            1. Farm & Environmental Baseline
+          </h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; font-size: 0.9rem;">
+            <div><strong>Farmer Name:</strong> Gurpreet Singh</div>
+            <div><strong>Farm Size:</strong> 5.0 Acres (Contiguous)</div>
+            <div><strong>GPS Coordinates:</strong> 30.9010° N, 75.8573° E</div>
+            <div><strong>Soil Type:</strong> Alluvial Loam (pH 6.8)</div>
+            <div><strong>Available Nitrogen:</strong> 260 kg/ha (Medium)</div>
+            <div><strong>Organic Carbon:</strong> 0.62%</div>
+            <div><strong>Irrigation Infrastructure:</strong> Subsurface Drip + Tube-well</div>
+            <div><strong>Water Quality:</strong> EC 0.65 dS/m (Safe freshwater)</div>
+          </div>
+        </div>
+
+        <!-- Section 2: Recommended Crop & Seed Variety -->
+        <div style="margin-bottom: 2rem;">
+          <h3 style="font-size: 1.15rem; color: var(--primary-900); border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.4rem; margin-bottom: 1rem;">
+            2. Recommended Crop & Certified Seed Variety
+          </h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; font-size: 0.9rem;">
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+              <div><strong>Top Recommended Crop:</strong> Maize (Zea mays L.)</div>
+              <div><strong>Suitability Index:</strong> <span style="color: #059669; font-weight: 700;">94% Suitability (Rank #1)</span></div>
+              <div><strong>Model Confidence:</strong> 0.94</div>
+              <div><strong>Rationale:</strong> Optimal vegetative thermal range (29.4°C), strong nitrogen absorption buffer, and 41.8% regional supply shortage in Khanna feed mills.</div>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+              <div><strong>Selected Seed Hybrid:</strong> Pioneer P3396 Single Cross Hybrid</div>
+              <div><strong>Breeder:</strong> Corteva Agriscience</div>
+              <div><strong>Maturity Duration:</strong> 108 Days</div>
+              <div><strong>Disease Resistance:</strong> Turcicum Leaf Blight & Downy Mildew Resistant</div>
+              <div><strong>Seed Requirement:</strong> 40 kg total (10 bags of 4kg) • ₹10,400</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Scientific Nutrient Dosage Plan -->
+        <div style="margin-bottom: 2rem;">
+          <h3 style="font-size: 1.15rem; color: var(--primary-900); border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.4rem; margin-bottom: 1rem;">
+            3. Scientific Nutrient Prescription (5.0 Acres Total)
+          </h3>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Total Dosage</th>
+                  <th>Timing / Placement</th>
+                  <th>Estimated Subsidized Cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>DAP (18:46:0)</td>
+                  <td>5 Bags (250 kg)</td>
+                  <td>Basal drilling 3-5 cm below seed furrow</td>
+                  <td>₹6,750</td>
+                </tr>
+                <tr>
+                  <td>Neem Coated Urea (46% N)</td>
+                  <td>10 Bags (450 kg)</td>
+                  <td>Split into 2 top dressings (V4 and Knee-high)</td>
+                  <td>₹2,665</td>
+                </tr>
+                <tr>
+                  <td>MOP (0:0:60)</td>
+                  <td>3 Bags (150 kg)</td>
+                  <td>Basal soil incorporation at land preparation</td>
+                  <td>₹4,950</td>
+                </tr>
+                <tr>
+                  <td>Zinc Sulfate 21%</td>
+                  <td>3 Bags (25 kg)</td>
+                  <td>Basal broadcast separately from DAP</td>
+                  <td>₹1,350</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 4: Market Procurement & Logistics -->
+        <div style="margin-bottom: 2rem;">
+          <h3 style="font-size: 1.15rem; color: var(--primary-900); border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.4rem; margin-bottom: 1rem;">
+            4. Market Linkage & Logistics Strategy
+          </h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; font-size: 0.9rem;">
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+              <div><strong>Target Wholesale Buyer:</strong> ABC Agro Foods & Millers</div>
+              <div><strong>Location:</strong> Khanna Industrial Area (22 km from farm)</div>
+              <div><strong>Offered Direct Contract Rate:</strong> ₹2,420 / quintal (+₹60/q over Mandi spot)</div>
+              <div><strong>Quality Requirement:</strong> Moisture &lt; 12.0%, Aflatoxin-free</div>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+              <div><strong>Recommended Transporter:</strong> Balwinder Singh Transport (Tata 407)</div>
+              <div><strong>Distance from Farm:</strong> 4.5 km</div>
+              <div><strong>Freight Tariff:</strong> ₹28 / km + ₹1,400 base</div>
+              <div><strong>Estimated Freight / Shuttle:</strong> ₹2,016</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 5: Financial Statement -->
+        <div style="margin-bottom: 2rem;">
+          <h3 style="font-size: 1.15rem; color: var(--primary-900); border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.4rem; margin-bottom: 1rem;">
+            5. Comprehensive Financial Projection Statement (5.0 Acres)
+          </h3>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; text-align: center;">
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+              <div style="font-size: 0.76rem; color: var(--text-muted); font-weight: 700;">TOTAL ESTIMATED COST</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);">₹69,100</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">₹13,820 / acre</div>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md);">
+              <div style="font-size: 0.76rem; color: var(--text-muted); font-weight: 700;">EXPECTED GROSS REVENUE</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: #0284c7;">₹3,44,850</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">142.5 q @ ₹2,420/q</div>
+            </div>
+
+            <div style="background: #ecfdf5; padding: 1rem; border-radius: var(--radius-md); border: 1px solid #a7f3d0;">
+              <div style="font-size: 0.76rem; color: #065f46; font-weight: 700;">ESTIMATED NET PROFIT</div>
+              <div style="font-size: 1.8rem; font-weight: 800; color: #047857;">₹2,15,400</div>
+              <div style="font-size: 0.75rem; color: #047857; font-weight: 700;">~₹43,080 / acre</div>
+            </div>
+
+            <div style="background: #fef3c7; padding: 1rem; border-radius: var(--radius-md); border: 1px solid #fde68a;">
+              <div style="font-size: 0.76rem; color: #92400e; font-weight: 700;">RETURN ON INVESTMENT</div>
+              <div style="font-size: 1.8rem; font-weight: 800; color: #b45309;">102% ROI</div>
+              <div style="font-size: 0.75rem; color: #92400e;">Under Expected Model</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Official Signoff & Legal Disclaimer -->
+        <div style="background: #fffbeb; border: 1px solid #fde68a; padding: 1rem 1.25rem; border-radius: var(--radius-md); font-size: 0.8rem; color: #78350f; line-height: 1.5;">
+          <strong>DISCLAIMER & LEGAL DISCLOSURE:</strong> This advisory dossier is algorithmically generated based on user-entered farm vectors, Open-Meteo meteorological models, and prevailing Mandi transaction histories. Figures represent estimated model projections under stated mathematical assumptions and do not constitute financial guarantees or guaranteed yield contracts. Qualified local agricultural extension officers and official seed packet label instructions take precedence.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script>
+    function exportDossierJSON() {
+      const data = {
+        farmer: "Gurpreet Singh",
+        farm: "Sahnewal Golden Acre Farm",
+        area_acres: 5.0,
+        recommended_crop: "Maize",
+        seed: "Pioneer P3396 Hybrid",
+        estimated_yield_quintals: 142.5,
+        estimated_net_profit_inr: 215400,
+        roi_percentage: 102,
+        buyer: "ABC Agro Foods & Millers",
+        transporter: "Balwinder Singh Transport"
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `AgriWise_Farm_Dossier_Sahnewal.json`;
+      a.click();
+    }
+  </script>
+</body>
+</html>

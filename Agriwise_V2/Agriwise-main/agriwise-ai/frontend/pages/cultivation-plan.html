@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📅 Cultivation Timeline Plan — AGRIWISE AI</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <!-- Title Section -->
+      <div class="page-title-bar">
+        <div class="page-title-left">
+          <h1>📅 Complete Cultivation Timeline (Day 0 to Harvest)</h1>
+          <p id="planSubtitle">Chronological agronomic roadmap for your certified crop variety on your 5-Acre Farm.</p>
+        </div>
+        <div class="page-title-actions">
+          <a href="/fertilizer-recommendation" class="btn btn-primary btn-sm">Next: Fertilizer Dosing Plan ➔</a>
+        </div>
+      </div>
+
+      <!-- Commodity Filter Bar -->
+      <div class="card" style="margin-bottom: 2rem; background: #064e3b; color: #fff;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <div style="font-weight: 700; font-size: 1.05rem; color: #34d399;">Active Crop Plan:</div>
+            <select id="cropSelectDropdown" class="form-control" style="width: 240px; background: #042f24; color: #fff; border-color: #059669; font-weight: 700;" onchange="onCropSelectionChange(this.value)">
+              <option value="Maize">🌽 Maize (Corn)</option>
+              <option value="Wheat">🌾 Wheat (Gehu)</option>
+              <option value="Mustard">🌼 Mustard (Sarson)</option>
+              <option value="Soybean">🌱 Soybean (Pili Soy)</option>
+              <option value="Basmati Rice">🍚 Basmati Rice</option>
+              <option value="Chickpea">🧆 Chickpea (Chana)</option>
+              <option value="Potato">🥔 Potato (Aloo)</option>
+            </select>
+          </div>
+          <div style="display: flex; gap: 0.75rem; align-items: center;">
+            <a href="/seed-recommendation" class="btn btn-sm btn-outline-emerald" style="color: #fff; border-color: rgba(255,255,255,0.4);">Change Variety ➔</a>
+            <span class="badge badge-emerald" id="cycleDaysBadge">108-Day Cycle</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overview Status Bar -->
+      <div class="card" style="margin-bottom: 2rem; background: #f8fafc;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <span class="badge badge-emerald">Active Farm Plan</span>
+            <h3 style="font-size: 1.25rem; color: var(--primary-900); margin-top: 4px;" id="planHeaderTitle">Pioneer P3396 Hybrid (108-Day Cycle)</h3>
+            <div style="font-size: 0.84rem; color: var(--text-muted);" id="currentStageDesc">Current Stage: <strong>Day 25 — Early Vegetative (V4 Leaf)</strong></div>
+          </div>
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <a href="/farm-calendar" class="btn btn-secondary btn-sm">📆 Open Task Calendar</a>
+            <a href="/fertilizer-recommendation" class="btn btn-outline-emerald btn-sm">🧪 Fertilizer Dosages</a>
+            <a href="/fertilizer-market" class="btn btn-amber btn-sm">🛒 Order Crop Inputs</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visual Chronological Timeline Container (Rendered Dynamically) -->
+      <div class="timeline" id="timelineContainer">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script>
+    const CULTIVATION_TIMELINES = {
+      "Maize": {
+        variety: "Pioneer P3396 Hybrid",
+        cycle: "108-Day Cycle",
+        currentStage: "Day 25 — Early Vegetative (V4 Leaf)",
+        stages: [
+          {
+            days: "DAY 0 • LAND PREPARATION & BASAL AMENDMENT",
+            title: "Deep Tillage, Laser Leveling & Basal Fertilizer Placement",
+            status: "completed",
+            desc: "Perform primary tillage with disc plough followed by two cultivator passes. Incorporate 5 tonnes well-decomposed FYM/vermicompost. Apply Basal DAP (5 bags total) and MOP (3 bags total) placed 3-5 cm below seed row.",
+            badges: ["✓ Completed", "Basal DAP Placed"]
+          },
+          {
+            days: "DAY 1 – 7 • SEED TREATMENT & SOWING",
+            title: "Precision Seed Drilling & Emergence Hydration",
+            status: "completed",
+            desc: "Treat Pioneer P3396 seed with Trichoderma viride (4g/kg). Drill seed with tractor seed-cum-fertilizer drill at 60 cm row-to-row and 20 cm plant-to-plant spacing (seed rate: 8 kg/acre). Give light emergence irrigation within 24 hours.",
+            badges: ["✓ Completed", "Plant Population: 28,000/acre"]
+          },
+          {
+            days: "DAY 8 – 20 • GERMINATION & GAP FILLING",
+            title: "Seedling Emergence Verification & Early Weed Control",
+            status: "completed",
+            desc: "Check for uniform germination (expected >90%). Perform manual gap filling within 10 days of sowing. Apply pre-emergence herbicide (Atrazine 50% WP @ 800g/acre) within 48 hours of sowing in moist soil.",
+            badges: ["✓ Completed", "94% Emergence Recorded"]
+          },
+          {
+            days: "DAY 20 – 35 • CURRENT STAGE: EARLY VEGETATIVE (V4)",
+            title: "First Split Top-Dressing Urea Application & Inter-cultivation",
+            status: "current",
+            desc: "Apply first split top-dressing of Neem Coated Urea (5 bags across 5 acres = 1 bag/acre) during calm weather when soil has good moisture. Run tractor cultivator or wheel hoe between rows to aerate soil.",
+            actionLink: "/fertilizer-market",
+            actionText: "🛒 Order Neem Coated Urea Now",
+            secondaryLink: "/weather",
+            secondaryText: "⛅ Check Rain Forecast First"
+          },
+          {
+            days: "DAY 35 – 60 • KNEE-HIGH STAGE & FALL ARMYWORM SCOUTING",
+            title: "Rapid Stem Elongation & Pest Monitoring",
+            status: "upcoming",
+            desc: "Plants enter exponential vegetative elongation. Scout whorls twice weekly for Spodoptera frugiperda (Fall Armyworm). If pin-hole leaf damage exceeds 5%, apply recommended botanical neem biocide."
+          },
+          {
+            days: "DAY 60 – 85 • TASSELING, SILKING & SECOND UREA SPLIT",
+            title: "Critical Flowering Phase & Second Nitrogen Dose",
+            status: "upcoming",
+            desc: "Most critical water sensitivity period! Moisture stress during silking causes severe pollination failure and barren cobs. Broadcast second split of Neem Coated Urea (1 bag/acre) at pre-tasseling stage."
+          },
+          {
+            days: "DAY 85 – 108 • GRAIN FILLING & HARVEST PREPARATION",
+            title: "Black Layer Maturity Confirmation & Direct Mandi Dispatch",
+            status: "upcoming",
+            desc: "Grain attains physiological maturity when black layer appears at kernel base. Harvest mechanically with combine harvester when grain moisture drops below 14-15% for highest Mandi price.",
+            actionLink: "/transport-marketplace",
+            actionText: "🚛 Book Local Transporter Ahead of Harvest"
+          }
+        ]
+      },
+      "Wheat": {
+        variety: "HD-2967 (Pusa Wheat)",
+        cycle: "140-Day Cycle",
+        currentStage: "Day 22 — Crown Root Initiation (CRI Stage)",
+        stages: [
+          {
+            days: "DAY 0 • PRE-SOWING IRRIGATION (RAUNI) & SEEDBED",
+            title: "Laser Land Leveling & Basal Fertilizer Placement",
+            status: "completed",
+            desc: "Give pre-sowing heavy irrigation (Rauni). At field capacity (wapsa), prepare fine crumb tilth using 2 passes of disc harrow and rotavator. Incorporate Basal DAP (6 bags across 5 acres) and MOP (2.5 bags).",
+            badges: ["✓ Completed", "Basal DAP Placed"]
+          },
+          {
+            days: "DAY 1 – 10 • PRECISION SEED DRILLING",
+            title: "Seed Treatment with Carboxin & Zero-Till Sowing",
+            status: "completed",
+            desc: "Treat HD-2967 seed with Vitavax (Carboxin 37.5% + Thiram 37.5% @ 2g/kg). Drill certified seeds with Happy Seeder or Zero-Till drill @ 40 kg/acre at 20 cm row spacing with 5 cm depth.",
+            badges: ["✓ Completed", "Drilled @ 40 kg/acre"]
+          },
+          {
+            days: "DAY 20 – 25 • CURRENT STAGE: CROWN ROOT INITIATION (CRI)",
+            title: "Most Critical First Irrigation & First Top-Dressing Urea",
+            status: "current",
+            desc: "Crown roots establish now; moisture stress here reduces earhead count by 35%! Apply first light irrigation (4-5 cm depth). Broadcast first split of Neem Coated Urea (5.5 bags across 5 acres = 1.1 bag/acre) at field capacity.",
+            actionLink: "/fertilizer-market",
+            actionText: "🛒 Order Top-Dressing Urea",
+            secondaryLink: "/weather",
+            secondaryText: "⛅ Rain Forecast Alert"
+          },
+          {
+            days: "DAY 40 – 50 • TILLERING & BROADLEAF WEED MANAGEMENT",
+            title: "Secondary Tillering Boost & Selective Herbicide Application",
+            status: "upcoming",
+            desc: "Apply post-emergence herbicide (Sulfosulfuron 75% + Metsulfuron 5% @ 16g/acre) to control Phalaris minor (Gulli Danda) and broadleaf Chenopodium weeds. Give second irrigation at 45 days."
+          },
+          {
+            days: "DAY 70 – 85 • JOINTING & BOOTING STAGE",
+            title: "Second Urea Split & Potassium Nitrate (13:0:45) Foliar Spray",
+            status: "upcoming",
+            desc: "Broadcast second split of Neem Coated Urea (1 bag/acre). Apply foliar spray of Potassium Nitrate (13:0:45 @ 1.5 kg/acre) to build starch reserves and withstand sudden warm winds."
+          },
+          {
+            days: "DAY 110 – 140 • MILKY TO HARD DOUGH & HARVEST",
+            title: "Grain Hardening, Moisture Monitoring & Combine Threshing",
+            status: "upcoming",
+            desc: "Terminal grain filling completes. Withhold last irrigation 12 days before harvest. Cut with combine harvester when grains snap cleanly between teeth (moisture below 12%). Direct dispatch to FCI / Mandi.",
+            actionLink: "/buyer-marketplace",
+            actionText: "🏢 Connect with Flour Mill Buyers"
+          }
+        ]
+      },
+      "Mustard": {
+        variety: "Pusa Bold (High Oil)",
+        cycle: "115-Day Cycle",
+        currentStage: "Day 28 — Branching & First Irrigation",
+        stages: [
+          {
+            days: "DAY 0 • SEEDBED PREPARATION & SULFUR ENRICHMENT",
+            title: "Single Super Phosphate (SSP) & Bentonite Sulfur Placement",
+            status: "completed",
+            desc: "Prepare smooth, clod-free seedbed to conserve subsoil moisture. Broadcast 12 bags Single Super Phosphate (SSP) to deliver essential sulfur (11% S) for maximizing oil synthesis.",
+            badges: ["✓ Completed", "Sulfur Basal Placed"]
+          },
+          {
+            days: "DAY 1 – 7 • SOWING & THINNING RIGOR",
+            title: "Seed Drilling & Plant Stand Optimization",
+            status: "completed",
+            desc: "Sow certified Pusa Bold seed @ 2 kg/acre using seed drill with 45 cm row spacing. Thin excess seedlings at 12 days to maintain 15 cm intra-row distance (stand: 60,000 plants/acre).",
+            badges: ["✓ Completed", "Optimum Stand Achieved"]
+          },
+          {
+            days: "DAY 25 – 35 • CURRENT STAGE: VEGETATIVE BRANCHING",
+            title: "First Irrigation & Nitrogen Top-Dressing",
+            status: "current",
+            desc: "Mustard responds remarkably to early irrigation at branching. Apply first irrigation followed immediately by Neem Coated Urea (3.5 bags across 5 acres = 0.7 bag/acre). Hoe field to break surface crust.",
+            actionLink: "/fertilizer-market",
+            actionText: "🛒 Order Top-Dressing Urea",
+            secondaryLink: "/weather",
+            secondaryText: "⛅ Weather Check"
+          },
+          {
+            days: "DAY 50 – 65 • FLOWERING & APHID (MAHU) SURVEILLANCE",
+            title: "Peak Golden Bloom & Sucking Pest Monitoring",
+            status: "upcoming",
+            desc: "Inspect terminal twigs daily for Mustard Aphid colonies. If >20% twigs harbor aphids, spray Thiamethoxam 25% WG (80g/acre) or systemic botanical neem oil late in the evening to protect pollinating honeybees."
+          },
+          {
+            days: "DAY 75 – 95 • POD (SILIQUA) FILLING STAGE",
+            title: "Second Light Irrigation & Frost Protection",
+            status: "upcoming",
+            desc: "Apply second light irrigation during siliqua elongation if winter rain fails. Keep perimeter smoke fires ready in case of severe nighttime sub-zero ground frost alerts."
+          },
+          {
+            days: "DAY 105 – 115 • SILIQUA BROWNING & MORNING HARVESTING",
+            title: "Harvest at 75% Yellow Pod Browning to Prevent Shattering",
+            status: "upcoming",
+            desc: "Harvest early in the morning when dew keeps siliquae moist to eliminate pod shattering seed loss. Stack in sheaves for 4-5 days of sun drying before threshing.",
+            actionLink: "/transport-marketplace",
+            actionText: "🚛 Book Mandi Transport"
+          }
+        ]
+      },
+      "Soybean": {
+        variety: "JS 335 (National Benchmark)",
+        cycle: "98-Day Cycle",
+        currentStage: "Day 18 — Early Vegetative & Post-Emergence Weeding",
+        stages: [
+          {
+            days: "DAY 0 • SUMMER DEEP PLOUGHING & RIDGE-FURROW",
+            title: "Deep Soil Solarization & Basal DAP Placement",
+            status: "completed",
+            desc: "Deep summer ploughing destroys resting soil pupae and weeds. Make broad bed and furrow (BBF) to prevent waterlogging during heavy monsoon showers. Apply Basal DAP (7 bags total across 5 acres).",
+            badges: ["✓ Completed", "BBF Ridging Done"]
+          },
+          {
+            days: "DAY 1 – 5 • SEED INOCULATION & SOWING",
+            title: "Bradyrhizobium japonicum & PSB Inoculation",
+            status: "completed",
+            desc: "Treat JS-335 seeds with Bradyrhizobium bacterial culture and PSB (5g/kg seed). Drill at 45 cm row spacing (seed rate: 30 kg/acre). Biological nitrogen fixing nodules will establish within 15 days.",
+            badges: ["✓ Completed", "Rhizobium Inoculated"]
+          },
+          {
+            days: "DAY 15 – 25 • CURRENT STAGE: WEED CONTROL & NODULATION",
+            title: "Post-Emergence Selective Herbicide & Nodule Inspection",
+            status: "current",
+            desc: "Weed competition in first 30 days can cut soybean yield by 50%! Apply Imazethapyr 10% SL @ 400 ml/acre in moist soil. Uproot sample plant to verify healthy pink Bradyrhizobium nodules.",
+            actionLink: "/fertilizer-market",
+            actionText: "🛒 Order Selective Weedicide",
+            secondaryLink: "/crop-demand",
+            secondaryText: "📊 View Soybean Demand"
+          },
+          {
+            days: "DAY 35 – 50 • FLOWERING & INSECT SCOUTING",
+            title: "Peak Flowering & Girdle Beetle / Spodoptera Surveillance",
+            status: "upcoming",
+            desc: "Zero water stress during flowering! Scout for Girdle Beetle and green semilooper larvae. Install 4 pheromone traps per acre. Apply Chlorantraniliprole 18.5% SC if larval count exceeds threshold."
+          },
+          {
+            days: "DAY 60 – 75 • POD DEVELOPMENT & 0:52:34 FOLIAR BOOST",
+            title: "Pod Filling Acceleration & Potassium Nutrition",
+            status: "upcoming",
+            desc: "Apply foliar spray of Mono Potassium Phosphate (0:52:34 @ 1 kg/acre) to maximize grain size, oil percentage, and seed plumpness."
+          },
+          {
+            days: "DAY 90 – 98 • DEFOLIATION & COMBINE HARVESTING",
+            title: "Natural Leaf Shedding & Direct Soya Crushing Dispatch",
+            status: "upcoming",
+            desc: "Leaves turn golden and drop completely. Harvest with combine harvester when seed moisture reaches 13-14%. Direct transport to nearest oil expelling unit.",
+            actionLink: "/buyer-marketplace",
+            actionText: "🏢 Sell to Soya Millers"
+          }
+        ]
+      },
+      "Basmati Rice": {
+        variety: "Pusa Basmati 1121",
+        cycle: "145-Day Cycle",
+        currentStage: "Day 45 — Active Tillering & Zinc Top-Dressing",
+        stages: [
+          {
+            days: "DAY 0 – 25 • WET BED NURSERY RAISING",
+            title: "Certified Seed Soaking, Nursery Sowing & Micronutrients",
+            status: "completed",
+            desc: "Soak Pusa 1121 seeds in Carbendazim solution for 24 hours. Broadcast in raised nursery beds with 10 kg Zinc Sulfate to ensure robust, disease-free seedlings.",
+            badges: ["✓ Completed", "Nursery Raised"]
+          },
+          {
+            days: "DAY 25 – 35 • PUDDLING & TRANSPLANTING",
+            title: "Laser Level Puddling & 2-3 Seedlings Per Hill",
+            status: "completed",
+            desc: "Puddle field thoroughly to form impermeable hardpan. Transplant 25-day-old vigorous seedlings with 20 cm x 15 cm spacing. Maintain 2-3 cm continuous water depth for initial 7 days.",
+            badges: ["✓ Completed", "Transplanted"]
+          },
+          {
+            days: "DAY 40 – 55 • CURRENT STAGE: ACTIVE TILLERING",
+            title: "First Split Urea + Zinc Sulfate Application",
+            status: "current",
+            desc: "Tillers multiply aggressively. Broadcast 1 bag/acre Neem Coated Urea combined with 5 kg Zinc Sulfate (21% Zn). Run cono-weeder between rows to aerate root zone and incorporate organic matter.",
+            actionLink: "/fertilizer-market",
+            actionText: "🛒 Order Urea & Zinc Sulfate",
+            secondaryLink: "/water-analysis",
+            secondaryText: "💧 Irrigation Water Analysis"
+          },
+          {
+            days: "DAY 65 – 80 • PANICLE INITIATION (PI STAGE)",
+            title: "Second Top Dressing & Stem Borer Protection",
+            status: "upcoming",
+            desc: "Apply second split of Urea (1 bag/acre) + MOP (15 kg/acre). Apply Cartap Hydrochloride 4G granules @ 7.5 kg/acre to prevent yellow stem borer damage (dead hearts)."
+          },
+          {
+            days: "DAY 90 – 110 • BOOTING, HEADING & NECK BLAST DEFENSE",
+            title: "Flag Leaf Maintenance & Prophylactic Fungicide Spray",
+            status: "upcoming",
+            desc: "Flag leaf contributes 65% of grain filling! Spray Tricyclazole 75% WP @ 120g/acre at 5% panicle emergence to protect against devastating Neck Blast disease."
+          },
+          {
+            days: "DAY 120 – 135 • MILKY TO HARD DOUGH & FIELD DRYING",
+            title: "Gradual Water Drainage to Prevent Grain Chalkiness",
+            status: "upcoming",
+            desc: "Drain standing water 12-14 days before harvest to firm up ground soil for combine harvesters and ensure uniform amber grain translucency."
+          },
+          {
+            days: "DAY 140 – 145 • GOLDEN HARVEST & EXPORT MANDI DELIVERY",
+            title: "Combine Harvest at 85% Golden Panicles for Premium Milling",
+            status: "upcoming",
+            desc: "Harvest when 85% of grain turns straw golden. Moisture should be 18-20% for sheller drying without broken grains. Immediate dispatch to export millers.",
+            actionLink: "/buyer-marketplace",
+            actionText: "🏢 Connect with Rice Exporters"
+          }
+        ]
+      },
+      "Chickpea": {
+        variety: "JG 11 (Desi Chana)",
+        cycle: "100-Day Cycle",
+        currentStage: "Day 30 — Nipping / Topping for Multi-Branching",
+        stages: [
+          {
+            days: "DAY 0 • SEEDBED MOISTURE CONSERVATION",
+            title: "Deep Disc Plowing & Trichoderma Inoculation",
+            status: "completed",
+            desc: "Conserve residual subsoil moisture after Kharif harvest. Incorporate Trichoderma harzianum (2 kg/acre) mixed in FYM to safeguard against soil-borne Fusarium wilt.",
+            badges: ["✓ Completed", "Bio-Fungicide Applied"]
+          },
+          {
+            days: "DAY 1 – 7 • SOWING & RHIZOBIUM COATING",
+            title: "Seed Treatment & Residual Moisture Drilling",
+            status: "completed",
+            desc: "Treat JG 11 seed with Mesorhizobium ciceri culture. Drill seeds @ 30 kg/acre at 30 cm row spacing with 7-8 cm depth into moist soil horizon.",
+            badges: ["✓ Completed", "Drilled @ 30 kg/acre"]
+          },
+          {
+            days: "DAY 25 – 35 • CURRENT STAGE: NIPPING / APICAL TOPPING",
+            title: "Manual Nipping of Apical Buds & Inter-Cultivation",
+            status: "current",
+            desc: "Nip top 2 cm apical shoot at 30 days! This breaks apical dominance and triggers dramatic emergence of 12-18 secondary fruiting branches, increasing final pod count by 30-40%.",
+            actionLink: "/weather",
+            actionText: "⛅ Weather & Temperature Forecast",
+            secondaryLink: "/fertilizer-recommendation",
+            secondaryText: "🧪 Nutrient Advice"
+          },
+          {
+            days: "DAY 45 – 60 • PRE-FLOWERING & POD BORER (HELICOVERPA)",
+            title: "Pheromone Trap Setup & NPV Biopesticide",
+            status: "upcoming",
+            desc: "Erect 5 Helicoverpa armigera pheromone traps/acre. Spray HaNPV biopesticide or Emamectin Benzoate 5% SG (80g/acre) if tiny larvae appear on flower buds."
+          },
+          {
+            days: "DAY 70 – 85 • POD SETTING & GRAIN FILLING",
+            title: "Pod Hardening & Zero Overhead Irrigation",
+            status: "upcoming",
+            desc: "Ensure good aeration. Do NOT flood field as excess moisture induces Collar Rot and vegetative resurgence at the expense of grain pods."
+          },
+          {
+            days: "DAY 95 – 100 • SENESCENCE & COMBINE THRESHING",
+            title: "Dry Desiccation & Mandi Aggregation",
+            status: "upcoming",
+            desc: "Harvest when foliage turns brownish-straw and grains rattle freely inside dry pods. Thresh at optimum drum speed to prevent seed coat splitting.",
+            actionLink: "/buyer-marketplace",
+            actionText: "🏢 Connect with Dal Millers"
+          }
+        ]
+      },
+      "Potato": {
+        variety: "Kufri Jyoti (Certified Tubers)",
+        cycle: "95-Day Cycle",
+        currentStage: "Day 22 — First Earthing-Up & Urea Placement",
+        stages: [
+          {
+            days: "DAY 0 • TUBER CURING & DEEP BED PREPARATION",
+            title: "Cold Store Sprouting & Heavy Basal DAP/MOP Application",
+            status: "completed",
+            desc: "Take certified tubers out of cold storage 10 days early to develop sturdy green sprouts. Apply Basal DAP (10 bags) and MOP (10 bags) across 5 acres. Form loose ridges.",
+            badges: ["✓ Completed", "Heavy Basal Placed"]
+          },
+          {
+            days: "DAY 1 – 5 • SEED TUBER PLANTING & RIDGING",
+            title: "Semi-Automatic Potato Planter Placement",
+            status: "completed",
+            desc: "Plant treated cut/whole seed tubers (40-50g size) at 20 cm intra-row distance on 60 cm ridge crests. Give immediate light furrow irrigation to settle soil.",
+            badges: ["✓ Completed", "Planted @ 12 q/acre"]
+          },
+          {
+            days: "DAY 20 – 25 • CURRENT STAGE: FIRST EARTHING-UP",
+            title: "Urea Top Dressing & Inter-Row Soil Mounding",
+            status: "current",
+            desc: "Top dress Neem Coated Urea (7 bags across 5 acres = 1.4 bag/acre). Mound soil high around stems (Earthing-up) using tractor ridger to ensure stolons are completely buried and tubers do not turn green from sunlight.",
+            actionLink: "/fertilizer-market",
+            actionText: "🛒 Order Top-Dressing Urea",
+            secondaryLink: "/weather",
+            secondaryText: "⛅ Check Frost & Rain"
+          },
+          {
+            days: "DAY 40 – 50 • TUBER INITIATION & LATE BLIGHT PREVENTATIVE",
+            title: "Stolon Bulking & Prophylactic Mancozeb Spray",
+            status: "upcoming",
+            desc: "High humidity and foggy nights trigger deadly Late Blight (Phytophthora). Spray Mancozeb 75% WP @ 800g/acre preventatively every 10 days. Maintain regular furrow irrigation."
+          },
+          {
+            days: "DAY 65 – 75 • MAXIMUM TUBER BULKING & DE-HAULMING",
+            title: "Stolon Cutting / Haulm Killing for Skin Hardening",
+            status: "upcoming",
+            desc: "Cut vegetative foliage (De-haulming) with tractor flail mower 12-14 days prior to harvest. This forces tuber skins to harden so they do not peel during digging and transport."
+          },
+          {
+            days: "DAY 90 – 95 • MECHANICAL DIGGING & COLD STORE CURING",
+            title: "Tractor Potato Digger Harvesting & Grading",
+            status: "upcoming",
+            desc: "Harvest in dry soil with tractor potato digger. Cure tubers in heaps under straw for 5-7 days before grading into Seed, Large, and Ration sizes for cold store deposit.",
+            actionLink: "/transport-marketplace",
+            actionText: "🚛 Book Cold Store Truck"
+          }
+        ]
+      }
+    };
+
+    function getSelectedCrop() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlCrop = urlParams.get('crop');
+      if (urlCrop && CULTIVATION_TIMELINES[urlCrop]) return urlCrop;
+      if (window.AgriState && AgriState.selectedCrop && CULTIVATION_TIMELINES[AgriState.selectedCrop]) {
+        return AgriState.selectedCrop;
+      }
+      const stored = localStorage.getItem('agriwise_selected_crop');
+      if (stored && CULTIVATION_TIMELINES[stored]) return stored;
+      return 'Maize';
+    }
+
+    function renderTimeline(cropName) {
+      const plan = CULTIVATION_TIMELINES[cropName] || CULTIVATION_TIMELINES['Maize'];
+
+      // Check if custom variety selected in localStorage or URL
+      const urlSeed = new URLSearchParams(window.location.search).get('seed');
+      const selectedSeed = urlSeed || localStorage.getItem('agriwise_selected_seed') || plan.variety;
+
+      document.getElementById('planSubtitle').innerText = `Chronological agronomic roadmap for ${selectedSeed} on your 5-Acre Farm.`;
+      document.getElementById('cycleDaysBadge').innerText = plan.cycle;
+      document.getElementById('planHeaderTitle').innerText = `${selectedSeed} (${plan.cycle})`;
+      document.getElementById('currentStageDesc').innerHTML = `Current Stage: <strong>${plan.currentStage}</strong>`;
+
+      const container = document.getElementById('timelineContainer');
+      container.innerHTML = '';
+
+      plan.stages.forEach(stage => {
+        const item = document.createElement('div');
+        item.className = `timeline-item ${stage.status === 'completed' ? 'completed' : ''}`;
+
+        let innerContent = '';
+        if (stage.status === 'current') {
+          innerContent = `
+            <div class="timeline-marker" style="background: var(--accent-amber); border-color: #b45309;"></div>
+            <div class="timeline-content" style="border: 2px solid var(--accent-amber); background: #fffbeb;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                <div class="timeline-day" style="color: #b45309;">${stage.days}</div>
+                <span class="badge badge-amber">Action Required This Week</span>
+              </div>
+              <div class="timeline-title">${stage.title}</div>
+              <p style="font-size: 0.9rem; color: #78350f;">${stage.desc}</p>
+              <div style="margin-top: 0.75rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                ${stage.actionLink ? `<a href="${stage.actionLink}" class="btn btn-amber btn-sm">${stage.actionText}</a>` : ''}
+                ${stage.secondaryLink ? `<a href="${stage.secondaryLink}" class="btn btn-secondary btn-sm">${stage.secondaryText}</a>` : ''}
+              </div>
+            </div>
+          `;
+        } else if (stage.status === 'completed') {
+          innerContent = `
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-day">${stage.days}</div>
+              <div class="timeline-title">${stage.title}</div>
+              <p style="font-size: 0.9rem; color: #334155;">${stage.desc}</p>
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                ${(stage.badges || []).map(b => `<span class="badge ${b.includes('✓') ? 'badge-emerald' : 'badge-gray'}">${b}</span>`).join('')}
+              </div>
+            </div>
+          `;
+        } else {
+          innerContent = `
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-day">${stage.days}</div>
+              <div class="timeline-title">${stage.title}</div>
+              <p style="font-size: 0.9rem; color: #334155;">${stage.desc}</p>
+              ${stage.actionLink ? `
+                <div style="margin-top: 0.75rem;">
+                  <a href="${stage.actionLink}" class="btn btn-secondary btn-sm">${stage.actionText}</a>
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }
+
+        item.innerHTML = innerContent;
+        container.appendChild(item);
+      });
+    }
+
+    function onCropSelectionChange(newCrop) {
+      if (window.AgriState) {
+        AgriState.setCrop(newCrop);
+      }
+      localStorage.setItem('agriwise_selected_crop', newCrop);
+
+      // Reset selected seed to the default variety of the new crop
+      const defaultVariety = CULTIVATION_TIMELINES[newCrop] ? CULTIVATION_TIMELINES[newCrop].variety : 'Certified Hybrid';
+      localStorage.setItem('agriwise_selected_seed', defaultVariety);
+
+      const url = new URL(window.location);
+      url.searchParams.set('crop', newCrop);
+      url.searchParams.delete('seed');
+      window.history.replaceState({}, '', url);
+
+      renderTimeline(newCrop);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const initialCrop = getSelectedCrop();
+      const select = document.getElementById('cropSelectDropdown');
+      if (select) {
+        select.value = initialCrop;
+      }
+      renderTimeline(initialCrop);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🧪 Scientific Fertilizer & Nutrient Dosage Plan — AGRIWISE AI</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/marketplace.css">
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <!-- Title Section -->
+      <div class="page-title-bar">
+        <div class="page-title-left">
+          <h1>🧪 Scientific Fertilizer & Nutrient Dosage Plan</h1>
+          <p id="fertSubtitle">ICAR soil-test calibrated nutrient requirements for your farm acreage.</p>
+        </div>
+        <div class="page-title-actions">
+          <a href="/fertilizer-market" class="btn btn-amber btn-sm">🛒 Open Fertilizer Market</a>
+          <a href="/market-intelligence" class="btn btn-primary btn-sm">Next: Market Intelligence ➔</a>
+        </div>
+      </div>
+
+      <!-- Commodity & Acreage Selector Bar -->
+      <div class="card" style="margin-bottom: 2rem; background: #064e3b; color: #fff;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.25rem;">
+          <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <div style="font-weight: 700; font-size: 1.05rem; color: #34d399;">Selected Crop:</div>
+            <select id="fertCropSelect" class="form-control" style="width: 230px; background: #042f24; color: #fff; border-color: #059669; font-weight: 700;" onchange="onCropChange(this.value)">
+              <option value="Maize">🌽 Maize (Corn)</option>
+              <option value="Wheat">🌾 Wheat (Gehu)</option>
+              <option value="Mustard">🌼 Mustard (Sarson)</option>
+              <option value="Soybean">🌱 Soybean (Pili Soy)</option>
+              <option value="Basmati Rice">🍚 Basmati Rice</option>
+              <option value="Chickpea">🧆 Chickpea (Chana)</option>
+              <option value="Potato">🥔 Potato (Aloo)</option>
+            </select>
+
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-left: 0.5rem;">
+              <span style="font-size: 0.9rem; color: #cbd5e1; font-weight: 600;">Farm Size:</span>
+              <input type="number" id="farmAcreInput" value="5" min="1" max="100" class="form-control" style="width: 80px; background: #042f24; color: #fff; border-color: #059669; font-weight: 700; text-align: center;" onchange="onAcreageChange(this.value)">
+              <span style="font-size: 0.9rem; color: #34d399; font-weight: 700;">Acres</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; align-items: center;">
+            <button class="btn btn-sm btn-amber" onclick="addAllRecommendedToCart()">
+              <span>🛒 Add All Prescribed to Cart</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Soil Health Calibration Bar -->
+      <div class="card" style="margin-bottom: 2rem; background: #f0fdf4; border: 1px solid var(--primary-200);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <span class="badge badge-emerald">Calibrated with Soil Health Card</span>
+            <h3 style="font-size: 1.25rem; color: var(--primary-900); margin-top: 4px;" id="soilCardHeadline">Sahnewal Farm Soil Baseline Calibration</h3>
+            <div style="font-size: 0.84rem; color: var(--text-muted);" id="soilStatsDesc">
+              Soil pH: <strong>6.8</strong> • Available N: <strong>260 kg/ha (Medium)</strong> • P: <strong>22.5 kg/ha (Good)</strong> • K: <strong>280 kg/ha (High)</strong>
+            </div>
+          </div>
+          <a href="/farm-analysis" class="btn btn-outline-emerald btn-sm">Update Soil Values</a>
+        </div>
+      </div>
+
+      <!-- Nutrient Requirement Metric Cards (N-P-K per Acre) -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;" id="nutrientCardsGrid">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Commercial Product Prescription Table -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="icon">📦</span>
+            <span id="prescriptionTableTitle">Commercial Fertilizer Prescription & Application Schedule</span>
+          </div>
+          <span class="badge badge-emerald">Govt Subsidized MRP Rates</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table" id="prescriptionTable">
+            <!-- Rendered by JS -->
+          </table>
+        </div>
+      </div>
+
+      <!-- Critical Agronomic Safety Disclaimer -->
+      <div class="safety-notice-box" id="safetyNoticeBox">
+        <div class="notice-title">
+          <span>⚠️ Mandatory Agronomic Chemical Safety & Mixing Rule:</span>
+        </div>
+        <p id="safetyNoticeContent">
+          • <strong>NEVER MIX ZINC SULFATE WITH DAP OR PHOSPHATES:</strong> Chemical reaction will form insoluble zinc phosphate precipitation, locking up both zinc and phosphorus nutrients.<br>
+          • <strong>PRE-RAIN WARNING:</strong> Do not broadcast urea if heavy rain (>15mm) is forecast within 48 hours to avoid severe nitrate run-off into local waterways.<br>
+          • <strong>REGULATORY NOTICE:</strong> Recommendations are calculated as advisory agronomic guidance based on ICAR fertilizer response curves. Product labels, official university package of practices, and certified soil testing laboratories take precedence over AI models.
+        </p>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem;">
+        <a href="/cultivation-plan" class="btn btn-secondary btn-md">
+          <span>⬅ Back to Cultivation Timeline</span>
+        </a>
+        <div style="display: flex; gap: 0.75rem;">
+          <button class="btn btn-amber btn-lg" onclick="addAllRecommendedToCart()">
+            <span>🛒 Add All Prescribed to Cart</span>
+          </button>
+          <a href="/fertilizer-market" class="btn btn-primary btn-lg">
+            <span>Find Nearby Input Dealers ➔</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/cart.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script>
+    const CROP_NUTRIENT_PLANS = {
+      "Maize": {
+        varietyLabel: "Pioneer Hybrid Maize",
+        n_acre: 50.0,
+        p_acre: 24.0,
+        k_acre: 18.0,
+        micro_label: "ZINC (ZnSO4)",
+        micro_acre: 5.0,
+        safetyNotes: "• <strong>NEVER MIX ZINC SULFATE WITH DAP:</strong> Precipitates into insoluble zinc phosphate. Apply zinc basal or 15 days apart.<br>• <strong>SPLIT NITROGEN:</strong> 33% Basal, 33% V4 stage, 33% Tasseling stage to avoid vegetative burning.<br>• <strong>MOISTURE CHECK:</strong> Top-dress urea only in moist soil; avoid applying directly before torrential rain.",
+        products: [
+          {
+            id: "fert-dap",
+            name: "DAP (Di-Ammonium Phosphate 18:46:0)",
+            packSize: "50 kg bag",
+            bagsPerAcre: 1.0,
+            ratePerBag: 1350,
+            stage: "Basal at Sowing",
+            placement: "Drill 3-5 cm below seed row",
+            image: "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-urea",
+            name: "Neem Coated Urea (46% N)",
+            packSize: "45 kg bag",
+            bagsPerAcre: 2.0,
+            ratePerBag: 266.5,
+            stage: "Split Top Dressings (V4 & Knee-high)",
+            placement: "Broadcast in moist soil",
+            image: "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-potash",
+            name: "MOP (Muriate of Potash 0:0:60)",
+            packSize: "50 kg bag",
+            bagsPerAcre: 0.6,
+            ratePerBag: 1650,
+            stage: "Basal Land Prep",
+            placement: "Incorporate during final harrowing",
+            image: "https://images.unsplash.com/photo-1589923188900-85dae523342b?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-zinc",
+            name: "Zinc Sulfate Heptahydrate (21% Zn)",
+            packSize: "10 kg bag",
+            bagsPerAcre: 0.5,
+            ratePerBag: 450,
+            stage: "Basal Soil Application",
+            placement: "Broadcast separately from DAP",
+            image: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=600&auto=format&fit=crop&q=80"
+          }
+        ]
+      },
+      "Wheat": {
+        varietyLabel: "HD-2967 Certified Wheat",
+        n_acre: 55.0,
+        p_acre: 25.0,
+        k_acre: 15.0,
+        micro_label: "ZINC (ZnSO4)",
+        micro_acre: 4.0,
+        safetyNotes: "• <strong>CRI STAGE APPLICATION:</strong> First urea split must accompany first irrigation at 21 days (Crown Root Initiation). Delay will forfeit tillering.<br>• <strong>AVOID EXCESS NITROGEN:</strong> Oversupplying urea induces stem weakness, leading to devastating field lodging during late spring hailstorms.<br>• <strong>PHOSPHATE DRILLING:</strong> Place DAP with Happy Seeder drill at depth for vigorous winter root spread.",
+        products: [
+          {
+            id: "fert-dap",
+            name: "DAP (Di-Ammonium Phosphate 18:46:0)",
+            packSize: "50 kg bag",
+            bagsPerAcre: 1.2,
+            ratePerBag: 1350,
+            stage: "Basal with Seed Drill",
+            placement: "Band placement 5 cm below seed",
+            image: "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-urea",
+            name: "Neem Coated Urea (46% N)",
+            packSize: "45 kg bag",
+            bagsPerAcre: 2.2,
+            ratePerBag: 266.5,
+            stage: "2 Equal Splits (CRI & Jointing)",
+            placement: "Broadcast immediately before or after irrigation",
+            image: "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-potash",
+            name: "MOP (Muriate of Potash 0:0:60)",
+            packSize: "50 kg bag",
+            bagsPerAcre: 0.5,
+            ratePerBag: 1650,
+            stage: "Basal Sowing",
+            placement: "Broadcast and mix in topsoil",
+            image: "https://images.unsplash.com/photo-1589923188900-85dae523342b?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-zinc",
+            name: "Zinc Sulfate Heptahydrate (21% Zn)",
+            packSize: "10 kg bag",
+            bagsPerAcre: 0.4,
+            ratePerBag: 450,
+            stage: "Basal Sowing",
+            placement: "Broadcast separately in moist soil",
+            image: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=600&auto=format&fit=crop&q=80"
+          }
+        ]
+      },
+      "Mustard": {
+        varietyLabel: "Pusa Bold High-Oil Mustard",
+        n_acre: 35.0,
+        p_acre: 18.0,
+        k_acre: 10.0,
+        micro_label: "SULFUR (Bentonite)",
+        micro_acre: 15.0,
+        safetyNotes: "• <strong>SULFUR IS CRITICAL:</strong> Mustard synthesizes pungent glucosinolates and oil using sulfur. SSP or bentonite sulfur directly boosts oil percentage by 2-3%.<br>• <strong>SPLIT NITROGEN:</strong> 50% Basal at sowing, 50% after first irrigation at 30 days.<br>• <strong>NO OVER-FERTILIZATION:</strong> High nitrogen makes mustard succulent and highly susceptible to devastating aphid (Mahu) attacks.",
+        products: [
+          {
+            id: "fert-ssp",
+            name: "SSP (Single Super Phosphate 16% P + 11% S)",
+            packSize: "50 kg bag",
+            bagsPerAcre: 2.4,
+            ratePerBag: 450,
+            stage: "Basal Land Prep",
+            placement: "Broadcast and incorporate during final tillage",
+            image: "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-urea",
+            name: "Neem Coated Urea (46% N)",
+            packSize: "45 kg bag",
+            bagsPerAcre: 1.4,
+            ratePerBag: 266.5,
+            stage: "Split (50% Basal, 50% Branching)",
+            placement: "Broadcast in moist soil",
+            image: "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-potash",
+            name: "MOP (Muriate of Potash 0:0:60)",
+            packSize: "50 kg bag",
+            bagsPerAcre: 0.4,
+            ratePerBag: 1650,
+            stage: "Basal Sowing",
+            placement: "Incorporate into top 10 cm soil",
+            image: "https://images.unsplash.com/photo-1589923188900-85dae523342b?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-sulfur",
+            name: "Agricultural Bentonite Sulfur (90% S)",
+            packSize: "25 kg bag",
+            bagsPerAcre: 0.4,
+            ratePerBag: 600,
+            stage: "Basal Soil Incorporation",
+            placement: "Broadcast along with SSP",
+            image: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=600&auto=format&fit=crop&q=80"
+          }
+        ]
+      },
+      "Soybean": {
+        varietyLabel: "JS 335 Certified Soybean",
+        n_acre: 15.0,
+        p_acre: 32.0,
+        k_acre: 16.0,
+        micro_label: "RHIZOBIUM BIO-FERTILIZER",
+        micro_acre: 1.0,
+        safetyNotes: "• <strong>BIOLOGICAL NITROGEN FIXATION:</strong> Soybean fixes 80% of its nitrogen from air via Bradyrhizobium root nodules. Heavy urea application stops nodulation! Use only starter N.<br>• <strong>PHOSPHATE FOR ROOT NODULES:</strong> High phosphorus (DAP) is essential for energy transfer (ATP) during bacterial nitrogen synthesis.<br>• <strong>INOCULANT ADVISORY:</strong> Inoculate seed in shade with Rhizobium + PSB 2 hours before sowing.",
+        products: [
+          {
+            id: "fert-dap",
+            name: "DAP (Di-Ammonium Phosphate 18:46:0)",
+            packSize: "50 kg bag",
+            bagsPerAcre: 1.4,
+            ratePerBag: 1350,
+            stage: "Basal with Seed Drill",
+            placement: "Side-band 5 cm away from seed furrow",
+            image: "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-urea",
+            name: "Neem Coated Urea (Starter Dose Only)",
+            packSize: "45 kg bag",
+            bagsPerAcre: 0.4,
+            ratePerBag: 266.5,
+            stage: "Basal Starter Only",
+            placement: "Broadcast at sowing; do NOT top dress",
+            image: "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-potash",
+            name: "MOP (Muriate of Potash 0:0:60)",
+            packSize: "50 kg bag",
+            bagsPerAcre: 0.5,
+            ratePerBag: 1650,
+            stage: "Basal Land Prep",
+            placement: "Incorporate into seedbed",
+            image: "https://images.unsplash.com/photo-1589923188900-85dae523342b?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-rhizobium",
+            name: "Bradyrhizobium + PSB Bio-Culture",
+            packSize: "500 ml bottle",
+            bagsPerAcre: 1.0,
+            ratePerBag: 300,
+            stage: "Seed Inoculation",
+            placement: "Slurry coat on certified seed before drilling",
+            image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600&auto=format&fit=crop&q=80"
+          }
+        ]
+      },
+      "Basmati Rice": {
+        varietyLabel: "Pusa Basmati 1121 Extra Long",
+        n_acre: 45.0,
+        p_acre: 20.0,
+        k_acre: 20.0,
+        micro_label: "ZINC SULFATE (21%)",
+        micro_acre: 10.0,
+        safetyNotes: "• <strong>KHAIRE DISEASE PREVENTION:</strong> Calcareous subsoils trigger severe zinc deficiency (Khaira disease). Zinc application at tillering is essential.<br>• <strong>SPLIT NITROGEN INTO 3 PASSES:</strong> 1/3 at final puddling, 1/3 at active tillering (21 days), 1/3 at panicle initiation (45 days).<br>• <strong>NEVER APPLY DAP IN STANDING WATER:</strong> Incorporate into dry soil before puddling to minimize phosphorus adsorption.",
+        products: [
+          {
+            id: "fert-dap",
+            name: "DAP (Di-Ammonium Phosphate 18:46:0)",
+            packSize: "50 kg bag",
+            bagsPerAcre: 1.0,
+            ratePerBag: 1350,
+            stage: "Basal at Final Puddling",
+            placement: "Broadcast and puddle into soil matrix",
+            image: "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-urea",
+            name: "Neem Coated Urea (46% N)",
+            packSize: "45 kg bag",
+            bagsPerAcre: 1.8,
+            ratePerBag: 266.5,
+            stage: "3 Splits (Basal, Tillering, Panicle)",
+            placement: "Broadcast in saturated soil (drain excess water first)",
+            image: "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-potash",
+            name: "MOP (Muriate of Potash 0:0:60)",
+            packSize: "50 kg bag",
+            bagsPerAcre: 0.7,
+            ratePerBag: 1650,
+            stage: "Basal + Panicle Initiation",
+            placement: "Apply with Urea split for grain elongation",
+            image: "https://images.unsplash.com/photo-1589923188900-85dae523342b?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-zinc",
+            name: "Zinc Sulfate Heptahydrate (21% Zn)",
+            packSize: "10 kg bag",
+            bagsPerAcre: 1.0,
+            ratePerBag: 450,
+            stage: "Active Tillering (25-30 DAT)",
+            placement: "Broadcast mixed with dry sand",
+            image: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=600&auto=format&fit=crop&q=80"
+          }
+        ]
+      },
+      "Chickpea": {
+        varietyLabel: "JG 11 Desi Chickpea",
+        n_acre: 10.0,
+        p_acre: 24.0,
+        k_acre: 12.0,
+        micro_label: "MESORHIZOBIUM CULTURE",
+        micro_acre: 1.0,
+        safetyNotes: "• <strong>PULSE NITROGEN REGULATION:</strong> High nitrogen causes excessive vegetative shading and flower drop without pod formation. Provide only starter N.<br>• <strong>PHOSPHATE SOLUBILIZATION:</strong> Deep-root chickpea extracts insoluble phosphates efficiently when combined with PSB inoculant.<br>• <strong>AVOID SALINE FERTILIZERS:</strong> Keep MOP below 20 kg/acre to prevent salt toxicity around delicate root zones.",
+        products: [
+          {
+            id: "fert-dap",
+            name: "DAP (Di-Ammonium Phosphate 18:46:0)",
+            packSize: "50 kg bag",
+            bagsPerAcre: 0.8,
+            ratePerBag: 1350,
+            stage: "Basal at Sowing",
+            placement: "Drill 7 cm deep below seed level",
+            image: "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-urea",
+            name: "Neem Coated Urea (Starter Dose)",
+            packSize: "45 kg bag",
+            bagsPerAcre: 0.3,
+            ratePerBag: 266.5,
+            stage: "Basal Starter Only",
+            placement: "Broadcast and mix in seedbed",
+            image: "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-potash",
+            name: "MOP (Muriate of Potash 0:0:60)",
+            packSize: "50 kg bag",
+            bagsPerAcre: 0.4,
+            ratePerBag: 1650,
+            stage: "Basal Land Prep",
+            placement: "Incorporate during final ploughing",
+            image: "https://images.unsplash.com/photo-1589923188900-85dae523342b?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-mesorhizobium",
+            name: "Mesorhizobium ciceri Bio-Inoculant",
+            packSize: "500 ml bottle",
+            bagsPerAcre: 1.0,
+            ratePerBag: 300,
+            stage: "Seed Treatment",
+            placement: "Coat seeds before sowing for root nodules",
+            image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600&auto=format&fit=crop&q=80"
+          }
+        ]
+      },
+      "Potato": {
+        varietyLabel: "Kufri Jyoti High-Feeder Tuber",
+        n_acre: 75.0,
+        p_acre: 45.0,
+        k_acre: 60.0,
+        micro_label: "MULTI-MICRONUTRIENT MIX",
+        micro_acre: 10.0,
+        safetyNotes: "• <strong>POTASSIUM FOR TUBER BULKING:</strong> Potato is an exceptionally heavy potassium consumer. Potash controls starch conversion and protects against storage weight loss.<br>• <strong>EARTHING-UP UREA:</strong> Second nitrogen split must be applied right before earthing-up so soil immediately covers the fertilizer.<br>• <strong>CHLORIDE CAUTION:</strong> High MOP can lower specific gravity of chip potatoes; use Sulfate of Potash (SOP) for crisping varieties.",
+        products: [
+          {
+            id: "fert-dap",
+            name: "DAP (Di-Ammonium Phosphate 18:46:0)",
+            packSize: "50 kg bag",
+            bagsPerAcre: 2.0,
+            ratePerBag: 1350,
+            stage: "Basal Furrow Application",
+            placement: "Band 5 cm below seed tuber level",
+            image: "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-urea",
+            name: "Neem Coated Urea (46% N)",
+            packSize: "45 kg bag",
+            bagsPerAcre: 2.8,
+            ratePerBag: 266.5,
+            stage: "Split (50% Basal, 50% Earthing-up)",
+            placement: "Mound soil over top-dressed urea immediately",
+            image: "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-potash",
+            name: "MOP / SOP (Potassium Fertilizer)",
+            packSize: "50 kg bag",
+            bagsPerAcre: 2.0,
+            ratePerBag: 1650,
+            stage: "Basal Land Prep",
+            placement: "Incorporate into ridge soil profile",
+            image: "https://images.unsplash.com/photo-1589923188900-85dae523342b?w=600&auto=format&fit=crop&q=80"
+          },
+          {
+            id: "fert-micronutrient",
+            name: "Soluble Micronutrient Complex (Zn+B+Fe+Mn)",
+            packSize: "10 kg bag",
+            bagsPerAcre: 0.8,
+            ratePerBag: 600,
+            stage: "Stolon Initiation (35 DAP)",
+            placement: "Foliar or furrow application",
+            image: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=600&auto=format&fit=crop&q=80"
+          }
+        ]
+      }
+    };
+
+    let currentCrop = "Maize";
+    let currentAcres = 5;
+
+    function getSelectedCrop() {
+      const urlCrop = new URLSearchParams(window.location.search).get('crop');
+      if (urlCrop && CROP_NUTRIENT_PLANS[urlCrop]) return urlCrop;
+      if (window.AgriState && AgriState.selectedCrop && CROP_NUTRIENT_PLANS[AgriState.selectedCrop]) {
+        return AgriState.selectedCrop;
+      }
+      const stored = localStorage.getItem('agriwise_selected_crop');
+      if (stored && CROP_NUTRIENT_PLANS[stored]) return stored;
+      return "Maize";
+    }
+
+    function renderFertilizerPlan(cropName, acres) {
+      currentCrop = cropName;
+      currentAcres = acres;
+      const plan = CROP_NUTRIENT_PLANS[cropName] || CROP_NUTRIENT_PLANS["Maize"];
+
+      // Update Subtitles & Headlines
+      document.getElementById('fertSubtitle').innerText = `ICAR soil-test calibrated nutrient requirements for ${acres} Acres of ${plan.varietyLabel}.`;
+      document.getElementById('soilCardHeadline').innerText = `${plan.varietyLabel} — Soil Health Calibration`;
+      document.getElementById('prescriptionTableTitle').innerText = `Commercial Fertilizer Prescription for ${acres} Acres (${plan.varietyLabel})`;
+
+      // Render Nutrient Cards
+      const nTotal = (plan.n_acre * acres).toFixed(1);
+      const pTotal = (plan.p_acre * acres).toFixed(1);
+      const kTotal = (plan.k_acre * acres).toFixed(1);
+      const microTotal = (plan.micro_acre * acres).toFixed(1);
+
+      document.getElementById('nutrientCardsGrid').innerHTML = `
+        <div class="card" style="border-top: 4px solid var(--primary-600);">
+          <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">TOTAL NITROGEN (N)</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: var(--primary-800); margin: 4px 0;">${plan.n_acre} kg / acre</div>
+          <div style="font-size: 0.82rem; color: var(--text-muted);">Farm Total (${acres} Acres): <strong>${nTotal} kg N</strong></div>
+        </div>
+
+        <div class="card" style="border-top: 4px solid var(--accent-amber);">
+          <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">PHOSPHORUS (P2O5)</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #b45309; margin: 4px 0;">${plan.p_acre} kg / acre</div>
+          <div style="font-size: 0.82rem; color: var(--text-muted);">Farm Total (${acres} Acres): <strong>${pTotal} kg P2O5</strong></div>
+        </div>
+
+        <div class="card" style="border-top: 4px solid var(--accent-sky);">
+          <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">POTASSIUM (K2O)</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #0284c7; margin: 4px 0;">${plan.k_acre} kg / acre</div>
+          <div style="font-size: 0.82rem; color: var(--text-muted);">Farm Total (${acres} Acres): <strong>${kTotal} kg K2O</strong></div>
+        </div>
+
+        <div class="card" style="border-top: 4px solid #10b981;">
+          <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">${plan.micro_label}</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #059669; margin: 4px 0;">${plan.micro_acre} kg / acre</div>
+          <div style="font-size: 0.82rem; color: var(--text-muted);">Farm Total (${acres} Acres): <strong>${microTotal} kg</strong></div>
+        </div>
+      `;
+
+      // Render Prescription Table
+      let totalCost = 0;
+      let tableRows = '';
+
+      plan.products.forEach(p => {
+        const totalBags = Math.ceil(p.bagsPerAcre * acres);
+        const itemCost = totalBags * p.ratePerBag;
+        totalCost += itemCost;
+
+        tableRows += `
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <img src="${p.image}" alt="${p.name}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-light);" onerror="this.src='https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&auto=format&fit=crop&q=80'">
+                <div>
+                  <strong>${p.name}</strong>
+                  <div style="font-size: 0.8rem; color: var(--text-muted);">${p.packSize}</div>
+                </div>
+              </div>
+            </td>
+            <td><strong>${p.packSize}</strong></td>
+            <td>
+              <strong style="color: var(--primary-700); font-size: 1.05rem;">${totalBags} Bags</strong>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">(${p.bagsPerAcre} bag/acre)</div>
+            </td>
+            <td><span style="font-size: 0.84rem;">${p.stage}</span></td>
+            <td><span style="font-size: 0.84rem; color: #475569;">${p.placement}</span></td>
+            <td>
+              <div style="font-weight: 700; color: var(--text-main); font-size: 1rem;">₹${itemCost.toLocaleString('en-IN')}</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">₹${p.ratePerBag}/bag</div>
+            </td>
+            <td>
+              <button class="btn btn-outline-emerald btn-sm" onclick="addSinglePrescriptionToCart('${p.id}', '${p.name.replace(/'/g, "\\'")}', ${p.ratePerBag}, '${p.packSize}', ${totalBags}, '${p.image}')">
+                <span>🛒 Add ${totalBags} Bags</span>
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+
+      const formattedTotal = '₹' + totalCost.toLocaleString('en-IN');
+
+      document.getElementById('prescriptionTable').innerHTML = `
+        <thead>
+          <tr>
+            <th>Commercial Fertilizer</th>
+            <th>Pack Size</th>
+            <th>Prescribed Quantity</th>
+            <th>Application Timing</th>
+            <th>Placement Method</th>
+            <th>Estimated Cost</th>
+            <th>Cart Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${tableRows}
+        </tbody>
+        <tfoot>
+          <tr style="background: #f8fafc; font-size: 1rem;">
+            <td colspan="5"><strong>Total Estimated Fertilizer Investment (${acres} Acres):</strong></td>
+            <td colspan="2"><strong style="color: var(--primary-900); font-size: 1.3rem;">${formattedTotal}</strong></td>
+          </tr>
+        </tfoot>
+      `;
+
+      // Render Safety Notes
+      document.getElementById('safetyNoticeContent').innerHTML = plan.safetyNotes;
+    }
+
+    function onCropChange(newCrop) {
+      if (window.AgriState) {
+        AgriState.setCrop(newCrop);
+      }
+      localStorage.setItem('agriwise_selected_crop', newCrop);
+
+      const url = new URL(window.location);
+      url.searchParams.set('crop', newCrop);
+      window.history.replaceState({}, '', url);
+
+      renderFertilizerPlan(newCrop, currentAcres);
+    }
+
+    function onAcreageChange(newAcres) {
+      const parsed = parseFloat(newAcres) || 5;
+      currentAcres = Math.max(1, parsed);
+      renderFertilizerPlan(currentCrop, currentAcres);
+    }
+
+    function addSinglePrescriptionToCart(id, name, rate, packSize, quantity, image) {
+      if (window.AgriCart) {
+        AgriCart.addItem({
+          id: id,
+          name: name,
+          category: 'Fertilizers',
+          price: rate,
+          unit: packSize,
+          image: image,
+          dealer: 'IFFCO / KRIBHCO Authorized Depot'
+        }, quantity);
+      } else {
+        alert(`Added ${quantity} bags of ${name} to cart!`);
+      }
+    }
+
+    function addAllRecommendedToCart() {
+      const plan = CROP_NUTRIENT_PLANS[currentCrop] || CROP_NUTRIENT_PLANS["Maize"];
+      if (window.AgriCart) {
+        plan.products.forEach(p => {
+          const totalBags = Math.ceil(p.bagsPerAcre * currentAcres);
+          AgriCart.addItem({
+            id: p.id,
+            name: p.name,
+            category: 'Fertilizers',
+            price: p.ratePerBag,
+            unit: p.packSize,
+            image: p.image,
+            dealer: 'IFFCO / KRIBHCO Authorized Depot'
+          }, totalBags);
+        });
+        AgriCart.openDrawer();
+      } else {
+        alert(`All recommended fertilizers added to cart!`);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const initialCrop = getSelectedCrop();
+      const select = document.getElementById('fertCropSelect');
+      if (select) {
+        select.value = initialCrop;
+      }
+      renderFertilizerPlan(initialCrop, currentAcres);
+    });
+  </script>
+</body>
+</html>

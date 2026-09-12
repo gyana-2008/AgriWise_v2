@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📝 Create Account & Register Farm — AGRIWISE AI</title>
+  <meta name="description" content="Register your farm or agribusiness on AGRIWISE AI. Free precision agronomy, certified seed recommendations, and direct market linkage.">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <style>
+    .step-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    .step-indicator::before {
+      content: '';
+      position: absolute;
+      top: 18px;
+      left: 30px;
+      right: 30px;
+      height: 2px;
+      background: var(--border-light);
+      z-index: 1;
+    }
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      position: relative;
+      z-index: 2;
+      background: #ffffff;
+      padding: 0 0.5rem;
+    }
+    .step-circle {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-full);
+      background: #f1f5f9;
+      border: 2px solid var(--border-light);
+      color: var(--text-muted);
+      font-weight: 800;
+      font-size: 0.92rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+    .step-item.active .step-circle {
+      background: var(--primary-600);
+      border-color: var(--primary-700);
+      color: #ffffff;
+      box-shadow: 0 0 0 4px var(--primary-100);
+    }
+    .step-item.completed .step-circle {
+      background: #047857;
+      border-color: #047857;
+      color: #ffffff;
+    }
+    .step-label {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .step-item.active .step-label {
+      color: var(--primary-900);
+    }
+    .role-grid-select {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .role-card-opt {
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 0.6rem;
+      text-align: center;
+      cursor: pointer;
+      background: #f8fafc;
+      transition: all 0.2s;
+    }
+    .role-card-opt:hover {
+      border-color: var(--primary-300);
+      background: var(--primary-50);
+    }
+    .role-card-opt.selected {
+      border-color: var(--primary-600);
+      background: #f0fdf4;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.15);
+    }
+    .role-card-icon {
+      font-size: 1.6rem;
+      margin-bottom: 0.3rem;
+    }
+    .role-card-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    @media (max-width: 768px) {
+      .role-grid-select {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body style="background: radial-gradient(circle at 50% 10%, #ecfdf5 0%, #f8fafc 90%); min-height: 100vh;">
+
+  <!-- Minimalist Top Header -->
+  <header style="padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(0,0,0,0.05); background: #ffffff;">
+    <a href="/" style="display: flex; align-items: center; gap: 0.6rem; text-decoration: none; color: var(--primary-900); font-family: var(--font-heading); font-weight: 800; font-size: 1.4rem;">
+      <span style="font-size: 1.75rem;">🌾</span>
+      <span>AGRIWISE<span class="ai-tag">AI</span></span>
+    </a>
+    <div style="display: flex; align-items: center; gap: 1.25rem;">
+      <div style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; font-weight: 600; color: var(--primary-700); background: var(--primary-50); padding: 0.35rem 0.75rem; border-radius: var(--radius-full); border: 1px solid var(--primary-200);">
+        <span>🏛️</span>
+        <span>AgriStack & e-NAM Federated</span>
+      </div>
+      <select id="regLangSelect" class="lang-select" onchange="switchRegisterLanguage(this.value)" style="padding: 0.35rem 0.75rem; font-size: 0.82rem;">
+        <option value="en">English</option>
+        <option value="hi">हिंदी (Hindi)</option>
+        <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+        <option value="mr">मराठी (Marathi)</option>
+        <option value="te">తెలుగు (Telugu)</option>
+        <option value="ta">தமிழ் (Tamil)</option>
+        <option value="gu">ગુજરાતી (Gujarati)</option>
+        <option value="bn">বাংলা (Bengali)</option>
+        <option value="kn">ಕನ್ನಡ (Kannada)</option>
+      </select>
+      <a href="/login" style="font-size: 0.88rem; font-weight: 700; color: var(--primary-700); text-decoration: none;">🔐 Sign In</a>
+    </div>
+  </header>
+
+  <main style="padding: 1rem;">
+    <div class="auth-split-container" style="max-width: 1280px;">
+
+      <!-- LEFT SHOWCASE PANE: Onboarding Benefits -->
+      <div class="auth-showcase-pane">
+        <div>
+          <div class="auth-brand-badge">
+            <span>🚀 100% FREE FARM ONBOARDING</span>
+          </div>
+          <h1 class="auth-showcase-title" id="regShowcaseTitle">
+            Join India's Smartest Agricultural Network.
+          </h1>
+          <p class="auth-showcase-subtitle" id="regShowcaseSub">
+            Over 140 million Indian cultivators are modernizing with ICAR scientific agronomy, live mandi price benchmarks, and direct industrial buyer linkages.
+          </p>
+
+          <div class="auth-features-list">
+            <div class="auth-feature-item">
+              <div class="auth-feature-icon">🚜</div>
+              <div>
+                <div class="auth-feature-title">Instant Digital Farm Dossier</div>
+                <div class="auth-feature-desc">Map your acreage, soil texture, tube-well water quality, and crop calendar in under 2 minutes.</div>
+              </div>
+            </div>
+
+            <div class="auth-feature-item">
+              <div class="auth-feature-icon">🧪</div>
+              <div>
+                <div class="auth-feature-title">Precision N-P-K & Zinc Guidance</div>
+                <div class="auth-feature-desc">Save ₹3,500 to ₹7,000 per acre on unnecessary chemicals with ICAR-calibrated split dosing.</div>
+              </div>
+            </div>
+
+            <div class="auth-feature-item">
+              <div class="auth-feature-icon">📈</div>
+              <div>
+                <div class="auth-feature-title">Direct Procurement Contracts</div>
+                <div class="auth-feature-desc">Access wholesale grain buyers, millers, and verified transporters without middleman commission.</div>
+              </div>
+            </div>
+
+            <div class="auth-feature-item">
+              <div class="auth-feature-icon">📜</div>
+              <div>
+                <div class="auth-feature-title">Kisan Credit Card (KCC) Ready</div>
+                <div class="auth-feature-desc">Automated interest subvention calculations (3% Govt of India subsidy) and DBT compliance.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="auth-quote-box">
+            <div style="font-style: italic;">
+              "Registering our Sahnewal farm unlocked exact soil-water suitability scores and connected us directly to Khanna grain millers, earning ₹48,000 extra on our maize harvest."
+            </div>
+            <div class="auth-quote-author">
+              <span>👨‍🌾</span>
+              <span>Sardar Gurpreet Singh • Progressive Farmer, Ludhiana</span>
+            </div>
+          </div>
+
+          <div class="auth-trust-strip">
+            <span>🛡️ DPDP Act Compliant</span>
+            <span>•</span>
+            <span>🔐 256-Bit Encryption</span>
+            <span>•</span>
+            <span>🇮🇳 Digital Agriculture Mission</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT ONBOARDING FORM PANE -->
+      <div class="auth-form-pane" style="padding: 2.5rem 2.5rem;">
+        
+        <!-- Step Progress Indicator -->
+        <div class="step-indicator">
+          <div class="step-item active" id="stepIndicator1">
+            <div class="step-circle">1</div>
+            <div class="step-label" id="stepLabel1">Contact</div>
+          </div>
+          <div class="step-item" id="stepIndicator2">
+            <div class="step-circle">2</div>
+            <div class="step-label" id="stepLabel2">Profile</div>
+          </div>
+          <div class="step-item" id="stepIndicator3">
+            <div class="step-circle">3</div>
+            <div class="step-label" id="stepLabel3">Verify</div>
+          </div>
+        </div>
+
+        <!-- Alert Box -->
+        <div id="regAlert" class="auth-status-alert">
+          <span id="regAlertIcon">⚠️</span>
+          <span id="regAlertMsg">Please fill all required fields.</span>
+        </div>
+
+        <!-- Role Selector Grid -->
+        <div>
+          <label class="form-label" style="font-weight: 700;" id="lblSelectRole">Select Your Registration Role:</label>
+          <div class="role-grid-select">
+            <div class="role-card-opt selected" data-role="FARMER" onclick="chooseRegRole('FARMER')">
+              <div class="role-card-icon">👨‍🌾</div>
+              <div class="role-card-title">Farmer (किसान)</div>
+            </div>
+            <div class="role-card-opt" data-role="DEALER" onclick="chooseRegRole('DEALER')">
+              <div class="role-card-icon">🏪</div>
+              <div class="role-card-title">Input Dealer</div>
+            </div>
+            <div class="role-card-opt" data-role="TRANSPORTER" onclick="chooseRegRole('TRANSPORTER')">
+              <div class="role-card-icon">🚛</div>
+              <div class="role-card-title">Transporter</div>
+            </div>
+            <div class="role-card-opt" data-role="BUYER" onclick="chooseRegRole('BUYER')">
+              <div class="role-card-icon">🏢</div>
+              <div class="role-card-title">Grain Buyer</div>
+            </div>
+          </div>
+        </div>
+
+        <form id="multiStepRegForm" onsubmit="handleRegistrationSubmit(event)">
+          
+          <!-- ==========================================
+               STEP 1: PERSONAL & CONTACT CREDENTIALS
+               ========================================== -->
+          <div id="stepSection1">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" id="lblFullName">Full Name *</label>
+                <input type="text" id="regFullName" class="form-control" placeholder="e.g. Gurpreet Singh" value="Gurpreet Singh" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" id="lblRegMobile">Mobile Number *</label>
+                <div style="display: flex; gap: 0.4rem;">
+                  <div style="padding: 0.65rem 0.8rem; background: #f1f5f9; border: 1px solid var(--border-light); border-radius: var(--radius-md); font-weight: 700; font-size: 0.88rem;">
+                    🇮🇳 +91
+                  </div>
+                  <input type="tel" id="regPhone" class="form-control" placeholder="10-digit mobile number" value="9876543210" maxlength="10" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" id="lblRegEmail">Email Address (Optional)</label>
+              <input type="email" id="regEmail" class="form-control" placeholder="gurpreet.farmer@agriwise.ai" value="gurpreet.farmer@agriwise.ai">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" id="lblRegPassword">Create Password *</label>
+                <div class="password-field-wrapper">
+                  <input type="password" id="regPassword" class="form-control" placeholder="Minimum 6 characters" value="agriwise2026" required minlength="6">
+                  <button type="button" class="password-toggle-btn" onclick="togglePassView('regPassword', this)">👁️</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" id="lblRegConfirmPass">Confirm Password *</label>
+                <div class="password-field-wrapper">
+                  <input type="password" id="regConfirmPassword" class="form-control" placeholder="Re-enter password" value="agriwise2026" required minlength="6">
+                  <button type="button" class="password-toggle-btn" onclick="togglePassView('regConfirmPassword', this)">👁️</button>
+                </div>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary btn-full" onclick="goToStep(2)" style="margin-top: 1rem; padding: 0.85rem;">
+              <span>Continue to Profile Details ➔</span>
+            </button>
+          </div>
+
+          <!-- ==========================================
+               STEP 2: ROLE-SPECIFIC FARM / BUSINESS DETAILS
+               ========================================== -->
+          <div id="stepSection2" style="display: none;">
+            
+            <!-- Farmer Profile Inputs -->
+            <div id="farmerRoleFields">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">State / Province</label>
+                  <select id="farmState" class="form-control">
+                    <option value="Punjab" selected>Punjab</option>
+                    <option value="Haryana">Haryana</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="Gujarat">Gujarat</option>
+                    <option value="Karnataka">Karnataka</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">District</label>
+                  <input type="text" id="farmDistrict" class="form-control" value="Ludhiana" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Village / Tehsil</label>
+                  <input type="text" id="farmVillage" class="form-control" value="Sahnewal" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Cultivable Landholding (Acres)</label>
+                  <input type="number" id="farmSizeAcres" class="form-control" value="5.0" step="0.5" min="0.5" max="500" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Primary Irrigation Source</label>
+                  <select id="farmIrrigation" class="form-control">
+                    <option value="Subsurface Drip + Tube-well" selected>Subsurface Drip + Tube-well</option>
+                    <option value="Canal Distributary">Canal Distributary</option>
+                    <option value="Overhead Sprinkler System">Overhead Sprinkler System</option>
+                    <option value="Flood Furrow">Flood Furrow</option>
+                    <option value="Rainfed / Monsoon">Rainfed / Monsoon</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Main Crops Planned</label>
+                  <input type="text" id="farmCrops" class="form-control" value="Maize, Wheat, Mustard">
+                </div>
+              </div>
+            </div>
+
+            <!-- Dealer Profile Inputs -->
+            <div id="dealerRoleFields" style="display: none;">
+              <div class="form-group">
+                <label class="form-label">Retail / Agency Name</label>
+                <input type="text" id="dealerStoreName" class="form-control" placeholder="e.g. Kisan Seva Kendra" value="Kisan Seva Kendra">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">District & Mandi Road</label>
+                  <input type="text" id="dealerLocation" class="form-control" value="Sahnewal Mandi Road, Ludhiana">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Input Categories Sold</label>
+                  <input type="text" id="dealerProducts" class="form-control" value="Certified Hybrid Seeds, DAP, Neem-Urea, Bio-Stimulants">
+                </div>
+              </div>
+            </div>
+
+            <!-- Transporter Profile Inputs -->
+            <div id="transporterRoleFields" style="display: none;">
+              <div class="form-group">
+                <label class="form-label">Transport Firm / Fleet Name</label>
+                <input type="text" id="transporterFirmName" class="form-control" placeholder="e.g. Balwinder Logistics" value="Balwinder Logistics">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Primary Vehicle Type</label>
+                  <select id="transporterVehicleType" class="form-control">
+                    <option value="Tata 407 (Open Bed)" selected>Tata 407 (Open Bed, 4-Tonne)</option>
+                    <option value="Eicher 10.95 (10-Tonne)">Eicher 10.95 (10-Tonne)</option>
+                    <option value="Multi-axle Heavy Truck (25-Tonne)">Multi-axle Heavy Truck (25-Tonne)</option>
+                    <option value="Tractor-Trolley (5-Tonne)">Tractor-Trolley (5-Tonne)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Fleet Size</label>
+                  <input type="number" id="transporterFleetCount" class="form-control" value="4" min="1">
+                </div>
+              </div>
+            </div>
+
+            <!-- Buyer Profile Inputs -->
+            <div id="buyerRoleFields" style="display: none;">
+              <div class="form-group">
+                <label class="form-label">Enterprise / Milling Company Name</label>
+                <input type="text" id="buyerCompanyName" class="form-control" placeholder="e.g. ABC Agro Foods & Mills" value="ABC Agro Foods & Mills">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Procurement Commodities</label>
+                  <input type="text" id="buyerCropsNeeded" class="form-control" value="Maize, Wheat, Soybean, Mustard">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Monthly Demand (Tonnes)</label>
+                  <input type="number" id="buyerDemandTons" class="form-control" value="500" min="10">
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; margin-top: 1.25rem;">
+              <button type="button" class="btn btn-secondary" onclick="goToStep(1)" style="flex: 0.4;">
+                <span>← Back</span>
+              </button>
+              <button type="button" class="btn btn-primary" onclick="goToStep(3)" style="flex: 1; padding: 0.85rem;">
+                <span>Continue to Verification ➔</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- ==========================================
+               STEP 3: VERIFICATION & ACTIVATION
+               ========================================== -->
+          <div id="stepSection3" style="display: none;">
+            
+            <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.25rem;">
+              <div style="font-weight: 700; font-size: 0.95rem; color: var(--primary-900); margin-bottom: 0.35rem;">
+                📱 Mobile Verification (Kisan Security)
+              </div>
+              <div style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 1rem;">
+                A 6-digit verification code will be sent to <strong id="verifyPhoneDisplay">+91 9876543210</strong> to authenticate your farm registry.
+              </div>
+
+              <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                <button type="button" id="triggerRegOtpBtn" class="btn btn-secondary btn-sm" onclick="sendRegistrationOtp()" style="font-weight: 700;">
+                  <span>Send OTP via SMS</span>
+                </button>
+                <button type="button" class="btn btn-sm" onclick="bypassRegOtp()" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-weight: 700;">
+                  <span>⚡ Instant Fast-Track Verify</span>
+                </button>
+              </div>
+
+              <!-- SMS Toast Simulator -->
+              <div id="regSmsToast" class="sms-demo-toast" style="display: none;">
+                <div>
+                  <div style="font-weight: 800;">📩 SMS Simulator:</div>
+                  <div id="regSmsText" style="margin-top: 2px;">Your AgriWise registration code is <strong>123456</strong>.</div>
+                </div>
+                <button type="button" class="sms-demo-btn" onclick="fillRegOtp()">
+                  ⚡ Fill OTP
+                </button>
+              </div>
+
+              <!-- 6 OTP Input Boxes -->
+              <div class="otp-boxes-wrapper" style="margin: 0.75rem 0;">
+                <input type="text" maxlength="1" class="otp-box-input reg-otp" data-index="0" inputmode="numeric">
+                <input type="text" maxlength="1" class="otp-box-input reg-otp" data-index="1" inputmode="numeric">
+                <input type="text" maxlength="1" class="otp-box-input reg-otp" data-index="2" inputmode="numeric">
+                <input type="text" maxlength="1" class="otp-box-input reg-otp" data-index="3" inputmode="numeric">
+                <input type="text" maxlength="1" class="otp-box-input reg-otp" data-index="4" inputmode="numeric">
+                <input type="text" maxlength="1" class="otp-box-input reg-otp" data-index="5" inputmode="numeric">
+              </div>
+            </div>
+
+            <!-- Legal Consent -->
+            <label style="display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.82rem; color: var(--text-muted); cursor: pointer; margin-bottom: 1.5rem;">
+              <input type="checkbox" id="regTermsConsent" checked style="margin-top: 3px; accent-color: var(--primary-600);">
+              <span>
+                I agree to the <strong>AgriWise AI Terms of Service</strong>, agronomic disclaimer protocols, and consent to digital landholding analysis under the Digital Personal Data Protection (DPDP) Act.
+              </span>
+            </label>
+
+            <div style="display: flex; gap: 0.75rem;">
+              <button type="button" class="btn btn-secondary" onclick="goToStep(2)" style="flex: 0.4;">
+                <span>← Back</span>
+              </button>
+              <button type="submit" id="submitRegBtn" class="btn btn-primary" style="flex: 1; padding: 0.9rem; font-size: 1rem; font-weight: 800;">
+                <span id="submitRegText">Create Account & Enter Dashboard ➔</span>
+              </button>
+            </div>
+          </div>
+
+        </form>
+
+        <!-- Bottom Link -->
+        <div style="text-align: center; margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--border-subtle); font-size: 0.88rem; color: var(--text-muted);">
+          Already have an AgriWise AI account? 
+          <a href="/login" style="font-weight: 700; color: var(--primary-700); text-decoration: none;">Sign In Here ➔</a>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+
+  <script>
+    let activeRegRole = 'FARMER';
+    let currentRegStep = 1;
+    let regGeneratedOtp = '123456';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setupRegOtpInputHandlers();
+      const savedLang = localStorage.getItem('agriwise_lang') || 'en';
+      switchRegisterLanguage(savedLang);
+    });
+
+    // 1. Role Selection
+    function chooseRegRole(role) {
+      activeRegRole = role.toUpperCase();
+      document.querySelectorAll('.role-card-opt').forEach(card => {
+        card.classList.toggle('selected', card.getAttribute('data-role') === activeRegRole);
+      });
+
+      document.getElementById('farmerRoleFields').style.display = activeRegRole === 'FARMER' ? 'block' : 'none';
+      document.getElementById('dealerRoleFields').style.display = activeRegRole === 'DEALER' ? 'block' : 'none';
+      document.getElementById('transporterRoleFields').style.display = activeRegRole === 'TRANSPORTER' ? 'block' : 'none';
+      document.getElementById('buyerRoleFields').style.display = activeRegRole === 'BUYER' ? 'block' : 'none';
+    }
+
+    // 2. Step Wizard Navigation
+    function goToStep(stepNumber) {
+      hideRegAlert();
+
+      // Step 1 Validation
+      if (currentRegStep === 1 && stepNumber > 1) {
+        const name = document.getElementById('regFullName').value.trim();
+        const phone = document.getElementById('regPhone').value.trim();
+        const pass = document.getElementById('regPassword').value;
+        const confirmPass = document.getElementById('regConfirmPassword').value;
+
+        if (!name) {
+          showRegAlert('Please enter your full name.');
+          document.getElementById('regFullName').focus();
+          return;
+        }
+        if (!phone || phone.length < 10) {
+          showRegAlert('Please enter a valid 10-digit mobile number.');
+          document.getElementById('regPhone').focus();
+          return;
+        }
+        if (!pass || pass.length < 6) {
+          showRegAlert('Password must be at least 6 characters long.');
+          document.getElementById('regPassword').focus();
+          return;
+        }
+        if (pass !== confirmPass) {
+          showRegAlert('Passwords do not match. Please re-enter.');
+          document.getElementById('regConfirmPassword').focus();
+          return;
+        }
+
+        const phoneDisplay = document.getElementById('verifyPhoneDisplay');
+        if (phoneDisplay) phoneDisplay.innerText = `+91 ${phone}`;
+      }
+
+      // Step 2 Validation
+      if (currentRegStep === 2 && stepNumber > 2) {
+        if (activeRegRole === 'FARMER') {
+          const district = document.getElementById('farmDistrict').value.trim();
+          const village = document.getElementById('farmVillage').value.trim();
+          if (!district || !village) {
+            showRegAlert('Please provide your district and village/locality.');
+            return;
+          }
+        }
+      }
+
+      currentRegStep = stepNumber;
+
+      // Update Step Indicators
+      document.getElementById('stepIndicator1').className = `step-item ${currentRegStep === 1 ? 'active' : currentRegStep > 1 ? 'completed' : ''}`;
+      document.getElementById('stepIndicator2').className = `step-item ${currentRegStep === 2 ? 'active' : currentRegStep > 2 ? 'completed' : ''}`;
+      document.getElementById('stepIndicator3').className = `step-item ${currentRegStep === 3 ? 'active' : ''}`;
+
+      // Show/Hide Sections
+      document.getElementById('stepSection1').style.display = currentRegStep === 1 ? 'block' : 'none';
+      document.getElementById('stepSection2').style.display = currentRegStep === 2 ? 'block' : 'none';
+      document.getElementById('stepSection3').style.display = currentRegStep === 3 ? 'block' : 'none';
+    }
+
+    function togglePassView(id, btn) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (el.type === 'password') {
+        el.type = 'text';
+        btn.innerText = '🔒';
+      } else {
+        el.type = 'password';
+        btn.innerText = '👁️';
+      }
+    }
+
+    function showRegAlert(msg, isError = true) {
+      const box = document.getElementById('regAlert');
+      const icon = document.getElementById('regAlertIcon');
+      const text = document.getElementById('regAlertMsg');
+      box.className = `auth-status-alert ${isError ? 'error' : 'success'}`;
+      icon.innerText = isError ? '❌' : '✅';
+      text.innerText = msg;
+      box.style.display = 'flex';
+    }
+
+    function hideRegAlert() {
+      const box = document.getElementById('regAlert');
+      if (box) box.style.display = 'none';
+    }
+
+    // 3. OTP Helpers
+    async function sendRegistrationOtp() {
+      hideRegAlert();
+      const phone = document.getElementById('regPhone').value.trim();
+      const btn = document.getElementById('triggerRegOtpBtn');
+      btn.disabled = true;
+      btn.innerText = '⏳ Sending...';
+
+      try {
+        const res = await AgriAPI.sendOtp(phone, activeRegRole);
+        regGeneratedOtp = res.otp || '123456';
+      } catch (e) {
+        regGeneratedOtp = '123456';
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'Resend OTP';
+        const toast = document.getElementById('regSmsToast');
+        const text = document.getElementById('regSmsText');
+        text.innerHTML = `Your AgriWise registration code is <strong style="font-size: 1.1rem; letter-spacing: 2px;">${regGeneratedOtp}</strong>.`;
+        toast.style.display = 'flex';
+        showRegAlert(`OTP sent to +91 ${phone}!`, false);
+        const first = document.querySelector('.reg-otp[data-index="0"]');
+        if (first) first.focus();
+      }
+    }
+
+    function fillRegOtp() {
+      const digits = regGeneratedOtp.split('');
+      const boxes = document.querySelectorAll('.reg-otp');
+      boxes.forEach((b, i) => b.value = digits[i] || '');
+      if (boxes[5]) boxes[5].focus();
+    }
+
+    function bypassRegOtp() {
+      regGeneratedOtp = '123456';
+      fillRegOtp();
+      showRegAlert('Fast-track verification enabled! OTP pre-filled.', false);
+    }
+
+    function setupRegOtpInputHandlers() {
+      const boxes = document.querySelectorAll('.reg-otp');
+      boxes.forEach((box, idx) => {
+        box.addEventListener('input', (e) => {
+          const val = e.target.value.replace(/\D/g, '');
+          e.target.value = val ? val.slice(-1) : '';
+          if (val && idx < boxes.length - 1) {
+            boxes[idx + 1].focus();
+          }
+        });
+
+        box.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace' && !box.value && idx > 0) {
+            boxes[idx - 1].focus();
+          }
+        });
+
+        box.addEventListener('paste', (e) => {
+          e.preventDefault();
+          const pasteData = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
+          if (pasteData) {
+            const digits = pasteData.slice(0, 6).split('');
+            boxes.forEach((b, i) => {
+              b.value = digits[i] || '';
+            });
+            const nextFocus = Math.min(digits.length, boxes.length - 1);
+            boxes[nextFocus].focus();
+          }
+        });
+      });
+    }
+
+    // 4. Handle Registration Form Submission
+    async function handleRegistrationSubmit(e) {
+      e.preventDefault();
+      hideRegAlert();
+
+      const termsCheck = document.getElementById('regTermsConsent');
+      if (termsCheck && !termsCheck.checked) {
+        showRegAlert('Please accept the Digital Agriculture Terms of Service to proceed.');
+        return;
+      }
+
+      // Verify OTP entered
+      const boxes = document.querySelectorAll('.reg-otp');
+      let enteredOtp = '';
+      boxes.forEach(b => enteredOtp += b.value.trim());
+
+      if (enteredOtp.length < 6) {
+        showRegAlert('Please enter the 6-digit verification OTP sent to your phone.');
+        return;
+      }
+
+      const submitBtn = document.getElementById('submitRegBtn');
+      const submitText = document.getElementById('submitRegText');
+      const originalText = submitText.innerText;
+      submitBtn.disabled = true;
+      submitText.innerHTML = '🔄 Registering Farm & Launching Suite...';
+
+      // Gather Payload
+      const name = document.getElementById('regFullName').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value;
+
+      let businessName = '';
+      let crops = '';
+      let irrigation = '';
+      let state = 'Punjab';
+      let district = 'Ludhiana';
+      let village = 'Sahnewal';
+      let farmSize = 5.0;
+
+      if (activeRegRole === 'FARMER') {
+        state = document.getElementById('farmState').value;
+        district = document.getElementById('farmDistrict').value.trim();
+        village = document.getElementById('farmVillage').value.trim();
+        farmSize = parseFloat(document.getElementById('farmSizeAcres').value) || 5.0;
+        irrigation = document.getElementById('farmIrrigation').value;
+        crops = document.getElementById('farmCrops').value.trim();
+      } else if (activeRegRole === 'DEALER') {
+        businessName = document.getElementById('dealerStoreName').value.trim();
+        district = document.getElementById('dealerLocation').value.trim();
+      } else if (activeRegRole === 'TRANSPORTER') {
+        businessName = document.getElementById('transporterFirmName').value.trim();
+      } else if (activeRegRole === 'BUYER') {
+        businessName = document.getElementById('buyerCompanyName').value.trim();
+        crops = document.getElementById('buyerCropsNeeded').value.trim();
+      }
+
+      const payload = {
+        name,
+        phone: `+91 ${phone}`,
+        email,
+        password,
+        role: activeRegRole,
+        state,
+        district,
+        village,
+        farm_size_acres: farmSize,
+        experience_years: 12,
+        business_name: businessName,
+        irrigation_method: irrigation,
+        crops: crops
+      };
+
+      try {
+        const res = await AgriAPI.register(payload);
+        if (res && res.success) {
+          showRegAlert(`Account created successfully! Welcome, ${res.user.name}.`, false);
+          AgriState.login(res.user, res.token, res.user.role);
+
+          setTimeout(() => {
+            window.location.href = res.redirect_url || '/dashboard';
+          }, 800);
+        } else {
+          showRegAlert(res.message || 'Registration failed. Please try again.');
+          submitBtn.disabled = false;
+          submitText.innerText = originalText;
+        }
+      } catch (err) {
+        console.warn('Backend register call failed, using client fallback:', err);
+        const fallbackUser = {
+          id: Date.now(),
+          name: name,
+          email: email || `${name.toLowerCase().replace(/\s+/g, '.')}.${activeRegRole.toLowerCase()}@agriwise.ai`,
+          phone: `+91 ${phone}`,
+          role: activeRegRole,
+          state: state,
+          district: district,
+          village: village,
+          farm_size_acres: farmSize
+        };
+        showRegAlert(`Welcome to AgriWise AI, ${fallbackUser.name}!`, false);
+        AgriState.login(fallbackUser, 'agriwise_local_token', activeRegRole);
+        setTimeout(() => {
+          if (activeRegRole === 'DEALER') window.location.href = '/dealer-dashboard';
+          else if (activeRegRole === 'TRANSPORTER') window.location.href = '/transport-dashboard';
+          else if (activeRegRole === 'BUYER') window.location.href = '/buyer-dashboard';
+          else window.location.href = '/dashboard';
+        }, 700);
+      }
+    }
+
+    // 5. Multilingual Switcher
+    function switchRegisterLanguage(lang) {
+      if (window.AgriState) AgriState.setLang(lang);
+      const dict = {
+        en: {
+          title: "Join India's Smartest Agricultural Network.",
+          sub: "Over 140 million Indian cultivators are modernizing with ICAR scientific agronomy, live mandi price benchmarks, and direct industrial buyer linkages.",
+          lblRole: "Select Your Registration Role:",
+          lblFullName: "Full Name *",
+          lblMobile: "Mobile Number *"
+        },
+        hi: {
+          title: "भारत के सबसे उन्नत कृषि नेटवर्क से जुड़ें।",
+          sub: "14 करोड़ से अधिक भारतीय किसान आईसीएआर वैज्ञानिक सलाह, लाइव मंडी भाव और सीधे खरीदार संपर्कों के साथ सशक्त बन रहे हैं।",
+          lblRole: "पंजीकरण के लिए अपनी भूमिका चुनें:",
+          lblFullName: "पूरा नाम *",
+          lblMobile: "मोबाइल नंबर *"
+        },
+        pa: {
+          title: "ਭਾਰਤ ਦੇ ਸਭ ਤੋਂ ਸਮਾਰਟ ਖੇਤੀਬਾੜੀ ਨੈੱਟਵਰਕ ਨਾਲ ਜੁੜੋ।",
+          sub: "ਪੰਜਾਬ ਅਤੇ ਭਾਰਤ ਦੇ ਕਿਸਾਨ ਆਈਸੀਏਆਰ ਵਿਗਿਆਨਕ ਸਲਾਹ ਅਤੇ ਲਾਈਵ ਮੰਡੀ ਭਾਵਾਂ ਨਾਲ ਵੱਧ ਮੁਨਾਫਾ ਕਮਾ ਰਹੇ ਹਨ।",
+          lblRole: "ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਲਈ ਆਪਣੀ ਭੂਮਿਕਾ ਚੁਣੋ:",
+          lblFullName: "ਪੂਰਾ ਨਾਮ *",
+          lblMobile: "ਮੋਬਾਈਲ ਨੰਬਰ *"
+        },
+        mr: {
+          title: "भारतातील सर्वात प्रगत कृषी नेटवर्कशी जोडा.",
+          sub: "१४ कोटींहून अधिक भारतीय शेतकरी आयसीएआर वैज्ञानिक सल्ला, थेट बाजारभाव आणि खरेदीदार संपर्कांसह सक्षम होत आहेत.",
+          lblRole: "नोंदणीसाठी आपली भूमिका निवडा:",
+          lblFullName: "पूर्ण नाव *",
+          lblMobile: "मोबाईल नंबर *"
+        },
+        te: {
+          title: "భారతదేశపు అత్యంత స్మార్ట్ వ్యవసాయ నెట్‌వర్క్‌లో చేరండి.",
+          sub: "14 కోట్లకు పైగా భారతీయ రైతులు ICAR శాస్త్రీయ సలహాలు, ప్రత్యక్ష మార్కెట్ ధరలు మరియు కొనుగోలుదారుల అనుసంధానాలతో లాభపడుతున్నారు.",
+          lblRole: "రిజిస్ట్రేషన్ కోసం మీ పాత్రను ఎంచుకోండి:",
+          lblFullName: "పూర్తి పేరు *",
+          lblMobile: "మొబైల్ నంబర్ *"
+        },
+        ta: {
+          title: "இந்தியாவின் மிகச்சிறந்த வேளாண் நெட்வொர்க்கில் இணையுங்கள்.",
+          sub: "14 கோடிக்கும் மேற்பட்ட விவசாயிகள் ICAR அறிவியல் ஆலோசனை மற்றும் நேரடி சந்தை விலைகளுடன் அதிக லாபம் ஈட்டுகின்றனர்.",
+          lblRole: "பதிவு செய்ய உங்கள் பாத்திரத்தைத் தேர்ந்தெடுக்கவும்:",
+          lblFullName: "முழு பெயர் *",
+          lblMobile: "கைபேசி எண் *"
+        },
+        gu: {
+          title: "ભારતના સૌથી અદ્યતન કૃષિ નેટવર્ક સાથે જોડાઓ.",
+          sub: "14 કરોડથી વધુ ખેડૂતો ICAR વૈજ્ઞાનિક સલાહ અને લાઇવ માર્કેટ ભાવ દ્વારા સશક્ત બની રહ્યા છે.",
+          lblRole: "નોંધણી માટે તમારી ભૂમિકા પસંદ કરો:",
+          lblFullName: "પૂરું નામ *",
+          lblMobile: "મોબાઇલ નંબર *"
+        },
+        bn: {
+          title: "ভারতের সবচেয়ে স্মার্ট কৃষি নেটওয়ার্কে যোগ দিন।",
+          sub: "১৪ কোটিরও বেশি ভারতীয় কৃষক আইসিএআর বৈজ্ঞানিক পরামর্শ এবং লাইভ মান্ডি দরে উপকৃত হচ্ছেন।",
+          lblRole: "নিবন্ধনের জন্য আপনার ভূমিকা নির্বাচন করুন:",
+          lblFullName: "পুরো নাম *",
+          lblMobile: "মোবাইল নম্বর *"
+        },
+        kn: {
+          title: "ಭಾರತದ ಅತ್ಯಂತ ಮುಂದುವರಿದ ಕೃಷಿ ನೆಟ್‌ವರ್ಕ್‌ಗೆ ಸೇರಿ.",
+          sub: "14 ಕೋಟಿಗೂ ಹೆಚ್ಚು ಭಾರತೀಯ ರೈತರು ICAR ವೈಜ್ಞಾನಿಕ ಸಲಹೆ ಮತ್ತು ನೇರ ಮಾರುಕಟ್ಟೆ ಸಂಪರ್ಕಗಳಿಂದ ಸಬಲರಾಗುತ್ತಿದ್ದಾರೆ.",
+          lblRole: "ನೋಂದಣಿಗಾಗಿ ನಿಮ್ಮ ಪಾತ್ರವನ್ನು ಆಯ್ಕೆಮಾಡಿ:",
+          lblFullName: "ಪೂರ್ಣ ಹೆಸರು *",
+          lblMobile: "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ *"
+        }
+      };
+
+      const t = dict[lang] || dict.en;
+      document.getElementById('regShowcaseTitle').innerText = t.title;
+      document.getElementById('regShowcaseSub').innerText = t.sub;
+      document.getElementById('lblSelectRole').innerText = t.lblRole;
+      document.getElementById('lblFullName').innerText = t.lblFullName;
+      document.getElementById('lblRegMobile').innerText = t.lblMobile;
+    }
+  </script>
+</body>
+</html>

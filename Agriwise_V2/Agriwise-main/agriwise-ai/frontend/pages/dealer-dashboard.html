@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏪 Agricultural Input Dealer Dashboard — AGRIWISE AI</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <!-- Title Section -->
+      <div class="page-title-bar">
+        <div class="page-title-left">
+          <h1>🏪 Input Dealer Business Command Center</h1>
+          <p>Logged in as <strong>Rajinder Kumar Gupta</strong> • Kisan Seva Kendra Sahnewal (Main Mandi Road)</p>
+        </div>
+        <div class="page-title-actions">
+          <button class="btn btn-primary btn-sm" onclick="addNewProductPrompt()">+ Add New Product</button>
+        </div>
+      </div>
+
+      <!-- Dealer Metrics Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+        <div class="card" style="border-left: 4px solid var(--primary-600);">
+          <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">MONTHLY REVENUE</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: var(--primary-900); margin: 4px 0;">₹4,85,200</div>
+          <div style="font-size: 0.8rem; color: #059669;">▲ +18.4% Kharif Sowing Inflow</div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid var(--accent-amber);">
+          <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">ACTIVE FARMER INQUIRIES</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #b45309; margin: 4px 0;">28 Inquiries</div>
+          <div style="font-size: 0.8rem; color: #b45309;">14 Pending Quote Requests</div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid var(--accent-sky);">
+          <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">INVENTORY ITEMS</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #0284c7; margin: 4px 0;">58 SKUs</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">Seeds, Fertilizers, Biocides</div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid #e11d48;">
+          <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">LOW STOCK ALERTS</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #e11d48; margin: 4px 0;">2 SKUs Low</div>
+          <div style="font-size: 0.8rem; color: #e11d48;">Zinc Sulfate & Pioneer P3396</div>
+        </div>
+      </div>
+
+      <!-- Inventory & Demand Radar Grids -->
+      <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 2rem; margin-bottom: 2rem;">
+        <!-- Left: Warehouse Inventory & Price Management -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">📦</span>
+              <span>Warehouse Stock & POS Pricing</span>
+            </div>
+            <span class="badge badge-emerald">POS Live</span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Product Name</th>
+                  <th>Category</th>
+                  <th>Stock Available</th>
+                  <th>Dealer MRP</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Pioneer P3396 Hybrid (4kg)</strong></td>
+                  <td>Seed</td>
+                  <td><span class="badge badge-amber">45 Bags</span></td>
+                  <td>₹1,040</td>
+                  <td><button class="btn btn-secondary btn-sm" onclick="adjustStock('Pioneer P3396')">Edit</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Neem Coated Urea (45kg)</strong></td>
+                  <td>Fertilizer</td>
+                  <td><span class="badge badge-emerald">220 Bags</span></td>
+                  <td>₹266.50</td>
+                  <td><button class="btn btn-secondary btn-sm" onclick="adjustStock('Urea')">Edit</button></td>
+                </tr>
+                <tr>
+                  <td><strong>DAP 18:46:0 (50kg)</strong></td>
+                  <td>Fertilizer</td>
+                  <td><span class="badge badge-emerald">80 Bags</span></td>
+                  <td>₹1,350</td>
+                  <td><button class="btn btn-secondary btn-sm" onclick="adjustStock('DAP')">Edit</button></td>
+                </tr>
+                <tr>
+                  <td><strong>MOP 0:0:60 (50kg)</strong></td>
+                  <td>Fertilizer</td>
+                  <td><span class="badge badge-emerald">65 Bags</span></td>
+                  <td>₹1,650</td>
+                  <td><button class="btn btn-secondary btn-sm" onclick="adjustStock('MOP')">Edit</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Zinc Sulfate 21% (10kg)</strong></td>
+                  <td>Micronutrient</td>
+                  <td><span class="badge badge-rose">30 Bags (Low)</span></td>
+                  <td>₹520</td>
+                  <td><button class="btn btn-secondary btn-sm" onclick="adjustStock('Zinc')">Restock</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right: Farmer Demand Radar -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">📡</span>
+              <span>Local Farmer Demand Radar (5 km)</span>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div style="background: #f0fdf4; padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--primary-600);">
+              <div style="font-weight: 700; color: var(--primary-900); font-size: 0.9rem;">Hybrid Maize Seed Surge</div>
+              <div style="font-size: 0.82rem; color: #166534; margin-top: 2px;">
+                42 nearby farms in Sahnewal actively searching for Pioneer P3396 and Kaveri 50. High purchase conversion rate.
+              </div>
+            </div>
+
+            <div style="background: #eff6ff; padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--accent-sky);">
+              <div style="font-weight: 700; color: #1e40af; font-size: 0.9rem;">Basal DAP Sowing Window</div>
+              <div style="font-size: 0.82rem; color: #1e3a8a; margin-top: 2px;">
+                Current sowing timeline drives peak DAP demand. Recommended buffer stock: 150 bags.
+              </div>
+            </div>
+
+            <div style="background: #fffbeb; padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--accent-amber);">
+              <div style="font-weight: 700; color: #92400e; font-size: 0.9rem;">Doorstep Tractor Delivery Requests</div>
+              <div style="font-size: 0.82rem; color: #78350f; margin-top: 2px;">
+                Farmers requesting combined seed + fertilizer tractor drops. 3 orders pending dispatch.
+              </div>
+            </div>
+          </div>
+      <!-- Incoming Customer Orders & Dispatch Management -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="icon">📋</span>
+            <span>Incoming Farmer Orders & Doorstep Fulfillment</span>
+          </div>
+          <span class="badge badge-emerald">Live DB Sync</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Farmer Name</th>
+                <th>Items Ordered</th>
+                <th>Delivery Address</th>
+                <th>Total Value</th>
+                <th>Order Status</th>
+                <th>Update Status</th>
+              </tr>
+            </thead>
+            <tbody id="dealerOrdersTableBody">
+              <tr>
+                <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">
+                  Loading farmer orders...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', loadDealerOrders);
+
+    async function loadDealerOrders() {
+      const tbody = document.getElementById('dealerOrdersTableBody');
+      try {
+        const orders = await AgriAPI.getOrders();
+        if (!orders || orders.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No orders placed yet. Orders from farmers will appear here.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = orders.map(o => {
+          let itemsDesc = o.item_title;
+          if (o.items_json) {
+            try {
+              const parsed = JSON.parse(o.items_json);
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                itemsDesc = parsed.map(p => `${p.name} (x${p.quantity})`).join(', ');
+              }
+            } catch (err) {}
+          }
+
+          const statusBadge = o.status === 'COMPLETED' ? 'badge-emerald' :
+                              o.status === 'DISPATCHED' ? 'badge-blue' :
+                              o.status === 'CONFIRMED' ? 'badge-amber' : 'badge-primary';
+
+          const formattedAmount = window.AgriCharts ? window.AgriCharts.formatMoney(o.amount_inr) : `₹${Number(o.amount_inr || 0).toLocaleString('en-IN')}`;
+
+          return `
+            <tr>
+              <td><strong>#ORD-${o.id}</strong></td>
+              <td>👨‍🌾 Gurpreet Singh</td>
+              <td><span title="${itemsDesc}" style="max-width: 250px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${itemsDesc}</span></td>
+              <td>📍 ${o.delivery_address || 'Sahnewal, Ludhiana'}</td>
+              <td style="font-weight: 800; color: var(--primary-900);">${formattedAmount}</td>
+              <td><span class="badge ${statusBadge}">${o.status}</span></td>
+              <td>
+                <select class="form-control" style="padding: 4px 8px; font-size: 0.8rem; width: auto; display: inline-block;" onchange="updateDealerOrderStatus(${o.id}, this.value)">
+                  <option value="ORDERED" ${o.status === 'ORDERED' ? 'selected' : ''}>ORDERED</option>
+                  <option value="CONFIRMED" ${o.status === 'CONFIRMED' ? 'selected' : ''}>CONFIRMED</option>
+                  <option value="DISPATCHED" ${o.status === 'DISPATCHED' ? 'selected' : ''}>DISPATCHED</option>
+                  <option value="COMPLETED" ${o.status === 'COMPLETED' ? 'selected' : ''}>COMPLETED</option>
+                </select>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error('Error loading dealer orders:', err);
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">Could not load orders.</td></tr>`;
+      }
+    }
+
+    async function updateDealerOrderStatus(orderId, status) {
+      try {
+        await AgriAPI.updateOrderStatus(orderId, status);
+        alert(`Order #ORD-${orderId} status updated to ${status}!`);
+        loadDealerOrders();
+      } catch (err) {
+        alert('Failed to update status: ' + err.message);
+      }
+    }
+
+    function addNewProductPrompt() {
+      const name = prompt("Enter Agricultural Input Product Name:", "NPK 19:19:19 Foliar (1kg)");
+      if (name) {
+        alert(`Product "${name}" added to dealer catalog! Ready for farmer purchase.`);
+      }
+    }
+
+    function adjustStock(prod) {
+      const newStock = prompt(`Update warehouse stock count for ${prod}:`, "100");
+      if (newStock) {
+        alert(`Stock for ${prod} updated to ${newStock} units.`);
+      }
+    }
+  </script>
+</body>
+</html>

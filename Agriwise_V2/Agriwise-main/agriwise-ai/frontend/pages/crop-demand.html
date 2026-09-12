@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📊 Real-Time Crop Demand Meters — AGRIWISE AI</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <!-- Title Section -->
+      <div class="page-title-bar">
+        <div class="page-title-left">
+          <h1>📊 National Crop Demand Intelligence</h1>
+          <p>Real-time procurement demand meters calibrated from industrial food millers, export orders, and Mandi arrivals.</p>
+        </div>
+        <div class="page-title-actions">
+          <a href="/market-intelligence" class="btn btn-secondary btn-sm">📈 Price Intelligence</a>
+          <a href="/crop-shortage" class="btn btn-primary btn-sm">Next: National Shortage Map ➔</a>
+        </div>
+      </div>
+
+      <!-- Commodity Filter Bar -->
+      <div class="card" style="margin-bottom: 2rem; background: #064e3b; color: #fff;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <div style="font-weight: 700; font-size: 1.05rem; color: #34d399;">Filter by Commodity:</div>
+            <select id="commodityFilterSelect" class="form-control" style="width: 240px; background: #042f24; color: #fff; border-color: #059669; font-weight: 700;" onchange="onDemandFilterChange(this.value)">
+              <option value="ALL">🌐 All Commodities (Ranked)</option>
+              <option value="Maize">🌽 Maize (Corn)</option>
+              <option value="Wheat">🌾 Wheat (Gehu)</option>
+              <option value="Mustard">🌼 Mustard (Sarson)</option>
+              <option value="Soybean">🌱 Soybean (Pili Soy)</option>
+              <option value="Basmati Rice">🍚 Basmati Rice</option>
+              <option value="Tomato">🍅 Tomato (Tamatar)</option>
+              <option value="Potato">🥔 Potato (Aloo)</option>
+              <option value="Cotton">☁️ Cotton (Kapas)</option>
+            </select>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <span class="badge badge-emerald">Live Verified Agmarknet</span>
+            <span class="badge badge-blue">42 Institutional Buyers</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demand Meters Section -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="icon">🔥</span>
+            <span id="demandMetersHeading">Commodities With Extreme Procurement Sourcing Pressure</span>
+          </div>
+          <span class="badge badge-rose" id="demandMetersBadge">High Deficit Alert</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;" id="demandMetersList">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- Institutional Procurement Requirements Feed -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="icon">🏢</span>
+            <span id="buyerFeedTitle">Live Wholesale Procurement Requirements Near Your Farm</span>
+          </div>
+          <a href="/buyer-marketplace" class="btn btn-outline-emerald btn-sm" id="allBuyersBtn">All Verified Buyers ➔</a>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1rem;" id="buyerRequirementsList">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script>
+    const COMMODITY_DEMAND_DATA = [
+      {
+        crop: "Maize",
+        title: "Maize (Corn) — Industrial Wet Milling & Poultry Feed",
+        intensity: 94,
+        level: "EXTREME",
+        levelColor: "#059669",
+        barClass: "",
+        barColor: "var(--primary-600)",
+        deficit: "Deficit: 23,000 Tonnes in Punjab / Haryana / Delhi NCR",
+        price: "Modal Spot: ₹2,360 / q (+3.2%)",
+        buyers: [
+          {
+            name: "ABC Agro Foods & Corn Millers",
+            location: "Khanna Industrial Area (22 km away)",
+            specs: "Moisture <12%, No Aflatoxin, Min Shelling 80%",
+            qty: "500 Tonnes Maize",
+            offered: "₹2,420 / quintal",
+            badge: "Immediate Sourcing Requirement",
+            badgeClass: "badge-emerald"
+          },
+          {
+            name: "Karnal Premium Poultry Feed Mills",
+            location: "GT Road, Karnal (130 km away)",
+            specs: "Dry yellow sound kernels, Protein >9%",
+            qty: "800 Tonnes Maize",
+            offered: "₹2,480 / quintal",
+            badge: "Poultry Cluster Sourcing",
+            badgeClass: "badge-blue"
+          },
+          {
+            name: "Sukhjit Starch & Chemicals Ltd",
+            location: "Phagwara Industrial Complex (45 km away)",
+            specs: "High starch recovery, Starch content >70%",
+            qty: "1,200 Tonnes Maize",
+            offered: "₹2,450 / quintal",
+            badge: "Bulk Starch Processor",
+            badgeClass: "badge-emerald"
+          }
+        ]
+      },
+      {
+        crop: "Soybean",
+        title: "Soybean — Yellow Oilseed & Crushing Meal",
+        intensity: 89,
+        level: "HIGH",
+        levelColor: "#b45309",
+        barClass: "progress-bar-amber",
+        barColor: "#f59e0b",
+        deficit: "Deficit: 38,000 Tonnes in Central & Northern Oil Processing Clusters",
+        price: "Modal Spot: ₹4,720 / q (+1.8%)",
+        buyers: [
+          {
+            name: "Ruchi Soya Industries Ltd",
+            location: "Industrial Corridor (60 km away)",
+            specs: "Oil content >18.5%, Moisture <10%",
+            qty: "1,500 Tonnes Soybean",
+            offered: "₹4,790 / quintal",
+            badge: "Commercial Oil Refiner",
+            badgeClass: "badge-emerald"
+          },
+          {
+            name: "Godrej Agrovet Animal Nutrition",
+            location: "Rajpura Feeds Park (55 km away)",
+            specs: "Non-GMO certified yellow soybean meal",
+            qty: "900 Tonnes Soybean",
+            offered: "₹4,820 / quintal",
+            badge: "De-Oiled Cake (DOC) Procurement",
+            badgeClass: "badge-blue"
+          }
+        ]
+      },
+      {
+        crop: "Tomato",
+        title: "Tomato — Fresh Horticulture & Puree Processing",
+        intensity: 85,
+        level: "VOLATILE",
+        levelColor: "#e11d48",
+        barClass: "progress-bar-rose",
+        barColor: "#e11d48",
+        deficit: "Daily Arrivals Deficit: Delhi Azadpur & Punjab APMC Mandis",
+        price: "Modal Spot: ₹1,950 / q (+8.5%)",
+        buyers: [
+          {
+            name: "Cremica Agro Food Park (Bector's)",
+            location: "Phillaur Highway (28 km away)",
+            specs: "Processing hybrid red firmness, TSS >4.5 Brix",
+            qty: "300 Tonnes Tomato",
+            offered: "₹2,050 / quintal",
+            badge: "Ketchup & Paste Contract",
+            badgeClass: "badge-rose"
+          },
+          {
+            name: "Mother Dairy Safal F&V Aggregator",
+            location: "Ludhiana Collection Hub (18 km away)",
+            specs: "Grade A table tomatoes in 25 kg plastic crates",
+            qty: "150 Tonnes Tomato",
+            offered: "₹1,980 / quintal",
+            badge: "Retail Direct Chain",
+            badgeClass: "badge-emerald"
+          }
+        ]
+      },
+      {
+        crop: "Wheat",
+        title: "Wheat — Flour Milling & Central Pool Buffer",
+        intensity: 82,
+        level: "STEADY HIGH",
+        levelColor: "#0284c7",
+        barClass: "progress-bar-blue",
+        barColor: "#0284c7",
+        deficit: "Southern Deficit Demand: Tamil Nadu & Karnataka (61,000 Tonnes)",
+        price: "Modal Spot: ₹2,425 / q (+0.8%)",
+        buyers: [
+          {
+            name: "Punjab Agro Industries Roller Flour Mills",
+            location: "Mandi Gobindgarh (35 km away)",
+            specs: "Gluten >10%, Hectolitre weight >78 kg/hl, Sound grain",
+            qty: "2,000 Tonnes Wheat",
+            offered: "₹2,470 / quintal",
+            badge: "Roller Flour Miller",
+            badgeClass: "badge-emerald"
+          },
+          {
+            name: "Britannia Industries Atta Procurement",
+            location: "Patiala Industrial Area (65 km away)",
+            specs: "Moisture <11%, High water absorption, Pusa Wheat",
+            qty: "2,500 Tonnes Wheat",
+            offered: "₹2,510 / quintal",
+            badge: "FMCG Bakery Giant",
+            badgeClass: "badge-blue"
+          }
+        ]
+      },
+      {
+        crop: "Mustard",
+        title: "Mustard — Kachi Ghani Edible Oil Crushing",
+        intensity: 88,
+        level: "HIGH PRESSURE",
+        levelColor: "#059669",
+        barClass: "",
+        barColor: "#059669",
+        deficit: "Deficit: 45,000 Tonnes in North India Mustard Oil Expelling Centers",
+        price: "Modal Spot: ₹5,680 / q (+2.4%)",
+        buyers: [
+          {
+            name: "Adani Wilmar Fortune Mustard Division",
+            location: "Bathinda Processing Terminal (110 km away)",
+            specs: "Oil content >40%, Moisture <8%, Clean bold seeds",
+            qty: "1,200 Tonnes Mustard",
+            offered: "₹5,750 / quintal",
+            badge: "National Edible Oil Major",
+            badgeClass: "badge-emerald"
+          },
+          {
+            name: "Dhuri Mustard Oil Expellers",
+            location: "Dhuri Mandi (45 km away)",
+            specs: "Pusa Bold / Giriraj variety, Zero moisture heating",
+            qty: "450 Tonnes Mustard",
+            offered: "₹5,720 / quintal",
+            badge: "Kachi Ghani Expeller",
+            badgeClass: "badge-amber"
+          }
+        ]
+      },
+      {
+        crop: "Basmati Rice",
+        title: "Basmati Rice — Aromatic Slender Grain Export",
+        intensity: 92,
+        level: "VERY HIGH",
+        levelColor: "#059669",
+        barClass: "",
+        barColor: "#059669",
+        deficit: "Middle East & European Export Container Bookings",
+        price: "Modal Spot: ₹3,840 / q (+4.1%)",
+        buyers: [
+          {
+            name: "KRBL Limited (India Gate Basmati)",
+            location: "Dhuri Rice Complex (50 km away)",
+            specs: "Pusa 1121 authentic paddy, Head Rice Recovery >62%",
+            qty: "2,000 Tonnes Paddy",
+            offered: "₹3,920 / quintal",
+            badge: "Leading World Exporter",
+            badgeClass: "badge-emerald"
+          },
+          {
+            name: "LT Foods Ltd (Daawat Basmati)",
+            location: "Amritsar Rice Terminal (135 km away)",
+            specs: "Extra long grain, Moisture 14%, Zero chalkiness",
+            qty: "1,800 Tonnes Paddy",
+            offered: "₹3,890 / quintal",
+            badge: "Global Brand Procurement",
+            badgeClass: "badge-blue"
+          }
+        ]
+      },
+      {
+        crop: "Potato",
+        title: "Potato — Processing Chipsona & Cold Storage",
+        intensity: 86,
+        level: "STRONG DEMAND",
+        levelColor: "#0284c7",
+        barClass: "progress-bar-blue",
+        barColor: "#0284c7",
+        deficit: "Snack Processing Plants Seeking High-Solids Contract Stock",
+        price: "Modal Spot: ₹1,420 / q (+5.5%)",
+        buyers: [
+          {
+            name: "PepsiCo Frito-Lay Processing Plant",
+            location: "Channo / Zahura (55 km away)",
+            specs: "Kufri Chipsona, Reducing sugar <0.1%, Diameter 45-75mm",
+            qty: "3,500 Tonnes Potato",
+            offered: "₹1,500 / quintal",
+            badge: "Guaranteed Industrial Buyback",
+            badgeClass: "badge-emerald"
+          },
+          {
+            name: "Ludhiana Cold Storage Aggregation Network",
+            location: "GT Road Sahnewal (8 km away)",
+            specs: "Firm cured tubers, Table ration grade Kufri Jyoti",
+            qty: "2,000 Tonnes Potato",
+            offered: "₹1,440 / quintal",
+            badge: "Regional Mandi Aggregator",
+            badgeClass: "badge-blue"
+          }
+        ]
+      },
+      {
+        crop: "Cotton",
+        title: "Cotton — Medium / Long Staple Spinning Mills",
+        intensity: 79,
+        level: "MODERATE STEADY",
+        levelColor: "#0284c7",
+        barClass: "progress-bar-blue",
+        barColor: "#0284c7",
+        deficit: "Spinning Mills Replenishing 45-Day Working Stocks",
+        price: "Modal Spot: ₹7,150 / q (+1.2%)",
+        buyers: [
+          {
+            name: "Vardhman Textiles Ltd",
+            location: "Ludhiana Mill Compound (14 km away)",
+            specs: "Staple length >29mm, Trash <3%, Moisture <8.5%",
+            qty: "1,500 Quintals Raw Cotton",
+            offered: "₹7,250 / quintal",
+            badge: "Export Yarn Spinner",
+            badgeClass: "badge-emerald"
+          }
+        ]
+      }
+    ];
+
+    function getSelectedCrop() {
+      const urlCrop = new URLSearchParams(window.location.search).get('crop');
+      if (urlCrop) return urlCrop;
+      if (window.AgriState && AgriState.selectedCrop) return AgriState.selectedCrop;
+      return localStorage.getItem('agriwise_selected_crop') || 'ALL';
+    }
+
+    function renderDemandView(selectedCrop) {
+      let filteredMeters = COMMODITY_DEMAND_DATA;
+      if (selectedCrop && selectedCrop !== 'ALL') {
+        // Put selected crop first, or filter
+        const match = COMMODITY_DEMAND_DATA.find(c => c.crop.toLowerCase() === selectedCrop.toLowerCase());
+        if (match) {
+          const others = COMMODITY_DEMAND_DATA.filter(c => c.crop.toLowerCase() !== selectedCrop.toLowerCase());
+          filteredMeters = [match, ...others];
+        }
+      }
+
+      // Render Meters
+      const container = document.getElementById('demandMetersList');
+      container.innerHTML = '';
+
+      filteredMeters.forEach((item, index) => {
+        const isSelected = selectedCrop !== 'ALL' && item.crop.toLowerCase() === selectedCrop.toLowerCase();
+        const el = document.createElement('div');
+        el.style.padding = isSelected ? '1.25rem' : '0';
+        el.style.background = isSelected ? '#f0fdf4' : 'transparent';
+        el.style.border = isSelected ? '2px solid var(--primary-500)' : 'none';
+        el.style.borderRadius = isSelected ? 'var(--radius-md)' : '0';
+
+        el.innerHTML = `
+          <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span style="font-size: 1.1rem; color: ${isSelected ? 'var(--primary-900)' : 'var(--text-main)'};">
+                ${index + 1}. ${item.title}
+              </span>
+              ${isSelected ? '<span class="badge badge-emerald">Selected Commodity</span>' : ''}
+            </div>
+            <span style="color: ${item.levelColor}; font-size: 1.1rem;">${item.intensity}% Demand Intensity (${item.level})</span>
+          </div>
+          <div class="progress-bar-container" style="height: 12px;">
+            <div class="progress-bar-fill ${item.barClass}" style="width: ${item.intensity}%; background-color: ${item.barColor};"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-muted); margin-top: 5px; flex-wrap: wrap; gap: 0.5rem;">
+            <span>${item.deficit}</span>
+            <span style="font-weight: 700; color: var(--text-main);">${item.price}</span>
+            <span>Status: <strong style="color: #059669;">LIVE</strong></span>
+          </div>
+        `;
+        container.appendChild(el);
+      });
+
+      // Render Buyer Requirements Feed
+      renderBuyerFeed(selectedCrop);
+    }
+
+    function renderBuyerFeed(selectedCrop) {
+      const feedContainer = document.getElementById('buyerRequirementsList');
+      feedContainer.innerHTML = '';
+
+      let buyers = [];
+      if (selectedCrop && selectedCrop !== 'ALL') {
+        const match = COMMODITY_DEMAND_DATA.find(c => c.crop.toLowerCase() === selectedCrop.toLowerCase());
+        if (match && match.buyers) {
+          buyers = match.buyers;
+          document.getElementById('buyerFeedTitle').innerText = `Active Institutional Buyers for ${match.crop}`;
+        }
+      }
+
+      if (buyers.length === 0) {
+        // Collect all top buyers
+        COMMODITY_DEMAND_DATA.forEach(c => {
+          if (c.buyers && c.buyers.length > 0) {
+            buyers.push(c.buyers[0]);
+          }
+        });
+        document.getElementById('buyerFeedTitle').innerText = `Live Wholesale Procurement Requirements Across All Commodities`;
+      }
+
+      buyers.forEach(b => {
+        const item = document.createElement('div');
+        item.style.display = 'flex';
+        item.style.justifyContent = 'space-between';
+        item.style.alignItems = 'center';
+        item.style.flexWrap = 'wrap';
+        item.style.gap = '1rem';
+        item.style.padding = '1.25rem';
+        item.style.background = '#f8fafc';
+        item.style.border = '1px solid var(--border-light)';
+        item.style.borderRadius = 'var(--radius-md)';
+
+        item.innerHTML = `
+          <div style="flex: 1; min-width: 260px;">
+            <span class="badge ${b.badgeClass}">${b.badge}</span>
+            <h4 style="font-size: 1.15rem; color: var(--text-main); margin: 6px 0 3px 0;">${b.name}</h4>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">${b.location} • Quality: ${b.specs}</div>
+            <div style="font-size: 0.9rem; font-weight: 700; color: #059669; margin-top: 4px;">
+              Required: <strong>${b.qty}</strong> • Offered Rate: <strong>${b.offered}</strong>
+            </div>
+          </div>
+          <div>
+            <a href="/buyer-marketplace" class="btn btn-primary btn-sm">Send Crop Offer</a>
+          </div>
+        `;
+        feedContainer.appendChild(item);
+      });
+    }
+
+    function onDemandFilterChange(newCrop) {
+      if (newCrop !== 'ALL' && window.AgriState) {
+        AgriState.setCrop(newCrop);
+      }
+      if (newCrop !== 'ALL') {
+        localStorage.setItem('agriwise_selected_crop', newCrop);
+      }
+
+      const url = new URL(window.location);
+      if (newCrop === 'ALL') {
+        url.searchParams.delete('crop');
+      } else {
+        url.searchParams.set('crop', newCrop);
+      }
+      window.history.replaceState({}, '', url);
+
+      renderDemandView(newCrop);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const initialCrop = getSelectedCrop();
+      const select = document.getElementById('commodityFilterSelect');
+      if (select) {
+        select.value = initialCrop;
+      }
+      renderDemandView(initialCrop);
+    });
+  </script>
+</body>
+</html>

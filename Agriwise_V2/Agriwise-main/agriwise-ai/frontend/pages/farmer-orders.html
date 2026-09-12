@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📦 Farmer Orders & Tenders — AGRIWISE AI</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <!-- Title Section -->
+      <div class="page-title-bar">
+        <div class="page-title-left">
+          <h1>📦 Farmer Input Orders & Mandi Contracts</h1>
+          <p>Track your seed/fertilizer purchases, transport bookings, and institutional crop supply contracts.</p>
+        </div>
+        <div class="page-title-actions">
+          <a href="/farm-equipment" class="btn btn-secondary btn-sm">🚜 Rent Farm Equipment</a>
+          <a href="/fertilizer-market" class="btn btn-primary btn-sm">+ Order Agricultural Inputs</a>
+        </div>
+      </div>
+
+      <!-- Equipment Rentals Card -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <div class="card-title">
+            <span class="icon">🚜</span>
+            <span>Farm Machinery & Equipment Rentals</span>
+          </div>
+          <a href="/farm-equipment" class="btn btn-sm btn-outline-primary" style="padding: 3px 10px; font-size: 0.8rem;">Browse Machinery Hub ➔</a>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>Equipment</th>
+                <th>Provider / CHC</th>
+                <th>Rental Slot</th>
+                <th>Duration</th>
+                <th>Total Paid</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="equipmentRentalsTableBody">
+              <!-- Dynamically populated from /api/equipment/my-rentals -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Orders List Card -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="icon">📋</span>
+            <span>Active & Historical Agricultural Input Orders</span>
+          </div>
+          <span class="badge badge-emerald">Live Database Verified</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Category</th>
+                <th>Item / Description</th>
+                <th>Partner / Merchant</th>
+                <th>Quantity</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Date Placed</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody">
+              <!-- Dynamically populated from /api/orders -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      loadOrders();
+      loadEquipmentRentals();
+    });
+
+    async function loadEquipmentRentals() {
+      const tbody = document.getElementById('equipmentRentalsTableBody');
+      try {
+        const res = await AgriAPI.getMyEquipmentRentals();
+        const allRentals = [...(res.upcoming || []), ...(res.active || []), ...(res.completed || []), ...(res.cancelled || [])];
+        if (allRentals && allRentals.length > 0) {
+          tbody.innerHTML = allRentals.map(r => {
+            const statusBadge = r.booking_status === 'CONFIRMED' ? 'badge-blue' :
+                                r.booking_status === 'ACTIVE' ? 'badge-emerald' :
+                                r.booking_status === 'COMPLETED' ? 'badge-emerald' : 'badge-red';
+            return `
+              <tr>
+                <td><strong>#${r.booking_id}</strong></td>
+                <td>
+                  <strong>${r.equipment_name}</strong>
+                  <div style="font-size: 0.76rem; color: var(--text-muted);">${r.with_operator ? '👨‍✈️ With Operator' : '👤 Self-Operated'} ${r.delivery_to_farm ? '• 📍 Delivered' : ''}</div>
+                </td>
+                <td>
+                  <div>${r.owner_name}</div>
+                  <div style="font-size: 0.76rem; color: var(--text-muted);">📞 ${r.owner_phone}</div>
+                </td>
+                <td style="font-size: 0.84rem;">
+                  <div>${r.start_time}</div>
+                  <div style="font-size: 0.76rem; color: var(--text-muted);">to ${r.end_time}</div>
+                </td>
+                <td>${r.duration_units} ${r.rental_type === 'HOURLY' ? 'Hours' : 'Days'}</td>
+                <td style="font-weight: 800; color: var(--primary-900);">₹${Number(r.total_amount || 0).toLocaleString('en-IN')}</td>
+                <td><span class="badge ${statusBadge}">${r.booking_status}</span></td>
+                <td>
+                  <div style="display: flex; gap: 4px;">
+                    <a href="/farm-equipment?tab=rentals&booking_id=${r.booking_id}" class="btn btn-sm btn-outline" style="padding: 3px 8px; font-size: 0.75rem;">Details</a>
+                    ${r.can_cancel ? `<button class="btn btn-sm btn-secondary" style="padding: 3px 8px; font-size: 0.75rem; color: #dc2626;" onclick="cancelBooking('${r.booking_id}')">Cancel</button>` : ''}
+                  </div>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        } else {
+          tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No machinery rentals booked yet. <a href="/farm-equipment" style="color: var(--primary-600); font-weight: 700;">Rent tractors, harvesters, pumps now ➔</a></td></tr>`;
+        }
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">Could not load rentals.</td></tr>`;
+      }
+    }
+
+    async function cancelBooking(bookingId) {
+      if (!confirm('Are you sure you want to cancel this equipment booking? Full refund applies if cancelled > 6 hours before rental.')) return;
+      try {
+        const res = await AgriAPI.cancelEquipmentBooking(bookingId, 'Cancelled from Orders page');
+        alert(res.message);
+        loadEquipmentRentals();
+      } catch (err) {
+        alert('Cancellation failed: ' + err.message);
+      }
+    }
+
+    async function loadOrders() {
+      try {
+        const userId = window.AgriState && window.AgriState.currentUser ? window.AgriState.currentUser.id : null;
+        const orders = await AgriAPI.getOrders(userId ? { user_id: userId } : {});
+        const tbody = document.getElementById('ordersTableBody');
+        if (orders && orders.length > 0) {
+          tbody.innerHTML = orders.map(o => {
+            const isPaid = o.status === 'COMPLETED' || o.status === 'PAID';
+            const payType = o.order_type === 'TRANSPORT' ? 'transport' : (o.order_type === 'BUYER_OFFER' ? 'escrow' : 'fertilizer');
+            
+            let itemDisplay = o.item_title;
+            if (o.items_json) {
+              try {
+                const parsed = JSON.parse(o.items_json);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                  itemDisplay = parsed.map(p => `${p.name} (x${p.quantity})`).join(', ');
+                }
+              } catch (e) {}
+            }
+
+            const formattedMoney = window.AgriCharts ? window.AgriCharts.formatMoney(o.amount_inr) : `₹${Number(o.amount_inr || 0).toLocaleString('en-IN')}`;
+
+            return `
+            <tr>
+              <td><strong>#ORD-${o.id}</strong></td>
+              <td><span class="badge ${o.order_type === 'INPUT' ? 'badge-emerald' : (o.order_type === 'TRANSPORT' ? 'badge-blue' : 'badge-amber')}">${o.order_type}</span></td>
+              <td>
+                <strong>${itemDisplay}</strong>
+                ${o.delivery_address ? `<div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">📍 ${o.delivery_address}</div>` : ''}
+              </td>
+              <td>${o.partner_name}</td>
+              <td>${o.quantity || '1 Order'}</td>
+              <td style="font-weight: 800; color: var(--primary-900);">${formattedMoney}</td>
+              <td><span class="badge ${isPaid ? 'badge-emerald' : o.status === 'DISPATCHED' ? 'badge-blue' : 'badge-amber'}">${o.status}</span></td>
+              <td style="font-size: 0.82rem; color: var(--text-muted);">${o.created_at}</td>
+              <td>
+                ${isPaid ? 
+                  `<a href="/payment" class="btn btn-sm btn-outline" style="padding: 3px 8px; font-size: 0.75rem;">Receipt</a>` :
+                  `<a href="/payment?type=${payType}&amount=${o.amount_inr}&recipient=${encodeURIComponent(o.partner_name)}&order_id=${o.id}" class="btn btn-sm btn-primary" style="padding: 3px 8px; font-size: 0.75rem; white-space: nowrap;">💳 Pay Now</a>`
+                }
+              </td>
+            </tr>
+          `;
+          }).join('');
+        } else {
+          tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: var(--text-muted); padding: 2rem;">No orders placed yet. Browse the Input or Buyer marketplace.</td></tr>`;
+        }
+      } catch (e) {
+        console.warn("Using offline orders fallback", e);
+      }
+    }
+  </script>
+</body>
+</html>
